@@ -1,0 +1,37 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Toolbox Pro",
+  "tabTools": "Tools",
+  "tabFavorites": "Favorites",
+  "tabSettings": "Settings",
+
+  "toolCalculator": "Calculator",
+  "toolUnitConverter": "Unit Converter",
+  "toolQrScanner": "QR Scanner",
+  "toolFlashlight": "Flashlight",
+  "toolLevel": "Level",
+  "toolCompass": "Compass",
+  "toolStopwatch": "Stopwatch",
+  "toolNoiseMeter": "Noise Meter",
+  "toolPasswordGenerator": "Password Generator",
+  "toolColorPicker": "Color Picker",
+  "toolProtractor": "Protractor",
+  "toolInvoiceChecker": "Invoice Checker",
+
+  "searchHint": "Search tools...",
+
+  "favoritesEmpty": "No favorites yet",
+  "favoritesEmptyHint": "Long press a tool card to add it to favorites",
+
+  "settingsAppearance": "Appearance",
+  "settingsLanguage": "Language",
+  "settingsAbout": "About",
+  "settingsThemeMode": "Theme Mode",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsThemeSystem": "System",
+  "settingsVersion": "Version",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsTermsOfService": "Terms of Service"
+}
