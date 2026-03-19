@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'invoice_api.dart';
 import 'invoice_parser.dart';
 
@@ -114,21 +115,36 @@ class _InvoiceCheckerPageState extends State<InvoiceCheckerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('發票對獎')),
-      body: SingleChildScrollView(
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFF009688),
+      title: '發票對獎',
+      heroTag: 'tool_hero_invoice_checker',
+      headerFlex: 2,
+      bodyFlex: 3,
+      // 中獎號碼顯示與對獎結果
+      headerChild: SafeArea(
+        top: true,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildWinningNumbersSection(),
+              if (_hasChecked) ...[
+                const SizedBox(height: 12),
+                _buildResultCard(),
+              ],
+            ],
+          ),
+        ),
+      ),
+      // 輸入區域（掃描 / 手動輸入）或「再查一張」按鈕
+      bodyChild: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 中獎號碼區塊
-            _buildWinningNumbersSection(),
-            const SizedBox(height: 24),
-
-            // 結果顯示
             if (_hasChecked) ...[
-              _buildResultCard(),
-              const SizedBox(height: 16),
               Center(
                 child: TextButton.icon(
                   onPressed: _resetCheck,
@@ -136,11 +152,7 @@ class _InvoiceCheckerPageState extends State<InvoiceCheckerPage> {
                   label: const Text('再查一張'),
                 ),
               ),
-              const SizedBox(height: 16),
-            ],
-
-            // 輸入方式
-            if (!_hasChecked) ...[
+            ] else ...[
               _buildScanButton(),
               const SizedBox(height: 16),
               _buildManualInput(),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:torch_light/torch_light.dart';
 
 /// 手電筒工具頁面
@@ -180,47 +181,58 @@ class _FlashlightPageState extends State<FlashlightPage> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('手電筒')),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Spacer(flex: 2),
-            // Main toggle button
-            _buildToggleButton(theme, colorScheme),
-            const SizedBox(height: 16),
-            // Status text
-            Text(
-              _isSosActive
-                  ? 'SOS 模式啟動中'
-                  : _isOn
-                      ? '已開啟'
-                      : '已關閉',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: _isOn || _isSosActive
-                    ? colorScheme.primary
-                    : colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const Spacer(),
-            // SOS button
-            _buildSosButton(theme, colorScheme),
-            const Spacer(),
-            // Error message
-            if (_errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  _errorMessage!,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.error,
-                  ),
-                  textAlign: TextAlign.center,
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFFFFC107),
+      title: '手電筒',
+      heroTag: 'tool_hero_flashlight',
+      headerFlex: 3,
+      bodyFlex: 2,
+      headerChild: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Main toggle button
+              _buildToggleButton(theme, colorScheme),
+              const SizedBox(height: 16),
+              // Status text
+              Text(
+                _isSosActive
+                    ? 'SOS 模式啟動中'
+                    : _isOn
+                        ? '已開啟'
+                        : '已關閉',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: _isOn || _isSosActive
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
                 ),
               ),
-            const SizedBox(height: 24),
-          ],
+            ],
+          ),
         ),
+      ),
+      bodyChild: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // SOS button
+          _buildSosButton(theme, colorScheme),
+          // Error message
+          if (_errorMessage != null) ...[
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                _errorMessage!,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.error,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

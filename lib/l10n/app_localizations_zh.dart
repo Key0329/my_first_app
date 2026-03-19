@@ -27,7 +27,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get toolUnitConverter => '單位換算';
 
   @override
-  String get toolQrScanner => 'QR 掃描';
+  String get toolQrGenerator => 'QR Code 產生器';
 
   @override
   String get toolFlashlight => '手電筒';

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>此應用程式需要使用相機來擷取顏色及掃描 QR 碼。</string>
+	<string>此應用程式需要使用相機來擷取顏色。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>此應用程式需要使用麥克風來偵測環境噪音分貝。</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

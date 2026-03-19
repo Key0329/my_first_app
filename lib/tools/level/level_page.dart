@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+
 /// Bubble Level (水平儀) tool page.
 ///
 /// Uses device accelerometer to detect tilt and displays a bubble level
@@ -108,46 +110,41 @@ class _LevelPageState extends State<LevelPage>
     final theme = Theme.of(context);
     final isLevel = _isLevel;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('水平儀')),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Bubble level visualisation
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final diameter =
-                        min(constraints.maxWidth, constraints.maxHeight) * 0.8;
-                    return SizedBox(
-                      width: diameter,
-                      height: diameter,
-                      child: CustomPaint(
-                        painter: _BubbleLevelPainter(
-                          angleX: _angleX,
-                          angleY: _angleY,
-                          isLevel: isLevel,
-                          primaryColor: theme.colorScheme.primary,
-                          surfaceColor: theme.colorScheme.surfaceContainerHighest,
-                          onSurfaceColor: theme.colorScheme.onSurface,
-                          levelColor: Colors.green,
-                        ),
-                      ),
-                    );
-                  },
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFF00BCD4),
+      title: '水平儀',
+      heroTag: 'tool_hero_level',
+      headerFlex: 3,
+      bodyFlex: 1,
+      // Bubble level visualisation
+      headerChild: SafeArea(
+        top: true,
+        child: Center(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final diameter =
+                  min(constraints.maxWidth, constraints.maxHeight) * 0.8;
+              return SizedBox(
+                width: diameter,
+                height: diameter,
+                child: CustomPaint(
+                  painter: _BubbleLevelPainter(
+                    angleX: _angleX,
+                    angleY: _angleY,
+                    isLevel: isLevel,
+                    primaryColor: theme.colorScheme.primary,
+                    surfaceColor: theme.colorScheme.surfaceContainerHighest,
+                    onSurfaceColor: theme.colorScheme.onSurface,
+                    levelColor: Colors.green,
+                  ),
                 ),
-              ),
-            ),
-            // Angle readouts
-            Expanded(
-              flex: 1,
-              child: _buildAngleReadout(theme, isLevel),
-            ),
-          ],
+              );
+            },
+          ),
         ),
       ),
+      // Angle readouts
+      bodyChild: _buildAngleReadout(theme, isLevel),
     );
   }
 

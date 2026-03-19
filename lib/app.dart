@@ -11,7 +11,7 @@ import 'package:my_first_app/tools/calculator/calculator_page.dart';
 import 'package:my_first_app/tools/password_generator/password_generator_page.dart';
 import 'package:my_first_app/tools/stopwatch_timer/stopwatch_timer_page.dart';
 import 'package:my_first_app/tools/invoice_checker/invoice_checker_page.dart';
-import 'package:my_first_app/tools/qr_scanner/qr_scanner_page.dart';
+import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
 import 'package:my_first_app/tools/color_picker/color_picker_page.dart';
 import 'package:my_first_app/tools/compass/compass_page.dart';
 import 'package:my_first_app/tools/flashlight/flashlight_page.dart';
@@ -72,53 +72,139 @@ class _ToolboxAppState extends State<ToolboxApp> {
           ],
         ),
         // Tool routes (full screen, no bottom nav)
+        // 使用 pageBuilder + CustomTransitionPage 讓 Hero 動畫可以跨頁面運作；
+        // FadeTransition 作為頁面過渡，不干擾共享元素的位移軌跡。
         GoRoute(
           path: '/tools/calculator',
-          builder: (context, state) => const CalculatorPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const CalculatorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/unit-converter',
-          builder: (context, state) => const UnitConverterPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const UnitConverterPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
-          path: '/tools/qr-scanner',
-          builder: (context, state) => const QrScannerPage(),
+          path: '/tools/qr-generator',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const QrGeneratorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/flashlight',
-          builder: (context, state) => const FlashlightPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const FlashlightPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/level',
-          builder: (context, state) => const LevelPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const LevelPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/compass',
-          builder: (context, state) => const CompassPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const CompassPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/stopwatch-timer',
-          builder: (context, state) => const StopwatchTimerPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const StopwatchTimerPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/noise-meter',
-          builder: (context, state) => const NoiseMeterPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const NoiseMeterPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/password-generator',
-          builder: (context, state) => const PasswordGeneratorPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const PasswordGeneratorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/color-picker',
-          builder: (context, state) => const ColorPickerPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const ColorPickerPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/protractor',
-          builder: (context, state) => const ProtractorPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const ProtractorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
         GoRoute(
           path: '/tools/invoice-checker',
-          builder: (context, state) => const InvoiceCheckerPage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const InvoiceCheckerPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
         ),
       ],
     );

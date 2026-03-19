@@ -8,7 +8,7 @@
 
   "toolCalculator": "Calculator",
   "toolUnitConverter": "Unit Converter",
-  "toolQrScanner": "QR Scanner",
+  "toolQrGenerator": "QR Generator",
   "toolFlashlight": "Flashlight",
   "toolLevel": "Level",
   "toolCompass": "Compass",

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+/// Bento grid tile size variants.
+///
+/// - [large]: spans 2 columns, 1.5x height (used for favorited tools at display time)
+/// - [medium]: 1 column, 1.2x height (standard default)
+/// - [small]: 1 column, 1x height (compact)
+enum BentoSize { large, medium, small }
+
 class ToolItem {
   final String id;
   final String nameKey;
@@ -8,6 +15,12 @@ class ToolItem {
   final Color color;
   final String routePath;
 
+  /// The default bento tile size for this tool.
+  ///
+  /// Favorited tools are dynamically upgraded to [BentoSize.large] at display
+  /// time; this field stores the non-favorited default only.
+  final BentoSize defaultBentoSize;
+
   const ToolItem({
     required this.id,
     required this.nameKey,
@@ -15,6 +28,7 @@ class ToolItem {
     required this.icon,
     required this.color,
     required this.routePath,
+    this.defaultBentoSize = BentoSize.medium,
   });
 }
 
@@ -36,12 +50,12 @@ const List<ToolItem> allTools = [
     routePath: '/tools/unit-converter',
   ),
   ToolItem(
-    id: 'qr_scanner',
-    nameKey: 'tool_qr_scanner',
-    fallbackName: 'QR 掃描',
-    icon: Icons.qr_code_scanner,
+    id: 'qr_generator',
+    nameKey: 'tool_qr_generator',
+    fallbackName: 'QR Code 產生器',
+    icon: Icons.qr_code,
     color: Color(0xFF9C27B0),
-    routePath: '/tools/qr-scanner',
+    routePath: '/tools/qr-generator',
   ),
   ToolItem(
     id: 'flashlight',

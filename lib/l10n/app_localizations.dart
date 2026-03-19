@@ -134,11 +134,11 @@ abstract class AppLocalizations {
   /// **'單位換算'**
   String get toolUnitConverter;
 
-  /// Tool name: QR Scanner
+  /// Tool name: QR Generator
   ///
   /// In zh, this message translates to:
-  /// **'QR 掃描'**
-  String get toolQrScanner;
+  /// **'QR Code 產生器'**
+  String get toolQrGenerator;
 
   /// Tool name: Flashlight
   ///

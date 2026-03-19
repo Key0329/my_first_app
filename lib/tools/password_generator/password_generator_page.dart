@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 
 class PasswordGeneratorPage extends StatefulWidget {
   const PasswordGeneratorPage({super.key});
@@ -89,19 +90,36 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
 
   @override
   Widget build(BuildContext context) {
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFF3F51B5),
+      title: '密碼產生器',
+      heroTag: 'tool_hero_password_generator',
+      headerFlex: 2,
+      bodyFlex: 3,
+      headerChild: _buildPasswordDisplay(context),
+      bodyChild: _buildOptionsArea(context),
+    );
+  }
+
+  /// 密碼顯示區（上方漸層 header）
+  Widget _buildPasswordDisplay(BuildContext context) {
     final strength = _strength;
-    return Scaffold(
-      appBar: AppBar(title: const Text('密碼產生器')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+
+    return SafeArea(
+      top: true,
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Password display
+            // Password text
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -111,71 +129,81 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
                       _password,
                       style: const TextStyle(
                         fontFamily: 'monospace',
-                        fontSize: 18,
+                        fontSize: 16,
                         letterSpacing: 1.2,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.copy),
+                    icon: const Icon(Icons.copy, color: Colors.white),
                     tooltip: '複製',
                     onPressed: _copyToClipboard,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-
+            const SizedBox(height: 12),
             // Strength indicator
             _StrengthBar(strength: strength),
-            const SizedBox(height: 24),
-
-            // Length slider
-            Text('密碼長度：${_length.round()}'),
-            Slider(
-              value: _length,
-              min: 8,
-              max: 64,
-              divisions: 56,
-              label: _length.round().toString(),
-              onChanged: (v) {
-                setState(() => _length = v);
-                _generatePassword();
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Character type toggles
-            SwitchListTile(
-              title: const Text('大寫字母 (A-Z)'),
-              value: _uppercase,
-              onChanged: (_) => _toggleType(_uppercase, (v) => _uppercase = v),
-            ),
-            SwitchListTile(
-              title: const Text('小寫字母 (a-z)'),
-              value: _lowercase,
-              onChanged: (_) => _toggleType(_lowercase, (v) => _lowercase = v),
-            ),
-            SwitchListTile(
-              title: const Text('數字 (0-9)'),
-              value: _numbers,
-              onChanged: (_) => _toggleType(_numbers, (v) => _numbers = v),
-            ),
-            SwitchListTile(
-              title: const Text('特殊字元 (!@#\$...)'),
-              value: _special,
-              onChanged: (_) => _toggleType(_special, (v) => _special = v),
-            ),
-            const SizedBox(height: 24),
-
-            // Generate button
-            FilledButton.icon(
-              onPressed: _generatePassword,
-              icon: const Icon(Icons.refresh),
-              label: const Text('產生新密碼'),
-            ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// 選項控制區（下方操作區）
+  Widget _buildOptionsArea(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Length slider
+          Text('密碼長度：${_length.round()}'),
+          Slider(
+            value: _length,
+            min: 8,
+            max: 64,
+            divisions: 56,
+            label: _length.round().toString(),
+            onChanged: (v) {
+              setState(() => _length = v);
+              _generatePassword();
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // Character type toggles
+          SwitchListTile(
+            title: const Text('大寫字母 (A-Z)'),
+            value: _uppercase,
+            onChanged: (_) => _toggleType(_uppercase, (v) => _uppercase = v),
+          ),
+          SwitchListTile(
+            title: const Text('小寫字母 (a-z)'),
+            value: _lowercase,
+            onChanged: (_) => _toggleType(_lowercase, (v) => _lowercase = v),
+          ),
+          SwitchListTile(
+            title: const Text('數字 (0-9)'),
+            value: _numbers,
+            onChanged: (_) => _toggleType(_numbers, (v) => _numbers = v),
+          ),
+          SwitchListTile(
+            title: const Text('特殊字元 (!@#\$...)'),
+            value: _special,
+            onChanged: (_) => _toggleType(_special, (v) => _special = v),
+          ),
+          const SizedBox(height: 24),
+
+          // Generate button
+          FilledButton.icon(
+            onPressed: _generatePassword,
+            icon: const Icon(Icons.refresh),
+            label: const Text('產生新密碼'),
+          ),
+        ],
       ),
     );
   }
@@ -205,7 +233,10 @@ class _StrengthBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('密碼強度'),
+            const Text(
+              '密碼強度',
+              style: TextStyle(color: Colors.white),
+            ),
             Text(
               strength.label,
               style: TextStyle(
@@ -221,7 +252,7 @@ class _StrengthBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: strength.value,
             color: strength.color,
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+            backgroundColor: Colors.white.withValues(alpha: 0.3),
             minHeight: 8,
           ),
         ),

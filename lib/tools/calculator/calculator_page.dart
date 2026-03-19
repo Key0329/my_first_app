@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'calculator_logic.dart';
 
 class CalculatorPage extends StatefulWidget {
@@ -131,67 +132,68 @@ class _CalculatorPageState extends State<CalculatorPage> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('計算機'),
-        actions: [
-          if (_history.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.history),
-              tooltip: '歷史紀錄',
-              onPressed: () => _showHistory(context),
-            ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Display area
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              alignment: Alignment.bottomRight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // Expression display
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    reverse: true,
-                    child: Text(
-                      _expression.isEmpty ? '0' : _expression,
-                      key: const Key('expression_display'),
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: colorScheme.onSurface.withAlpha(179),
-                      ),
-                      maxLines: 1,
-                    ),
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFF4CAF50),
+      title: '計算機',
+      heroTag: 'tool_hero_calculator',
+      headerFlex: 2,
+      bodyFlex: 4,
+      headerChild: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+          alignment: Alignment.bottomRight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // History action in header
+              if (_history.isNotEmpty)
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.history),
+                    tooltip: '歷史紀錄',
+                    onPressed: () => _showHistory(context),
                   ),
-                  const SizedBox(height: 8),
-                  // Result display
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    reverse: true,
-                    child: Text(
-                      _result.isEmpty ? '' : '= $_result',
-                      key: const Key('result_display'),
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface,
-                      ),
-                      maxLines: 1,
-                    ),
+                ),
+              const Spacer(),
+              // Expression display
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                reverse: true,
+                child: Text(
+                  _expression.isEmpty ? '0' : _expression,
+                  key: const Key('expression_display'),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: colorScheme.onSurface.withAlpha(179),
                   ),
-                ],
+                  maxLines: 1,
+                ),
               ),
-            ),
+              const SizedBox(height: 8),
+              // Result display
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                reverse: true,
+                child: Text(
+                  _result.isEmpty ? '' : '= $_result',
+                  key: const Key('result_display'),
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                  maxLines: 1,
+                ),
+              ),
+            ],
           ),
+        ),
+      ),
+      bodyChild: Column(
+        children: [
           const Divider(height: 1),
-          // Button grid
           Expanded(
-            flex: 4,
             child: _buildButtonGrid(colorScheme),
           ),
         ],

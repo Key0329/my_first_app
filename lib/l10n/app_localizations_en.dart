@@ -27,7 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolUnitConverter => 'Unit Converter';
 
   @override
-  String get toolQrScanner => 'QR Scanner';
+  String get toolQrGenerator => 'QR Generator';
 
   @override
   String get toolFlashlight => 'Flashlight';

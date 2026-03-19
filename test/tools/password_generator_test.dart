@@ -58,6 +58,8 @@ void main() {
       // Tap generate button multiple times to increase chance of different password
       String? newPassword;
       for (var i = 0; i < 10; i++) {
+        await tester.ensureVisible(find.text('產生新密碼'));
+        await tester.pumpAndSettle();
         await tester.tap(find.text('產生新密碼'));
         await tester.pump();
         newPassword =

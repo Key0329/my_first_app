@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 /// Compass tool page.
@@ -125,13 +126,80 @@ class _CompassPageState extends State<CompassPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('指南針')),
-      body: _unsupported ? _buildUnsupported(theme) : _buildCompass(theme),
+
+    if (_unsupported) {
+      return ImmersiveToolScaffold(
+        toolColor: const Color(0xFFFF5722),
+        title: '指南針',
+        heroTag: 'tool_hero_compass',
+        headerFlex: 3,
+        bodyFlex: 1,
+        headerChild: SafeArea(
+          child: _buildUnsupportedHeader(theme),
+        ),
+        bodyChild: const SizedBox.shrink(),
+      );
+    }
+
+    final heading = _heading ?? 0;
+    final cardinal = _cardinalDirection(heading);
+    final degrees = heading.toStringAsFixed(0);
+
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFFFF5722),
+      title: '指南針',
+      heroTag: 'tool_hero_compass',
+      headerFlex: 3,
+      bodyFlex: 1,
+      headerChild: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Heading readout
+            Text(
+              '$degrees\u00B0',
+              style: theme.textTheme.displayMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              cardinal,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Compass dial
+            Expanded(
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: _heading == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomPaint(
+                            painter: _CompassPainter(
+                              heading: _displayHeading,
+                              color: theme.colorScheme.onSurface,
+                              primaryColor: theme.colorScheme.primary,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+      bodyChild: const SizedBox.shrink(),
     );
   }
 
-  Widget _buildUnsupported(ThemeData theme) {
+  Widget _buildUnsupportedHeader(ThemeData theme) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -157,55 +225,6 @@ class _CompassPageState extends State<CompassPage>
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildCompass(ThemeData theme) {
-    final heading = _heading ?? 0;
-    final cardinal = _cardinalDirection(heading);
-    final degrees = heading.toStringAsFixed(0);
-
-    return Column(
-      children: [
-        const SizedBox(height: 32),
-        // Heading readout
-        Text(
-          '$degrees\u00B0',
-          style: theme.textTheme.displayMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          cardinal,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            color: theme.colorScheme.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 32),
-        // Compass dial
-        Expanded(
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: _heading == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : CustomPaint(
-                        painter: _CompassPainter(
-                          heading: _displayHeading,
-                          color: theme.colorScheme.onSurface,
-                          primaryColor: theme.colorScheme.primary,
-                        ),
-                      ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 32),
-      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 
 /// Formats a [Duration] as HH:MM:SS.mm (centiseconds).
 String formatDuration(Duration d) {
@@ -35,17 +36,28 @@ class StopwatchTimerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('碼錶 / 計時器'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.timer_outlined), text: '碼錶'),
-              Tab(icon: Icon(Icons.hourglass_bottom), text: '計時器'),
-            ],
+      child: ImmersiveToolScaffold(
+        toolColor: const Color(0xFF607D8B),
+        title: '碼錶 / 計時器',
+        heroTag: 'tool_hero_stopwatch_timer',
+        headerFlex: 1,
+        bodyFlex: 3,
+        headerChild: SafeArea(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: TabBar(
+              tabs: const [
+                Tab(icon: Icon(Icons.timer_outlined), text: '碼錶'),
+                Tab(icon: Icon(Icons.hourglass_bottom), text: '計時器'),
+              ],
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor:
+                  Theme.of(context).colorScheme.onSurfaceVariant,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
-        body: const TabBarView(
+        bodyChild: const TabBarView(
           children: [
             _StopwatchTab(),
             _TimerTab(),

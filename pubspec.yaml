@@ -21,6 +21,11 @@ dependencies:
   noise_meter: ^5.1.0
   http: ^1.1.0
   shared_preferences: ^2.2.0
+  qr_flutter: ^4.1.0
+
+dependency_overrides:
+  audio_streamer:
+    path: patches/audio_streamer
 
 dev_dependencies:
   flutter_test:

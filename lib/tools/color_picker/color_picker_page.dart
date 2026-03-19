@@ -1,9 +1,10 @@
-import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 
 /// Helper to extract an 8-bit channel value from the new [Color] API
 /// (where r/g/b are 0.0–1.0 doubles).
@@ -45,6 +46,7 @@ class ColorPickerPage extends StatefulWidget {
 class _ColorPickerPageState extends State<ColorPickerPage>
     with WidgetsBindingObserver {
   MobileScannerController? _controller;
+  final GlobalKey _cameraKey = GlobalKey();
   final List<_ColorEntry> _history = [];
   _ColorEntry? _selectedEntry;
   bool _hasPermission = true;
@@ -67,30 +69,37 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     final controller = MobileScannerController(
       detectionSpeed: DetectionSpeed.noDuplicates,
       facing: CameraFacing.back,
-      formats: const [], // We don't need barcode detection
+      formats: const [],
     );
 
     _controller = controller;
 
-    try {
-      await controller.start();
-      if (mounted) {
-        setState(() {
-          _controllerInitialized = true;
-          _hasPermission = true;
-        });
-      }
-    } on MobileScannerException catch (e) {
-      if (e.errorCode == MobileScannerErrorCode.permissionDenied) {
-        if (mounted) {
-          setState(() {
-            _hasPermission = false;
-          });
-        }
-      }
-    } catch (_) {
-      // Camera start failed for other reasons
+    // Put the MobileScanner widget in the tree FIRST, so the texture surface
+    // is ready before the camera starts writing to it.
+    if (mounted) {
+      setState(() {
+        _controllerInitialized = true;
+        _hasPermission = true;
+      });
     }
+
+    // Wait for the widget tree to rebuild, then start the camera.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      try {
+        await controller.start();
+      } on MobileScannerException catch (e) {
+        if (e.errorCode == MobileScannerErrorCode.permissionDenied) {
+          if (mounted) {
+            setState(() {
+              _hasPermission = false;
+            });
+          }
+        }
+      } catch (_) {
+        // Camera start failed for other reasons
+      }
+    });
   }
 
   @override
@@ -108,19 +117,44 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     super.dispose();
   }
 
-  /// Captures a frame from the camera and picks the center-pixel color.
-  ///
-  /// Strategy: stop the current (barcode-less) controller, create a temporary
-  /// one with `returnImage: true` so the barcode-capture stream delivers raw
-  /// image bytes, grab the first frame, decode it with `dart:ui`, read the
-  /// center pixel, then restart the original controller.
+  /// Captures the center pixel color from the camera preview using
+  /// RepaintBoundary screenshot.
   Future<void> _captureColor() async {
-    if (_isCapturing || _controller == null) return;
+    if (_isCapturing) return;
     setState(() => _isCapturing = true);
 
     try {
-      final color = await _pickColorFromCamera();
-      if (color != null && mounted) {
+      final boundary = _cameraKey.currentContext?.findRenderObject()
+          as RenderRepaintBoundary?;
+      if (boundary == null) return;
+
+      final image = await boundary.toImage(pixelRatio: 1.0);
+      final byteData = await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      );
+
+      if (byteData == null) {
+        image.dispose();
+        return;
+      }
+
+      final centerX = image.width ~/ 2;
+      final centerY = image.height ~/ 2;
+      final pixelIndex = (centerY * image.width + centerX) * 4;
+
+      if (pixelIndex + 3 >= byteData.lengthInBytes) {
+        image.dispose();
+        return;
+      }
+
+      final r = byteData.getUint8(pixelIndex);
+      final g = byteData.getUint8(pixelIndex + 1);
+      final b = byteData.getUint8(pixelIndex + 2);
+
+      image.dispose();
+
+      final color = Color.fromARGB(255, r, g, b);
+      if (mounted) {
         final entry = _ColorEntry(color: color, pickedAt: DateTime.now());
         setState(() {
           _history.insert(0, entry);
@@ -136,91 +170,6 @@ class _ColorPickerPageState extends State<ColorPickerPage>
       if (mounted) {
         setState(() => _isCapturing = false);
       }
-    }
-  }
-
-  Future<Color?> _pickColorFromCamera() async {
-    final controller = _controller;
-    if (controller == null) return null;
-
-    final completer = Completer<Color?>();
-
-    try {
-      // Stop current preview so we can start a capture controller.
-      await controller.stop();
-
-      final imgController = MobileScannerController(
-        detectionSpeed: DetectionSpeed.normal,
-        facing: CameraFacing.back,
-        formats: const [],
-        returnImage: true,
-      );
-
-      Timer? timeout;
-      StreamSubscription<BarcodeCapture>? subscription;
-
-      timeout = Timer(const Duration(seconds: 3), () {
-        subscription?.cancel();
-        imgController.stop().then((_) => imgController.dispose());
-        controller.start(); // Restart original preview
-        if (!completer.isCompleted) completer.complete(null);
-      });
-
-      subscription = imgController.barcodes.listen((capture) async {
-        final imageBytes = capture.image;
-        if (imageBytes != null && !completer.isCompleted) {
-          timeout?.cancel();
-          await subscription?.cancel();
-          await imgController.stop();
-          imgController.dispose();
-
-          final color = await _decodeCenterPixel(imageBytes);
-
-          await controller.start(); // Restart original preview
-          completer.complete(color);
-        }
-      });
-
-      await imgController.start();
-    } catch (_) {
-      try {
-        await controller.start();
-      } catch (_) {}
-      if (!completer.isCompleted) completer.complete(null);
-    }
-
-    return completer.future;
-  }
-
-  /// Decodes JPEG/PNG image bytes and returns the colour of the centre pixel.
-  Future<Color?> _decodeCenterPixel(Uint8List imageBytes) async {
-    try {
-      final codec = await ui.instantiateImageCodec(imageBytes);
-      final frame = await codec.getNextFrame();
-      final image = frame.image;
-
-      final centerX = image.width ~/ 2;
-      final centerY = image.height ~/ 2;
-
-      final byteData = await image.toByteData(
-        format: ui.ImageByteFormat.rawRgba,
-      );
-
-      if (byteData == null) return null;
-
-      final pixelIndex = (centerY * image.width + centerX) * 4;
-      if (pixelIndex + 3 >= byteData.lengthInBytes) return null;
-
-      final r = byteData.getUint8(pixelIndex);
-      final g = byteData.getUint8(pixelIndex + 1);
-      final b = byteData.getUint8(pixelIndex + 2);
-
-      image.dispose();
-      codec.dispose();
-
-      return Color.fromARGB(255, r, g, b);
-    } catch (_) {
-      return null;
     }
   }
 
@@ -265,10 +214,23 @@ class _ColorPickerPageState extends State<ColorPickerPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('色彩擷取')),
-      body: _hasPermission ? _buildMainContent() : _buildPermissionDenied(),
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFFFF9800),
+      title: '色彩擷取',
+      heroTag: 'tool_hero_color_picker',
+      headerFlex: 2,
+      bodyFlex: 3,
+      headerChild: _buildCameraHeader(context),
+      bodyChild: _buildColorInfoArea(context),
     );
+  }
+
+  /// 相機預覽區（上方漸層 header）
+  Widget _buildCameraHeader(BuildContext context) {
+    if (!_hasPermission) {
+      return _buildPermissionDenied();
+    }
+    return _buildCameraPreview();
   }
 
   Widget _buildPermissionDenied() {
@@ -278,20 +240,25 @@ class _ColorPickerPageState extends State<ColorPickerPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.camera_alt_outlined,
               size: 64,
-              color: Theme.of(context).colorScheme.outline,
+              color: Colors.white70,
             ),
             const SizedBox(height: 16),
             const Text(
               '需要相機權限',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
               '色彩擷取需要使用相機來偵測顏色。\n請在系統設定中允許相機存取。',
               textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white70),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
@@ -305,58 +272,64 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     );
   }
 
-  Widget _buildMainContent() {
-    return Column(
-      children: [
-        // Camera preview with crosshair
-        Expanded(flex: 3, child: _buildCameraPreview()),
-        // Picked-colour display & copy actions
-        _buildColorDisplay(),
-        // History palette
-        Expanded(flex: 1, child: _buildHistoryPalette()),
-      ],
-    );
-  }
-
   Widget _buildCameraPreview() {
     if (!_controllerInitialized || _controller == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Stack(
-      alignment: Alignment.center,
+    return SafeArea(
+      top: true,
+      bottom: false,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          ClipRect(
+            child: RepaintBoundary(
+              key: _cameraKey,
+              child: MobileScanner(
+                controller: _controller!,
+                fit: BoxFit.cover,
+                onDetect: (_) {},
+              ),
+            ),
+          ),
+          // Crosshair overlay
+          CustomPaint(
+            size: const Size(80, 80),
+            painter: _CrosshairPainter(color: Colors.white),
+          ),
+          // Capture button
+          Positioned(
+            bottom: 16,
+            child: FloatingActionButton.extended(
+              heroTag: 'color_capture',
+              onPressed: _isCapturing ? null : _captureColor,
+              icon: _isCapturing
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.colorize),
+              label: Text(_isCapturing ? '擷取中...' : '擷取顏色'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 顏色資訊與歷史記錄區（下方操作區）
+  Widget _buildColorInfoArea(BuildContext context) {
+    return Column(
       children: [
-        ClipRect(
-          child: MobileScanner(
-            controller: _controller!,
-            fit: BoxFit.cover,
-            onDetect: (_) {},
-          ),
-        ),
-        // Crosshair overlay
-        CustomPaint(
-          size: const Size(80, 80),
-          painter: _CrosshairPainter(color: Colors.white),
-        ),
-        // Capture button
-        Positioned(
-          bottom: 16,
-          child: FloatingActionButton.extended(
-            heroTag: 'color_capture',
-            onPressed: _isCapturing ? null : _captureColor,
-            icon: _isCapturing
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.colorize),
-            label: Text(_isCapturing ? '擷取中...' : '擷取顏色'),
-          ),
-        ),
+        // Picked-colour display & copy actions
+        _buildColorDisplay(),
+        // History palette
+        Expanded(child: _buildHistoryPalette()),
       ],
     );
   }

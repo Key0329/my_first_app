@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+
 /// 噪音計工具頁面
 ///
 /// 使用裝置麥克風即時測量環境噪音分貝值，提供即時折線圖與
@@ -143,11 +145,136 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('噪音計')),
-      body: _permissionDenied
-          ? _buildPermissionDenied()
-          : _buildMainContent(),
+    if (_permissionDenied) {
+      // 權限被拒時使用普通 Scaffold 顯示錯誤畫面
+      return Scaffold(
+        appBar: AppBar(title: const Text('噪音計')),
+        body: _buildPermissionDenied(),
+      );
+    }
+
+    final colorScheme = Theme.of(context).colorScheme;
+    final dbColor = _getDbColor(_currentDb);
+
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFFE91E63),
+      title: '噪音計',
+      heroTag: 'tool_hero_noise_meter',
+      headerFlex: 2,
+      bodyFlex: 2,
+      // 目前分貝值顯示（量表區）
+      headerChild: SafeArea(
+        top: true,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _isRecording
+                    ? _currentDb.toStringAsFixed(1)
+                    : '--',
+                style: TextStyle(
+                  fontSize: 72,
+                  fontWeight: FontWeight.bold,
+                  color: _isRecording ? dbColor : colorScheme.outline,
+                ),
+              ),
+              Text(
+                'dB',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: _isRecording
+                      ? dbColor
+                      : colorScheme.outline,
+                ),
+              ),
+              if (_isRecording && _minDb != double.infinity) ...[
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildStatChip(
+                      '最小',
+                      '${_minDb.toStringAsFixed(1)} dB',
+                      colorScheme,
+                    ),
+                    const SizedBox(width: 16),
+                    _buildStatChip(
+                      '最大',
+                      '${_maxDb.toStringAsFixed(1)} dB',
+                      colorScheme,
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      // 即時折線圖 + 噪音等級參考 + 開始/停止按鈕
+      bodyChild: Column(
+        children: [
+          // 即時折線圖
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _dbHistory.isEmpty
+                  ? Center(
+                      child: Text(
+                        _isRecording ? '收集資料中...' : '按下開始測量噪音',
+                        style: TextStyle(
+                          color: colorScheme.outline,
+                          fontSize: 14,
+                        ),
+                      ),
+                    )
+                  : CustomPaint(
+                      size: Size.infinite,
+                      painter: _NoiseChartPainter(
+                        data: _dbHistory,
+                        lineColor: dbColor,
+                        gridColor: colorScheme.outlineVariant,
+                        textColor: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // 噪音等級參考
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _buildReferenceSection(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // 開始 / 停止按鈕
+          Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: FilledButton.icon(
+              onPressed: _toggleRecording,
+              icon: Icon(_isRecording ? Icons.stop : Icons.mic),
+              label: Text(_isRecording ? '停止測量' : '開始測量'),
+              style: FilledButton.styleFrom(
+                backgroundColor: _isRecording
+                    ? colorScheme.error
+                    : colorScheme.primary,
+                foregroundColor: _isRecording
+                    ? colorScheme.onError
+                    : colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -205,129 +332,6 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
           ],
         ),
       ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // 主要內容
-  // ---------------------------------------------------------------------------
-
-  Widget _buildMainContent() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final dbColor = _getDbColor(_currentDb);
-
-    return Column(
-      children: [
-        // 目前分貝值顯示
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _isRecording
-                      ? _currentDb.toStringAsFixed(1)
-                      : '--',
-                  style: TextStyle(
-                    fontSize: 72,
-                    fontWeight: FontWeight.bold,
-                    color: _isRecording ? dbColor : colorScheme.outline,
-                  ),
-                ),
-                Text(
-                  'dB',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: _isRecording
-                        ? dbColor
-                        : colorScheme.outline,
-                  ),
-                ),
-                if (_isRecording && _minDb != double.infinity) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildStatChip(
-                        '最小',
-                        '${_minDb.toStringAsFixed(1)} dB',
-                        colorScheme,
-                      ),
-                      const SizedBox(width: 16),
-                      _buildStatChip(
-                        '最大',
-                        '${_maxDb.toStringAsFixed(1)} dB',
-                        colorScheme,
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-
-        // 即時折線圖
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _dbHistory.isEmpty
-                ? Center(
-                    child: Text(
-                      _isRecording ? '收集資料中...' : '按下開始測量噪音',
-                      style: TextStyle(
-                        color: colorScheme.outline,
-                        fontSize: 14,
-                      ),
-                    ),
-                  )
-                : CustomPaint(
-                    size: Size.infinite,
-                    painter: _NoiseChartPainter(
-                      data: _dbHistory,
-                      lineColor: dbColor,
-                      gridColor: colorScheme.outlineVariant,
-                      textColor: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // 噪音等級參考
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _buildReferenceSection(),
-        ),
-
-        const SizedBox(height: 16),
-
-        // 開始 / 停止按鈕
-        Padding(
-          padding: const EdgeInsets.only(bottom: 32),
-          child: FilledButton.icon(
-            onPressed: _toggleRecording,
-            icon: Icon(_isRecording ? Icons.stop : Icons.mic),
-            label: Text(_isRecording ? '停止測量' : '開始測量'),
-            style: FilledButton.styleFrom(
-              backgroundColor: _isRecording
-                  ? colorScheme.error
-                  : colorScheme.primary,
-              foregroundColor: _isRecording
-                  ? colorScheme.onError
-                  : colorScheme.onPrimary,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
-              ),
-              textStyle: const TextStyle(fontSize: 18),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

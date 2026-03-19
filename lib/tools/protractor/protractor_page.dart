@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+
 /// Protractor (量角器) tool page.
 ///
 /// A full-screen protractor with two draggable arms extending from a center
@@ -37,45 +39,85 @@ class _ProtractorPageState extends State<ProtractorPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('量角器'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: '重設',
-            onPressed: _reset,
-          ),
-        ],
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final size = Size(constraints.maxWidth, constraints.maxHeight);
-          final center = Offset(size.width / 2, size.height / 2);
-          final radius = math.min(size.width, size.height) * 0.38;
+    return ImmersiveToolScaffold(
+      toolColor: const Color(0xFF795548),
+      title: '量角器',
+      heroTag: 'tool_hero_protractor',
+      headerFlex: 3,
+      bodyFlex: 1,
+      // 量角器視覺化區域
+      headerChild: SafeArea(
+        top: true,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final size = Size(constraints.maxWidth, constraints.maxHeight);
+            final center = Offset(size.width / 2, size.height / 2);
+            final radius = math.min(size.width, size.height) * 0.38;
 
-          return GestureDetector(
-            onPanStart: (details) => _onPanStart(details, center, radius),
-            onPanUpdate: (details) => _onPanUpdate(details, center),
-            onPanEnd: (_) => _activeArm = null,
-            child: CustomPaint(
-              size: size,
-              painter: _ProtractorPainter(
-                arm1Angle: _arm1Angle,
-                arm2Angle: _arm2Angle,
-                angleDegrees: _angleDegrees,
-                radius: radius,
-                center: center,
-                isDark: isDark,
-                primaryColor: theme.colorScheme.primary,
+            return GestureDetector(
+              onPanStart: (details) => _onPanStart(details, center, radius),
+              onPanUpdate: (details) => _onPanUpdate(details, center),
+              onPanEnd: (_) => setState(() => _activeArm = null),
+              child: CustomPaint(
+                size: size,
+                painter: _ProtractorPainter(
+                  arm1Angle: _arm1Angle,
+                  arm2Angle: _arm2Angle,
+                  angleDegrees: _angleDegrees,
+                  radius: radius,
+                  center: center,
+                  isDark: isDark,
+                  primaryColor: theme.colorScheme.primary,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      // 角度顯示與重設按鈕
+      bodyChild: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // 角度數值顯示
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '角度',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${_angleDegrees.toStringAsFixed(1)}°',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            // 重設按鈕
+            FilledButton.tonal(
+              onPressed: _reset,
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.refresh, size: 18),
+                  SizedBox(width: 6),
+                  Text('重設'),
+                ],
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
