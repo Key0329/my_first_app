@@ -37,6 +37,7 @@ class ImmersiveToolScaffold extends StatelessWidget {
     this.headerFlex = 2,
     this.bodyFlex = 3,
     this.heroTag,
+    this.showHeaderGradient = true,
   });
 
   /// 工具指定顏色，用於計算漸層背景色
@@ -62,6 +63,10 @@ class ImmersiveToolScaffold extends StatelessWidget {
   /// 形成配對，產生共享元素過渡動畫。
   final String? heroTag;
 
+  /// 是否在 header 區域顯示漸層背景，預設 true。
+  /// 設為 false 時 header 背景透明，適用於相機預覽等需要完整顯示內容的場景。
+  final bool showHeaderGradient;
+
   /// 根據 brightness 計算漸層色彩
   ///
   /// - Light mode: [toolColor.withValues(alpha: 0.8), toolColor.withValues(alpha: 0.4)]
@@ -84,27 +89,43 @@ class ImmersiveToolScaffold extends StatelessWidget {
   /// 若 [heroTag] 非空，以 [Hero] + [Material] 包裹以支援共享元素動畫；
   /// [Material] 使用 [MaterialType.transparency] 確保動畫過渡期間正確渲染。
   Widget _buildHeader(List<Color> gradientColors) {
-    final gradientContainer = Container(
+    final decoration = showHeaderGradient
+        ? BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: gradientColors,
+            ),
+          )
+        : null;
+
+    final headerContainer = Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: gradientColors,
-        ),
-      ),
+      decoration: decoration,
       child: headerChild,
     );
 
     if (heroTag == null) {
-      return gradientContainer;
+      return headerContainer;
     }
 
     return Hero(
       tag: heroTag!,
+      // 飛行期間只顯示漸層背景，避免 headerChild 內容在過渡動畫中被擠壓閃爍
+      flightShuttleBuilder: (flightContext, animation, direction, fromContext, toContext) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: gradientColors,
+            ),
+          ),
+        );
+      },
       child: Material(
         type: MaterialType.transparency,
-        child: gradientContainer,
+        child: headerContainer,
       ),
     );
   }

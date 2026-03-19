@@ -113,6 +113,11 @@ class _ColorPickerPageState extends State<ColorPickerPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    try {
+      _controller?.stop();
+    } catch (_) {
+      // 相機可能已在關閉中，忽略錯誤
+    }
     _controller?.dispose();
     super.dispose();
   }
@@ -217,9 +222,11 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     return ImmersiveToolScaffold(
       toolColor: const Color(0xFFFF9800),
       title: '色彩擷取',
-      heroTag: 'tool_hero_color_picker',
+      // 不使用 Hero 動畫 — 相機需要穩定的 widget tree，
+      // Hero 飛行期間的 reparent 會導致 camera surface 崩潰
       headerFlex: 2,
       bodyFlex: 3,
+      showHeaderGradient: false,
       headerChild: _buildCameraHeader(context),
       bodyChild: _buildColorInfoArea(context),
     );
