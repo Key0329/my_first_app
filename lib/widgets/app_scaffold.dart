@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
 
 class AppScaffold extends StatelessWidget {
   final Widget child;
@@ -7,9 +8,9 @@ class AppScaffold extends StatelessWidget {
   const AppScaffold({super.key, required this.child});
 
   static const _tabs = [
-    ('/tools', Icons.build, '工具'),
-    ('/favorites', Icons.favorite, '收藏'),
-    ('/settings', Icons.settings, '設定'),
+    ('/tools', Icons.grid_view_rounded, '工具'),
+    ('/favorites', Icons.favorite_outline, '收藏'),
+    ('/settings', Icons.settings_outlined, '設定'),
   ];
 
   int _currentIndex(BuildContext context) {
@@ -22,25 +23,30 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final b = Theme.of(context).brightness;
     final currentIndex = _currentIndex(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('工具箱 Pro'),
-      ),
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: (index) {
-          context.go(_tabs[index].$1);
-        },
-        destinations: _tabs
-            .map(
-              (tab) => NavigationDestination(
-                icon: Icon(tab.$2),
-                label: tab.$3,
-              ),
-            )
-            .toList(),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(height: 0.5, thickness: 0.5, color: DT.navBorder(b)),
+          NavigationBar(
+            selectedIndex: currentIndex,
+            onDestinationSelected: (index) {
+              context.go(_tabs[index].$1);
+            },
+            destinations: _tabs
+                .map(
+                  (tab) => NavigationDestination(
+                    icon: Icon(tab.$2),
+                    label: tab.$3,
+                  ),
+                )
+                .toList(),
+          ),
+        ],
       ),
     );
   }

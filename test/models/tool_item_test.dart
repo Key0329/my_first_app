@@ -3,19 +3,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/models/tool_item.dart';
 
 void main() {
-  group('BentoSize enum', () {
-    test('has exactly three values: large, medium, small', () {
-      expect(BentoSize.values.length, 3);
-      expect(BentoSize.values, containsAll([
-        BentoSize.large,
-        BentoSize.medium,
-        BentoSize.small,
+  group('ToolCategory enum', () {
+    test('has exactly three values: calculate, measure, life', () {
+      expect(ToolCategory.values.length, 3);
+      expect(ToolCategory.values, containsAll([
+        ToolCategory.calculate,
+        ToolCategory.measure,
+        ToolCategory.life,
       ]));
+    });
+
+    test('each category has a label', () {
+      expect(ToolCategory.calculate.label, '計算');
+      expect(ToolCategory.measure.label, '測量');
+      expect(ToolCategory.life.label, '生活');
     });
   });
 
-  group('ToolItem.defaultBentoSize', () {
-    test('defaults to BentoSize.medium when not specified', () {
+  group('ToolItem', () {
+    test('requires category parameter', () {
       const item = ToolItem(
         id: 'test',
         nameKey: 'tool_test',
@@ -23,37 +29,10 @@ void main() {
         icon: Icons.star,
         color: Color(0xFF000000),
         routePath: '/tools/test',
+        category: ToolCategory.life,
       );
 
-      expect(item.defaultBentoSize, BentoSize.medium);
-    });
-
-    test('can be set to BentoSize.large', () {
-      const item = ToolItem(
-        id: 'test_large',
-        nameKey: 'tool_test_large',
-        fallbackName: '測試大',
-        icon: Icons.star,
-        color: Color(0xFF000000),
-        routePath: '/tools/test-large',
-        defaultBentoSize: BentoSize.large,
-      );
-
-      expect(item.defaultBentoSize, BentoSize.large);
-    });
-
-    test('can be set to BentoSize.small', () {
-      const item = ToolItem(
-        id: 'test_small',
-        nameKey: 'tool_test_small',
-        fallbackName: '測試小',
-        icon: Icons.star,
-        color: Color(0xFF000000),
-        routePath: '/tools/test-small',
-        defaultBentoSize: BentoSize.small,
-      );
-
-      expect(item.defaultBentoSize, BentoSize.small);
+      expect(item.category, ToolCategory.life);
     });
   });
 
@@ -68,12 +47,12 @@ void main() {
       }
     });
 
-    test('all existing entries default to BentoSize.medium', () {
+    test('all entries have a valid category', () {
       for (final tool in allTools) {
         expect(
-          tool.defaultBentoSize,
-          BentoSize.medium,
-          reason: 'Tool "${tool.id}" should default to BentoSize.medium',
+          ToolCategory.values.contains(tool.category),
+          isTrue,
+          reason: 'Tool "${tool.id}" should have a valid ToolCategory',
         );
       }
     });
@@ -92,7 +71,10 @@ void main() {
         'password_generator',
         'color_picker',
         'protractor',
-        'invoice_checker',
+        'bmi_calculator',
+        'split_bill',
+        'random_wheel',
+        'screen_ruler',
       ]));
     });
   });

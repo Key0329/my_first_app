@@ -54,7 +54,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolProtractor => 'Protractor';
 
   @override
-  String get toolInvoiceChecker => 'Invoice Checker';
+  String get toolBmiCalculator => 'BMI Calculator';
+
+  @override
+  String get toolSplitBill => 'Split Bill';
+
+  @override
+  String get toolRandomWheel => 'Random Wheel';
+
+  @override
+  String get toolScreenRuler => 'Screen Ruler';
 
   @override
   String get searchHint => 'Search tools...';

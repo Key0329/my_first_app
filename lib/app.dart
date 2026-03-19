@@ -10,7 +10,6 @@ import 'package:my_first_app/theme/app_theme.dart';
 import 'package:my_first_app/tools/calculator/calculator_page.dart';
 import 'package:my_first_app/tools/password_generator/password_generator_page.dart';
 import 'package:my_first_app/tools/stopwatch_timer/stopwatch_timer_page.dart';
-import 'package:my_first_app/tools/invoice_checker/invoice_checker_page.dart';
 import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
 import 'package:my_first_app/tools/color_picker/color_picker_page.dart';
 import 'package:my_first_app/tools/compass/compass_page.dart';
@@ -19,6 +18,10 @@ import 'package:my_first_app/tools/level/level_page.dart';
 import 'package:my_first_app/tools/noise_meter/noise_meter_page.dart';
 import 'package:my_first_app/tools/protractor/protractor_page.dart';
 import 'package:my_first_app/tools/unit_converter/unit_converter_page.dart';
+import 'package:my_first_app/tools/bmi_calculator/bmi_calculator_page.dart';
+import 'package:my_first_app/tools/split_bill/split_bill_page.dart';
+import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
+import 'package:my_first_app/tools/screen_ruler/screen_ruler_page.dart';
 import 'package:my_first_app/widgets/app_scaffold.dart';
 
 class ToolboxApp extends StatefulWidget {
@@ -196,10 +199,43 @@ class _ToolboxAppState extends State<ToolboxApp> {
           ),
         ),
         GoRoute(
-          path: '/tools/invoice-checker',
+          path: '/tools/bmi-calculator',
           pageBuilder: (context, state) => CustomTransitionPage(
             key: state.pageKey,
-            child: const InvoiceCheckerPage(),
+            child: const BmiCalculatorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/split-bill',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const SplitBillPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/random-wheel',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const RandomWheelPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/screen-ruler',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const ScreenRulerPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);

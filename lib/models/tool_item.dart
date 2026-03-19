@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// Bento grid tile size variants.
-///
-/// - [large]: spans 2 columns, 1.5x height (used for favorited tools at display time)
-/// - [medium]: 1 column, 1.2x height (standard default)
-/// - [small]: 1 column, 1x height (compact)
-enum BentoSize { large, medium, small }
+/// 工具分類，用於首頁 Tab 篩選。
+enum ToolCategory {
+  calculate('計算'),
+  measure('測量'),
+  life('生活');
+
+  const ToolCategory(this.label);
+  final String label;
+}
 
 class ToolItem {
   final String id;
@@ -14,12 +17,7 @@ class ToolItem {
   final IconData icon;
   final Color color;
   final String routePath;
-
-  /// The default bento tile size for this tool.
-  ///
-  /// Favorited tools are dynamically upgraded to [BentoSize.large] at display
-  /// time; this field stores the non-favorited default only.
-  final BentoSize defaultBentoSize;
+  final ToolCategory category;
 
   const ToolItem({
     required this.id,
@@ -28,11 +26,12 @@ class ToolItem {
     required this.icon,
     required this.color,
     required this.routePath,
-    this.defaultBentoSize = BentoSize.medium,
+    required this.category,
   });
 }
 
 const List<ToolItem> allTools = [
+  // ── 計算 ──
   ToolItem(
     id: 'calculator',
     nameKey: 'tool_calculator',
@@ -40,6 +39,7 @@ const List<ToolItem> allTools = [
     icon: Icons.calculate,
     color: Color(0xFF4CAF50),
     routePath: '/tools/calculator',
+    category: ToolCategory.calculate,
   ),
   ToolItem(
     id: 'unit_converter',
@@ -48,23 +48,27 @@ const List<ToolItem> allTools = [
     icon: Icons.swap_horiz,
     color: Color(0xFF2196F3),
     routePath: '/tools/unit-converter',
+    category: ToolCategory.calculate,
   ),
   ToolItem(
-    id: 'qr_generator',
-    nameKey: 'tool_qr_generator',
-    fallbackName: 'QR Code 產生器',
-    icon: Icons.qr_code,
-    color: Color(0xFF9C27B0),
-    routePath: '/tools/qr-generator',
+    id: 'bmi_calculator',
+    nameKey: 'tool_bmi_calculator',
+    fallbackName: 'BMI 計算機',
+    icon: Icons.monitor_heart,
+    color: Color(0xFFE91E63),
+    routePath: '/tools/bmi-calculator',
+    category: ToolCategory.calculate,
   ),
   ToolItem(
-    id: 'flashlight',
-    nameKey: 'tool_flashlight',
-    fallbackName: '手電筒',
-    icon: Icons.flashlight_on,
-    color: Color(0xFFFFC107),
-    routePath: '/tools/flashlight',
+    id: 'split_bill',
+    nameKey: 'tool_split_bill',
+    fallbackName: 'AA 制分帳',
+    icon: Icons.groups,
+    color: Color(0xFF26A69A),
+    routePath: '/tools/split-bill',
+    category: ToolCategory.calculate,
   ),
+  // ── 測量 ──
   ToolItem(
     id: 'level',
     nameKey: 'tool_level',
@@ -72,6 +76,7 @@ const List<ToolItem> allTools = [
     icon: Icons.straighten,
     color: Color(0xFF00BCD4),
     routePath: '/tools/level',
+    category: ToolCategory.measure,
   ),
   ToolItem(
     id: 'compass',
@@ -80,38 +85,7 @@ const List<ToolItem> allTools = [
     icon: Icons.explore,
     color: Color(0xFFFF5722),
     routePath: '/tools/compass',
-  ),
-  ToolItem(
-    id: 'stopwatch_timer',
-    nameKey: 'tool_stopwatch_timer',
-    fallbackName: '碼錶',
-    icon: Icons.timer,
-    color: Color(0xFF607D8B),
-    routePath: '/tools/stopwatch-timer',
-  ),
-  ToolItem(
-    id: 'noise_meter',
-    nameKey: 'tool_noise_meter',
-    fallbackName: '噪音計',
-    icon: Icons.mic,
-    color: Color(0xFFE91E63),
-    routePath: '/tools/noise-meter',
-  ),
-  ToolItem(
-    id: 'password_generator',
-    nameKey: 'tool_password_generator',
-    fallbackName: '密碼產生器',
-    icon: Icons.lock,
-    color: Color(0xFF3F51B5),
-    routePath: '/tools/password-generator',
-  ),
-  ToolItem(
-    id: 'color_picker',
-    nameKey: 'tool_color_picker',
-    fallbackName: '色彩擷取',
-    icon: Icons.colorize,
-    color: Color(0xFFFF9800),
-    routePath: '/tools/color-picker',
+    category: ToolCategory.measure,
   ),
   ToolItem(
     id: 'protractor',
@@ -120,13 +94,79 @@ const List<ToolItem> allTools = [
     icon: Icons.architecture,
     color: Color(0xFF795548),
     routePath: '/tools/protractor',
+    category: ToolCategory.measure,
   ),
   ToolItem(
-    id: 'invoice_checker',
-    nameKey: 'tool_invoice_checker',
-    fallbackName: '發票對獎',
-    icon: Icons.receipt_long,
-    color: Color(0xFF009688),
-    routePath: '/tools/invoice-checker',
+    id: 'screen_ruler',
+    nameKey: 'tool_screen_ruler',
+    fallbackName: '螢幕尺規',
+    icon: Icons.square_foot,
+    color: Color(0xFF5C6BC0),
+    routePath: '/tools/screen-ruler',
+    category: ToolCategory.measure,
+  ),
+  ToolItem(
+    id: 'noise_meter',
+    nameKey: 'tool_noise_meter',
+    fallbackName: '噪音計',
+    icon: Icons.mic,
+    color: Color(0xFFE91E63),
+    routePath: '/tools/noise-meter',
+    category: ToolCategory.measure,
+  ),
+  // ── 生活 ──
+  ToolItem(
+    id: 'flashlight',
+    nameKey: 'tool_flashlight',
+    fallbackName: '手電筒',
+    icon: Icons.flashlight_on,
+    color: Color(0xFFFFC107),
+    routePath: '/tools/flashlight',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'stopwatch_timer',
+    nameKey: 'tool_stopwatch_timer',
+    fallbackName: '碼錶',
+    icon: Icons.timer,
+    color: Color(0xFF607D8B),
+    routePath: '/tools/stopwatch-timer',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'password_generator',
+    nameKey: 'tool_password_generator',
+    fallbackName: '密碼產生器',
+    icon: Icons.lock,
+    color: Color(0xFF3F51B5),
+    routePath: '/tools/password-generator',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'color_picker',
+    nameKey: 'tool_color_picker',
+    fallbackName: '色彩擷取',
+    icon: Icons.colorize,
+    color: Color(0xFFFF9800),
+    routePath: '/tools/color-picker',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'qr_generator',
+    nameKey: 'tool_qr_generator',
+    fallbackName: 'QR Code 產生器',
+    icon: Icons.qr_code,
+    color: Color(0xFF9C27B0),
+    routePath: '/tools/qr-generator',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'random_wheel',
+    nameKey: 'tool_random_wheel',
+    fallbackName: '隨機決定器',
+    icon: Icons.casino,
+    color: Color(0xFFFF7043),
+    routePath: '/tools/random-wheel',
+    category: ToolCategory.life,
   ),
 ];

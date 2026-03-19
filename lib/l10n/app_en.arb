@@ -17,8 +17,10 @@
   "toolPasswordGenerator": "Password Generator",
   "toolColorPicker": "Color Picker",
   "toolProtractor": "Protractor",
-  "toolInvoiceChecker": "Invoice Checker",
-
+  "toolBmiCalculator": "BMI Calculator",
+  "toolSplitBill": "Split Bill",
+  "toolRandomWheel": "Random Wheel",
+  "toolScreenRuler": "Screen Ruler",
   "searchHint": "Search tools...",
 
   "favoritesEmpty": "No favorites yet",

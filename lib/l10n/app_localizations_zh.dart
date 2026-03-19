@@ -54,7 +54,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get toolProtractor => '量角器';
 
   @override
-  String get toolInvoiceChecker => '發票對獎';
+  String get toolBmiCalculator => 'BMI 計算機';
+
+  @override
+  String get toolSplitBill => 'AA 制分帳';
+
+  @override
+  String get toolRandomWheel => '隨機決定器';
+
+  @override
+  String get toolScreenRuler => '螢幕尺規';
 
   @override
   String get searchHint => '搜尋工具...';

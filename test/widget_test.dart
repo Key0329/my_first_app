@@ -11,7 +11,7 @@ void main() {
     await tester.pumpWidget(ToolboxApp(settings: settings));
     await tester.pumpAndSettle();
 
-    expect(find.text('工具箱 Pro'), findsOneWidget);
+    expect(find.text('工具箱'), findsOneWidget);
     expect(find.text('計算機'), findsOneWidget);
   });
 }

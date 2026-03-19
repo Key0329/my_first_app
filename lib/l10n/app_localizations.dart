@@ -188,11 +188,29 @@ abstract class AppLocalizations {
   /// **'量角器'**
   String get toolProtractor;
 
-  /// Tool name: Invoice Checker
+  /// Tool name: BMI Calculator
   ///
   /// In zh, this message translates to:
-  /// **'發票對獎'**
-  String get toolInvoiceChecker;
+  /// **'BMI 計算機'**
+  String get toolBmiCalculator;
+
+  /// Tool name: Split Bill
+  ///
+  /// In zh, this message translates to:
+  /// **'AA 制分帳'**
+  String get toolSplitBill;
+
+  /// Tool name: Random Wheel
+  ///
+  /// In zh, this message translates to:
+  /// **'隨機決定器'**
+  String get toolRandomWheel;
+
+  /// Tool name: Screen Ruler
+  ///
+  /// In zh, this message translates to:
+  /// **'螢幕尺規'**
+  String get toolScreenRuler;
 
   /// Search bar hint text
   ///

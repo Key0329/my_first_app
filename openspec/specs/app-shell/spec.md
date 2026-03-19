@@ -342,12 +342,12 @@ tests:
 ---
 ### Requirement: Tool list displayed as grid
 
-The home page SHALL display all tools in a Bento Grid layout with variable-sized cards. Favorited tools SHALL be displayed as large cards spanning 2 columns. The home page SHALL include a search bar at the top to filter tools by name. When filtering, the Bento layout SHALL recalculate for the visible tools.
+The home page SHALL display all tools in a Bento Grid layout with variable-sized cards. Favorited tools SHALL be displayed as large cards spanning 2 columns. The home page SHALL include a search bar at the top to filter tools by name. When filtering, the Bento layout SHALL recalculate for the visible tools. The total tool count SHALL be 15.
 
 #### Scenario: User views the tool list
 
 - **WHEN** user is on the Tools tab
-- **THEN** all 12 tools SHALL be displayed in a Bento Grid layout with variable card sizes
+- **THEN** all 15 tools SHALL be displayed in a Bento Grid layout with variable card sizes
 
 #### Scenario: User searches for a tool
 
@@ -356,124 +356,136 @@ The home page SHALL display all tools in a Bento Grid layout with variable-sized
 
 
 <!-- @trace
-source: design-overhaul-bento
+source: add-tools-batch-2
 updated: 2026-03-19
 code:
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-  - patches/audio_streamer/lib/audio_streamer.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - patches/audio_streamer/example/android/settings.gradle
-  - patches/audio_streamer/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-  - lib/widgets/bento_grid.dart
-  - lib/widgets/staggered_fade_in.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
-  - patches/audio_streamer/README.md
-  - lib/l10n/app_localizations.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.lock
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/l10n/app_en.arb
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
-  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
-  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
-  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - lib/widgets/bouncing_button.dart
-  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
-  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
   - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-  - patches/audio_streamer/ios/audio_streamer.podspec
-  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-  - ios/Runner/Info.plist
-  - lib/tools/compass/compass_page.dart
-  - patches/audio_streamer/example/android/app/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-  - lib/models/tool_item.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
-  - lib/widgets/tool_card.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
-  - patches/audio_streamer/example/README.md
-  - pubspec.yaml
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
-  - lib/tools/protractor/protractor_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-  - patches/audio_streamer/example/ios/Podfile
-  - patches/audio_streamer/analysis_options.yaml
-  - patches/audio_streamer/example/ios/Runner/Info.plist
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-  - lib/tools/flashlight/flashlight_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-  - lib/tools/password_generator/password_generator_page.dart
-  - patches/audio_streamer/android/src/main/AndroidManifest.xml
-  - lib/pages/favorites_page.dart
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
-  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
-  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
-  - lib/pages/home_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/l10n/app_localizations_en.dart
-  - patches/audio_streamer/android/gradle.properties
-  - lib/tools/calculator/calculator_page.dart
   - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-  - lib/widgets/immersive_tool_scaffold.dart
-  - patches/audio_streamer/example/pubspec.yaml
-  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
-  - lib/theme/app_theme.dart
-  - patches/audio_streamer/example/android/gradle.properties
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-  - android/app/src/main/AndroidManifest.xml
-  - lib/tools/level/level_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
-  - patches/audio_streamer/LICENSE
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
-  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
-  - lib/app.dart
-  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
-  - patches/audio_streamer/android/build.gradle
+  - lib/tools/screen_ruler/ruler_painter.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
   - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
+  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
+  - lib/tools/level/level_page.dart
+  - patches/audio_streamer/android/gradle.properties
+  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
+  - pubspec.yaml
+  - patches/audio_streamer/example/ios/Podfile
+  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
+  - lib/l10n/app_localizations_zh.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
   - patches/audio_streamer/example/lib/main.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/theme/app_theme.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
+  - patches/audio_streamer/pubspec.yaml
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
+  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
+  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
+  - lib/widgets/staggered_fade_in.dart
+  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
+  - patches/audio_streamer/example/android/app/build.gradle
+  - patches/audio_streamer/example/pubspec.yaml
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
+  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
+  - lib/pages/favorites_page.dart
+  - lib/tools/compass/compass_page.dart
   - patches/audio_streamer/CHANGELOG.md
   - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - patches/audio_streamer/example/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
+  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
   - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
+  - lib/l10n/app_zh.arb
+  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
+  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
+  - patches/audio_streamer/example/android/settings.gradle
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
+  - lib/tools/flashlight/flashlight_page.dart
+  - patches/audio_streamer/README.md
+  - lib/app.dart
+  - android/app/src/main/AndroidManifest.xml
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
+  - patches/audio_streamer/LICENSE
+  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
+  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
+  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+  - lib/tools/qr_scanner/qr_scanner_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
+  - lib/tools/invoice_checker/invoice_api.dart
+  - lib/tools/invoice_checker/invoice_parser.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+  - lib/widgets/immersive_tool_scaffold.dart
+  - patches/audio_streamer/android/src/main/AndroidManifest.xml
+  - ios/Runner/Info.plist
+  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
+  - lib/widgets/bento_grid.dart
+  - patches/audio_streamer/analysis_options.yaml
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
+  - pubspec.lock
+  - lib/tools/split_bill/split_bill_page.dart
+  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
+  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
+  - lib/widgets/bouncing_button.dart
+  - lib/widgets/tool_card.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
+  - patches/audio_streamer/ios/audio_streamer.podspec
+  - lib/models/tool_item.dart
+  - patches/audio_streamer/lib/audio_streamer.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
+  - lib/pages/home_page.dart
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
+  - lib/tools/bmi_calculator/bmi_logic.dart
+  - lib/l10n/app_en.arb
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+  - lib/tools/random_wheel/wheel_painter.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - patches/audio_streamer/example/android/build.gradle
+  - patches/audio_streamer/example/README.md
+  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
+  - patches/audio_streamer/example/android/gradle.properties
+  - lib/l10n/app_localizations_en.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
+  - lib/l10n/app_localizations.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
+  - patches/audio_streamer/android/build.gradle
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
   - patches/audio_streamer/android/settings.gradle
-  - lib/l10n/app_localizations_zh.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+  - lib/tools/protractor/protractor_page.dart
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+  - patches/audio_streamer/example/ios/Runner/Info.plist
+  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
+  - lib/tools/password_generator/password_generator_page.dart
 tests:
-  - test/theme/app_theme_test.dart
-  - patches/audio_streamer/test/audio_streamer_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/models/tool_item_test.dart
+  - test/tools/password_generator_test.dart
   - test/widgets/bouncing_button_test.dart
+  - test/tools/split_bill_test.dart
+  - test/tools/invoice_checker_test.dart
+  - test/tools/qr_generator_test.dart
+  - test/widgets/bento_grid_test.dart
+  - test/tools/bmi_calculator_logic_test.dart
+  - test/widgets/immersive_tool_scaffold_test.dart
+  - test/widgets/staggered_fade_in_test.dart
+  - test/models/tool_item_test.dart
   - test/pages/favorites_page_test.dart
   - test/widgets/tool_card_test.dart
-  - test/widgets/immersive_tool_scaffold_test.dart
+  - test/theme/app_theme_test.dart
   - test/pages/home_page_test.dart
-  - test/tools/password_generator_test.dart
-  - test/widgets/staggered_fade_in_test.dart
-  - test/tools/qr_generator_test.dart
+  - patches/audio_streamer/test/audio_streamer_test.dart
 -->
 
 ---
@@ -543,4 +555,151 @@ tests:
   - test/tools/unit_converter_test.dart
   - test/tools/stopwatch_timer_test.dart
   - test/services/settings_service_test.dart
+-->
+
+---
+### Requirement: Routes for new tools
+
+The app SHALL register four new full-screen GoRoute entries with CustomTransitionPage and FadeTransition:
+- `/tools/bmi-calculator` → BmiCalculatorPage
+- `/tools/split-bill` → SplitBillPage
+- `/tools/random-wheel` → RandomWheelPage
+- `/tools/screen-ruler` → ScreenRulerPage
+
+#### Scenario: User navigates to a new tool
+
+- **WHEN** user taps any of the four new tool cards on the home page
+- **THEN** the corresponding tool page SHALL open in full screen with a fade transition and Hero animation
+
+<!-- @trace
+source: add-tools-batch-2
+updated: 2026-03-19
+code:
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
+  - lib/tools/screen_ruler/ruler_painter.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
+  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
+  - lib/tools/level/level_page.dart
+  - patches/audio_streamer/android/gradle.properties
+  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
+  - pubspec.yaml
+  - patches/audio_streamer/example/ios/Podfile
+  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
+  - lib/l10n/app_localizations_zh.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
+  - patches/audio_streamer/example/lib/main.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/theme/app_theme.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
+  - patches/audio_streamer/pubspec.yaml
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
+  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
+  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
+  - lib/widgets/staggered_fade_in.dart
+  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
+  - patches/audio_streamer/example/android/app/build.gradle
+  - patches/audio_streamer/example/pubspec.yaml
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
+  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
+  - lib/pages/favorites_page.dart
+  - lib/tools/compass/compass_page.dart
+  - patches/audio_streamer/CHANGELOG.md
+  - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
+  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
+  - lib/l10n/app_zh.arb
+  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
+  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
+  - patches/audio_streamer/example/android/settings.gradle
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
+  - lib/tools/flashlight/flashlight_page.dart
+  - patches/audio_streamer/README.md
+  - lib/app.dart
+  - android/app/src/main/AndroidManifest.xml
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
+  - patches/audio_streamer/LICENSE
+  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
+  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
+  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+  - lib/tools/qr_scanner/qr_scanner_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
+  - lib/tools/invoice_checker/invoice_api.dart
+  - lib/tools/invoice_checker/invoice_parser.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+  - lib/widgets/immersive_tool_scaffold.dart
+  - patches/audio_streamer/android/src/main/AndroidManifest.xml
+  - ios/Runner/Info.plist
+  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
+  - lib/widgets/bento_grid.dart
+  - patches/audio_streamer/analysis_options.yaml
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
+  - pubspec.lock
+  - lib/tools/split_bill/split_bill_page.dart
+  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
+  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
+  - lib/widgets/bouncing_button.dart
+  - lib/widgets/tool_card.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
+  - patches/audio_streamer/ios/audio_streamer.podspec
+  - lib/models/tool_item.dart
+  - patches/audio_streamer/lib/audio_streamer.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
+  - lib/pages/home_page.dart
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
+  - lib/tools/bmi_calculator/bmi_logic.dart
+  - lib/l10n/app_en.arb
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+  - lib/tools/random_wheel/wheel_painter.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - patches/audio_streamer/example/android/build.gradle
+  - patches/audio_streamer/example/README.md
+  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
+  - patches/audio_streamer/example/android/gradle.properties
+  - lib/l10n/app_localizations_en.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
+  - lib/l10n/app_localizations.dart
+  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
+  - patches/audio_streamer/android/build.gradle
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+  - patches/audio_streamer/android/settings.gradle
+  - lib/tools/protractor/protractor_page.dart
+  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+  - patches/audio_streamer/example/ios/Runner/Info.plist
+  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
+  - lib/tools/password_generator/password_generator_page.dart
+tests:
+  - test/tools/password_generator_test.dart
+  - test/widgets/bouncing_button_test.dart
+  - test/tools/split_bill_test.dart
+  - test/tools/invoice_checker_test.dart
+  - test/tools/qr_generator_test.dart
+  - test/widgets/bento_grid_test.dart
+  - test/tools/bmi_calculator_logic_test.dart
+  - test/widgets/immersive_tool_scaffold_test.dart
+  - test/widgets/staggered_fade_in_test.dart
+  - test/models/tool_item_test.dart
+  - test/pages/favorites_page_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/theme/app_theme_test.dart
+  - test/pages/home_page_test.dart
+  - patches/audio_streamer/test/audio_streamer_test.dart
 -->

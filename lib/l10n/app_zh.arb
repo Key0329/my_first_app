@@ -33,9 +33,14 @@
   "@toolColorPicker": { "description": "Tool name: Color Picker" },
   "toolProtractor": "量角器",
   "@toolProtractor": { "description": "Tool name: Protractor" },
-  "toolInvoiceChecker": "發票對獎",
-  "@toolInvoiceChecker": { "description": "Tool name: Invoice Checker" },
-
+  "toolBmiCalculator": "BMI 計算機",
+  "@toolBmiCalculator": { "description": "Tool name: BMI Calculator" },
+  "toolSplitBill": "AA 制分帳",
+  "@toolSplitBill": { "description": "Tool name: Split Bill" },
+  "toolRandomWheel": "隨機決定器",
+  "@toolRandomWheel": { "description": "Tool name: Random Wheel" },
+  "toolScreenRuler": "螢幕尺規",
+  "@toolScreenRuler": { "description": "Tool name: Screen Ruler" },
   "searchHint": "搜尋工具...",
   "@searchHint": { "description": "Search bar hint text" },
 
