@@ -5,9 +5,11 @@ import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
-import 'package:my_first_app/widgets/share_button.dart';
+import 'package:my_first_app/widgets/share_card_generator.dart';
+import 'package:my_first_app/widgets/share_card_template.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:share_plus/share_plus.dart';
 import 'bmi_logic.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -24,6 +26,7 @@ class BmiCalculatorPage extends StatefulWidget {
 class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
   static const Color _toolColor = Color(0xFFE91E63);
 
+  final GlobalKey _shareCardKey = GlobalKey();
   double _heightCm = 170;
   double _weightKg = 65;
   bool _hasTrackedComplete = false;
@@ -53,43 +56,101 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
     }
   }
 
+  Future<void> _shareAsCard() async {
+    AnalyticsService.instance.logToolShare(
+      toolId: 'bmi_calculator',
+      shareMethod: 'share_card',
+    );
+
+    final xFile = await ShareCardGenerator.capture(_shareCardKey);
+    if (xFile != null) {
+      await Share.shareXFiles([xFile], text: '用 Spectra 工具箱計算 BMI');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final result = _result;
     final (minWeight, maxWeight) = BmiLogic.healthyWeightRange(_heightCm);
 
-    return ImmersiveToolScaffold(
-      toolId: 'bmi_calculator',
-      toolColor: _toolColor,
-      title: 'BMI 計算機',
-      heroTag: 'tool_hero_bmi_calculator',
-      headerFlex: 2,
-      bodyFlex: 3,
-      actions: [
-        ShareButton(
+    return Stack(
+      children: [
+        ImmersiveToolScaffold(
           toolId: 'bmi_calculator',
-          enabled: true,
-          shareText:
-              '📊 我的 BMI：${result.bmi.toStringAsFixed(1)}（${_categoryLabel(result.category)}）\n身高：${_heightCm.round()}cm / 體重：${_weightKg.round()}kg\n\n用 Spectra 工具箱計算 BMI 👉 https://spectra.app/tools/bmi-calculator',
+          toolColor: _toolColor,
+          title: 'BMI 計算機',
+          heroTag: 'tool_hero_bmi_calculator',
+          headerFlex: 2,
+          bodyFlex: 3,
+          actions: [
+            Opacity(
+              opacity: 1.0,
+              child: IconButton(
+                onPressed: _shareAsCard,
+                icon: const Icon(Icons.share),
+                tooltip: '分享',
+              ),
+            ),
+          ],
+          headerChild: _BmiGauge(result: result),
+          bodyChild: _BmiControls(
+            toolColor: _toolColor,
+            heightCm: _heightCm,
+            weightKg: _weightKg,
+            result: result,
+            minWeight: minWeight,
+            maxWeight: maxWeight,
+            onHeightChanged: (v) {
+              setState(() => _heightCm = v);
+              _trackCompleteOnce();
+            },
+            onWeightChanged: (v) {
+              setState(() => _weightKg = v);
+              _trackCompleteOnce();
+            },
+          ),
+        ),
+        // 隱藏的分享卡片（用於截圖）
+        Offstage(
+          child: RepaintBoundary(
+            key: _shareCardKey,
+            child: ShareCardTemplate(
+              toolName: 'BMI 計算機',
+              gradientColors: toolGradients['bmi_calculator']!,
+              resultChild: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    result.bmi.toStringAsFixed(1),
+                    style: TextStyle(
+                      fontSize: 56,
+                      fontWeight: FontWeight.bold,
+                      color: result.category.color,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _categoryLabel(result.category),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: result.category.color,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    '身高 ${_heightCm.round()} cm / 體重 ${_weightKg.round()} kg',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF999999),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
-      headerChild: _BmiGauge(result: result),
-      bodyChild: _BmiControls(
-        toolColor: _toolColor,
-        heightCm: _heightCm,
-        weightKg: _weightKg,
-        result: result,
-        minWeight: minWeight,
-        maxWeight: maxWeight,
-        onHeightChanged: (v) {
-          setState(() => _heightCm = v);
-          _trackCompleteOnce();
-        },
-        onWeightChanged: (v) {
-          setState(() => _weightKg = v);
-          _trackCompleteOnce();
-        },
-      ),
     );
   }
 }

@@ -77,13 +77,13 @@
 - [x] 建立工具關聯圖譜（計算機→單位換算、匯率→分帳 等）
 - [x] 在工具結果頁底部顯示推薦卡片
 
-### Change #6: `share-result-cards`
+### ~~Change #6: `share-result-cards`~~ ✅ archived 2026-03-22
 
 > 預估：2 天 | 依賴：#1
 
-- [ ] 使用 `RepaintBoundary` + `toImage()` 生成結果卡片圖片
-- [ ] 卡片帶品牌漸層邊框 + App 水印
-- [ ] 優先支援：AA 分帳、BMI、轉盤結果、日期倒數
+- [x] 使用 `RepaintBoundary` + `toImage()` 生成結果卡片圖片
+- [x] 卡片帶品牌漸層邊框 + App 水印
+- [x] 優先支援：AA 分帳、BMI、轉盤結果、日期倒數
 
 ---
 
@@ -334,7 +334,7 @@
 | ~~3~~ | ~~`home-screen-widgets`~~ ✅ | 2 | 3d | #1 |
 | ~~4~~ | ~~`calculator-history`~~ ✅ | 2 | 1d | #1 |
 | ~~5~~ | ~~`tool-recommendations`~~ ✅ | 2 | 1.5d | #1 |
-| 6 | `share-result-cards` | 2 | 2d | #1 |
+| ~~6~~ | ~~`share-result-cards`~~ ✅ | 2 | 2d | #1 |
 | 7 | `tool-registry` | 3 | 2d | #1 |
 | 8 | `ci-cd-pipeline` | 3 | 1.5d | — |
 | 9 | `services-refactor` | 3 | 2d | #1 |

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/share_card_generator.dart';
+import 'package:my_first_app/widgets/share_card_template.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:share_plus/share_plus.dart';
 import 'date_calculator_logic.dart';
 
 /// 日期計算機工具頁面。
@@ -24,6 +28,9 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   static const Color _toolColor = Color(0xFF5C6BC0);
 
   late final TabController _tabController;
+
+  // ── 分享卡片 ──
+  final GlobalKey _shareCardKey = GlobalKey();
 
   // ── Mode 1: Date Interval ──
   DateTime _intervalStart = DateTime.now();
@@ -157,26 +164,197 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
     }
   }
 
+  // ── 分享卡片結果內容 ──
+  Widget _buildShareCardResult() {
+    const resultTextColor = Color(0xFF333333);
+
+    switch (_tabController.index) {
+      case 0:
+        final r = _intervalResult;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${_formatDate(_intervalStart)} ~ ${_formatDate(_intervalEnd)}',
+              style: const TextStyle(
+                fontSize: 14,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '${r.totalDays} 天',
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: _toolColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${r.weeks} 週 ${r.remainingDays} 天 / ${r.months} 個月 ${r.monthRemainingDays} 天',
+              style: const TextStyle(
+                fontSize: 13,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
+      case 1:
+        final result = _addSubResult;
+        final days = int.tryParse(_daysController.text) ?? 0;
+        final op = _isSubtract ? '減' : '加';
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${_formatDate(_addSubBase)} $op $days 天',
+              style: const TextStyle(
+                fontSize: 14,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              _formatDate(result),
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: _toolColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _weekdayName(result),
+              style: const TextStyle(
+                fontSize: 13,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
+      case 2:
+        final r = _bizResult;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${_formatDate(_bizStart)} ~ ${_formatDate(_bizEnd)}',
+              style: const TextStyle(
+                fontSize: 14,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '${r.businessDays} 工作日',
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: _toolColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${r.calendarDays} 日曆天 / ${r.weekendDays} 天週末',
+              style: const TextStyle(
+                fontSize: 13,
+                color: resultTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  String get _shareText {
+    switch (_tabController.index) {
+      case 0:
+        final r = _intervalResult;
+        return '📅 日期區間：${_formatDate(_intervalStart)} ~ ${_formatDate(_intervalEnd)}，共 ${r.totalDays} 天\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+      case 1:
+        final result = _addSubResult;
+        final days = int.tryParse(_daysController.text) ?? 0;
+        final op = _isSubtract ? '減' : '加';
+        return '📅 ${_formatDate(_addSubBase)} $op $days 天 = ${_formatDate(result)}（${_weekdayName(result)}）\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+      case 2:
+        final r = _bizResult;
+        return '📅 工作日計算：${_formatDate(_bizStart)} ~ ${_formatDate(_bizEnd)}，共 ${r.businessDays} 工作日\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+      default:
+        return '';
+    }
+  }
+
+  Future<void> _shareAsImage() async {
+    AnalyticsService.instance.logToolShare(
+      toolId: 'date_calculator',
+      shareMethod: 'system_share',
+    );
+
+    final xFile = await ShareCardGenerator.capture(_shareCardKey);
+    if (xFile != null) {
+      await Share.shareXFiles(
+        [xFile],
+        text: _shareText,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ImmersiveToolScaffold(
-      toolId: 'date_calculator',
-      toolColor: _toolColor,
-      title: '日期計算機',
-      heroTag: 'tool_hero_date_calculator',
-      headerFlex: 2,
-      bodyFlex: 3,
-      headerChild: SafeArea(
-        top: true,
-        bottom: false,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: _buildHeaderContent(),
+    final colors = toolGradients['date_calculator'] ?? [_toolColor, _toolColor];
+
+    return Stack(
+      children: [
+        ImmersiveToolScaffold(
+          toolId: 'date_calculator',
+          toolColor: _toolColor,
+          title: '日期計算機',
+          heroTag: 'tool_hero_date_calculator',
+          headerFlex: 2,
+          bodyFlex: 3,
+          actions: [
+            IconButton(
+              onPressed: _shareAsImage,
+              icon: const Icon(Icons.share),
+              tooltip: '分享',
+            ),
+          ],
+          headerChild: SafeArea(
+            top: true,
+            bottom: false,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: _buildHeaderContent(),
+              ),
+            ),
+          ),
+          bodyChild: _buildBody(),
+        ),
+        // 隱藏的分享卡片（用於截圖）
+        Offstage(
+          child: RepaintBoundary(
+            key: _shareCardKey,
+            child: ShareCardTemplate(
+              toolName: '日期計算機',
+              gradientColors: colors,
+              resultChild: _buildShareCardResult(),
+            ),
           ),
         ),
-      ),
-      bodyChild: _buildBody(),
+      ],
     );
   }
 

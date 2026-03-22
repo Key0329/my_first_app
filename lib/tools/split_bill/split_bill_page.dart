@@ -5,9 +5,11 @@ import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
-import 'package:my_first_app/widgets/share_button.dart';
+import 'package:my_first_app/widgets/share_card_generator.dart';
+import 'package:my_first_app/widgets/share_card_template.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 // ---------------------------------------------------------------------------
 // 計算邏輯（純函式，方便單元測試）
@@ -97,6 +99,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
   static const int _maxCount = 30;
 
   final TextEditingController _amountController = TextEditingController();
+  final GlobalKey _shareCardKey = GlobalKey();
   int _count = 2;
   int _total = 0;
   bool _hasTrackedComplete = false;
@@ -144,6 +147,18 @@ class _SplitBillPageState extends State<SplitBillPage> {
     }
   }
 
+  Future<void> _shareAsCard() async {
+    AnalyticsService.instance.logToolShare(
+      toolId: 'split_bill',
+      shareMethod: 'share_card',
+    );
+
+    final xFile = await ShareCardGenerator.capture(_shareCardKey);
+    if (xFile != null) {
+      await Share.shareXFiles([xFile], text: '用 Spectra 工具箱快速分帳');
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Build
   // ---------------------------------------------------------------------------
@@ -151,33 +166,89 @@ class _SplitBillPageState extends State<SplitBillPage> {
   @override
   Widget build(BuildContext context) {
     final result = calculateSplitBill(total: _total, count: _count);
+    final enabled = _total > 0;
 
-    return ImmersiveToolScaffold(
-      toolId: 'split_bill',
-      toolColor: _toolColor,
-      title: '分帳計算',
-      heroTag: 'tool_hero_split_bill',
-      headerFlex: 2,
-      bodyFlex: 3,
-      actions: [
-        ShareButton(
+    return Stack(
+      children: [
+        ImmersiveToolScaffold(
           toolId: 'split_bill',
-          enabled: _total > 0,
-          shareText: _total > 0
-              ? 'AA 分帳結果 💰\n總金額：NT\$${formatWithThousands(_total)}\n每人：NT\$${formatWithThousands(calculateSplitBill(total: _total, count: _count).base)}（$_count人）\n\n用 Spectra 工具箱快速分帳 👉 https://spectra.app/tools/split-bill'
-              : null,
+          toolColor: _toolColor,
+          title: '分帳計算',
+          heroTag: 'tool_hero_split_bill',
+          headerFlex: 2,
+          bodyFlex: 3,
+          actions: [
+            Opacity(
+              opacity: enabled ? 1.0 : 0.4,
+              child: IconButton(
+                onPressed: enabled ? _shareAsCard : null,
+                icon: const Icon(Icons.share),
+                tooltip: '分享',
+              ),
+            ),
+          ],
+          headerChild: _SplitBillHeader(total: _total, count: _count),
+          bodyChild: _SplitBillBody(
+            amountController: _amountController,
+            count: _count,
+            result: result,
+            onIncrement: _increment,
+            onDecrement: _decrement,
+            minCount: _minCount,
+            maxCount: _maxCount,
+          ),
+        ),
+        // 隱藏的分享卡片（用於截圖）
+        Offstage(
+          child: RepaintBoundary(
+            key: _shareCardKey,
+            child: ShareCardTemplate(
+              toolName: '分帳計算',
+              gradientColors: toolGradients['split_bill']!,
+              resultChild: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '每人應付',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'NT\$${formatWithThousands(result.base)}',
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF26A69A),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    '總額 NT\$${formatWithThousands(_total)} ÷ $_count 人',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF999999),
+                    ),
+                  ),
+                  if (!result.isEvenSplit) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      '第 1 人多付 ${result.remainder} 元',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF26A69A),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
         ),
       ],
-      headerChild: _SplitBillHeader(total: _total, count: _count),
-      bodyChild: _SplitBillBody(
-        amountController: _amountController,
-        count: _count,
-        result: result,
-        onIncrement: _increment,
-        onDecrement: _decrement,
-        minCount: _minCount,
-        maxCount: _maxCount,
-      ),
     );
   }
 }

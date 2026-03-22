@@ -6,9 +6,11 @@ import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
-import 'package:my_first_app/widgets/share_button.dart';
+import 'package:my_first_app/widgets/share_card_generator.dart';
+import 'package:my_first_app/widgets/share_card_template.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'wheel_painter.dart';
 import 'wheel_result_overlay.dart';
@@ -47,6 +49,9 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   double _currentRotation = 0.0;
   double _targetRotation = 0.0;
   bool _isSpinning = false;
+
+  // ── 分享卡片 ────────────────────────────────────────────────────
+  final GlobalKey _shareCardKey = GlobalKey();
 
   // ── 輸入 ──────────────────────────────────────────────────────
   final TextEditingController _textController = TextEditingController();
@@ -219,28 +224,73 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     );
   }
 
+  // ── 分享邏輯 ────────────────────────────────────────────────────
+
+  Future<void> _shareAsImage() async {
+    if (_lastResult == null) return;
+
+    AnalyticsService.instance.logToolShare(
+      toolId: 'random_wheel',
+      shareMethod: 'system_share',
+    );
+
+    final xFile = await ShareCardGenerator.capture(_shareCardKey);
+    if (xFile != null) {
+      await Share.shareXFiles(
+        [xFile],
+        text: '🎯 轉盤結果：$_lastResult\n\n用 Spectra 工具箱隨機決定 👉 https://spectra.app/tools/random-wheel',
+      );
+    }
+  }
+
   // ── 建構 UI ──────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
-    return ImmersiveToolScaffold(
-      toolId: 'random_wheel',
-      toolColor: _toolColor,
-      title: '隨機轉盤',
-      heroTag: _heroTag,
-      headerFlex: 3,
-      bodyFlex: 2,
-      actions: [
-        ShareButton(
+    final colors = toolGradients['random_wheel'] ?? [_toolColor, _toolColor];
+
+    return Stack(
+      children: [
+        ImmersiveToolScaffold(
           toolId: 'random_wheel',
-          enabled: _lastResult != null,
-          shareText: _lastResult != null
-              ? '🎯 轉盤結果：$_lastResult\n\n用 Spectra 工具箱隨機決定 👉 https://spectra.app/tools/random-wheel'
-              : null,
+          toolColor: _toolColor,
+          title: '隨機轉盤',
+          heroTag: _heroTag,
+          headerFlex: 3,
+          bodyFlex: 2,
+          actions: [
+            Opacity(
+              opacity: _lastResult != null ? 1.0 : 0.4,
+              child: IconButton(
+                onPressed: _lastResult != null ? _shareAsImage : null,
+                icon: const Icon(Icons.share),
+                tooltip: '分享',
+              ),
+            ),
+          ],
+          headerChild: _buildHeader(),
+          bodyChild: _buildBody(),
+        ),
+        // 隱藏的分享卡片（用於截圖）
+        Offstage(
+          child: RepaintBoundary(
+            key: _shareCardKey,
+            child: ShareCardTemplate(
+              toolName: '隨機轉盤',
+              gradientColors: colors,
+              resultChild: Text(
+                _lastResult ?? '',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: colors.first,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
         ),
       ],
-      headerChild: _buildHeader(),
-      bodyChild: _buildBody(),
     );
   }
 
