@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_first_app/models/tool_item.dart';
+import 'package:my_first_app/pages/tool_search_delegate.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -78,17 +79,25 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 // 搜尋按鈕（40x40 圓形）
-                Container(
-                  width: DT.searchButtonSize,
-                  height: DT.searchButtonSize,
-                  decoration: BoxDecoration(
-                    color: DT.searchIconBg(b),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.search,
-                    size: DT.searchIconSize,
-                    color: DT.searchIconColor(b),
+                GestureDetector(
+                  onTap: () {
+                    showSearch(
+                      context: context,
+                      delegate: ToolSearchDelegate(),
+                    );
+                  },
+                  child: Container(
+                    width: DT.searchButtonSize,
+                    height: DT.searchButtonSize,
+                    decoration: BoxDecoration(
+                      color: DT.searchIconBg(b),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.search,
+                      size: DT.searchIconSize,
+                      color: DT.searchIconColor(b),
+                    ),
                   ),
                 ),
               ],

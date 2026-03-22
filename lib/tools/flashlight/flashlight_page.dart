@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -182,6 +183,10 @@ class _FlashlightPageState extends State<FlashlightPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isMobilePlatform()) {
+      return const PlatformUnsupportedView(toolName: '手電筒');
+    }
+
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 

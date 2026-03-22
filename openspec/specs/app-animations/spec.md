@@ -204,11 +204,11 @@ tests:
 ---
 ### Requirement: Interactive micro-animations
 
-Tool pages SHALL include subtle micro-animations for interactive elements. Buttons SHALL have a scale bounce effect (scale to 0.95 on press, back to 1.0 on release with a spring curve). Numeric displays that change value SHALL animate the transition with a brief vertical slide.
+Tool pages SHALL include subtle micro-animations for interactive elements. All interactive buttons across all 15 tool pages SHALL be wrapped in BouncingButton with a scale bounce effect (scale to 0.95 on press, back to 1.0 on release with a spring curve). Numeric displays that change value SHALL animate the transition with a brief vertical slide using AnimatedSwitcher with 200ms duration. The BouncingButton wrapper SHALL apply to FilledButton, OutlinedButton, IconButton, and custom GestureDetector-based interactive elements.
 
 #### Scenario: Button press shows scale bounce
 
-- **WHEN** user presses a button in any tool page
+- **WHEN** user presses any interactive button in any tool page
 - **THEN** the button SHALL briefly scale down to 0.95 and spring back to 1.0
 
 #### Scenario: Calculator result animates on change
@@ -216,123 +216,141 @@ Tool pages SHALL include subtle micro-animations for interactive elements. Butto
 - **WHEN** the calculator result value changes
 - **THEN** the new value SHALL slide in from below while the old value slides out above
 
+
 <!-- @trace
-source: design-overhaul-bento
-updated: 2026-03-19
+source: tool-pages-bento-redesign
+updated: 2026-03-22
 code:
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-  - patches/audio_streamer/lib/audio_streamer.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - patches/audio_streamer/example/android/settings.gradle
-  - patches/audio_streamer/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-  - lib/widgets/bento_grid.dart
-  - lib/widgets/staggered_fade_in.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
-  - patches/audio_streamer/README.md
-  - lib/l10n/app_localizations.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.lock
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
+  - lib/theme/design_tokens.dart
   - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/l10n/app_en.arb
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
-  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
-  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
-  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - lib/widgets/bouncing_button.dart
-  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
-  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-  - patches/audio_streamer/ios/audio_streamer.podspec
-  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-  - ios/Runner/Info.plist
-  - lib/tools/compass/compass_page.dart
-  - patches/audio_streamer/example/android/app/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-  - lib/models/tool_item.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
-  - lib/widgets/tool_card.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
-  - patches/audio_streamer/example/README.md
-  - pubspec.yaml
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
   - lib/tools/protractor/protractor_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-  - patches/audio_streamer/example/ios/Podfile
-  - patches/audio_streamer/analysis_options.yaml
-  - patches/audio_streamer/example/ios/Runner/Info.plist
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-  - lib/tools/flashlight/flashlight_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-  - lib/tools/password_generator/password_generator_page.dart
-  - patches/audio_streamer/android/src/main/AndroidManifest.xml
-  - lib/pages/favorites_page.dart
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
-  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
-  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
-  - lib/pages/home_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/l10n/app_localizations_en.dart
-  - patches/audio_streamer/android/gradle.properties
+  - lib/tools/compass/compass_page.dart
+  - lib/widgets/animated_value_text.dart
+  - CLAUDE.md
+  - lib/tools/split_bill/split_bill_page.dart
   - lib/tools/calculator/calculator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-  - lib/widgets/immersive_tool_scaffold.dart
-  - patches/audio_streamer/example/pubspec.yaml
-  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
-  - lib/theme/app_theme.dart
-  - patches/audio_streamer/example/android/gradle.properties
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-  - android/app/src/main/AndroidManifest.xml
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/widgets/tool_section_card.dart
+  - lib/tools/qr_generator/qr_generator_page.dart
   - lib/tools/level/level_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
   - lib/tools/color_picker/color_picker_page.dart
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
-  - patches/audio_streamer/LICENSE
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
-  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
-  - lib/app.dart
-  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
-  - patches/audio_streamer/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
-  - patches/audio_streamer/example/lib/main.dart
-  - patches/audio_streamer/CHANGELOG.md
-  - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/password_generator/password_generator_page.dart
   - lib/tools/unit_converter/unit_converter_page.dart
-  - patches/audio_streamer/example/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
-  - patches/audio_streamer/android/settings.gradle
-  - lib/l10n/app_localizations_zh.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+  - lib/widgets/tool_gradient_button.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/immersive_tool_scaffold.dart
 tests:
-  - test/theme/app_theme_test.dart
-  - patches/audio_streamer/test/audio_streamer_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/models/tool_item_test.dart
+  - test/widgets/animated_value_text_test.dart
+  - test/widgets/tool_section_card_test.dart
   - test/widgets/bouncing_button_test.dart
-  - test/pages/favorites_page_test.dart
-  - test/widgets/tool_card_test.dart
-  - test/widgets/immersive_tool_scaffold_test.dart
-  - test/pages/home_page_test.dart
+  - test/widgets/tool_gradient_button_test.dart
+  - test/theme/design_tokens_test.dart
   - test/tools/password_generator_test.dart
-  - test/widgets/staggered_fade_in_test.dart
-  - test/tools/qr_generator_test.dart
+-->
+
+---
+### Requirement: Tool page body staggered fade-in animation
+
+When a tool page opens, the body section cards SHALL animate in with a staggered fade-in effect, reusing the same pattern as the home page. Each section card SHALL slide up from 20 pixels below and fade from 0 to full opacity. Each successive card SHALL start 50ms after the previous one. The animation SHALL play once on page open and SHALL NOT replay on widget rebuilds.
+
+#### Scenario: Body sections animate in on tool page open
+
+- **WHEN** user navigates to any tool page
+- **THEN** each ToolSectionCard in the body area SHALL animate in with staggered slide-up and fade-in effect
+
+#### Scenario: Animation does not replay on state changes
+
+- **WHEN** user interacts with controls on a tool page causing widget rebuilds
+- **THEN** the body section cards SHALL NOT replay the entrance animation
+
+
+<!-- @trace
+source: tool-pages-bento-redesign
+updated: 2026-03-22
+code:
+  - lib/theme/design_tokens.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/widgets/animated_value_text.dart
+  - CLAUDE.md
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/widgets/tool_section_card.dart
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/password_generator/password_generator_page.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/widgets/tool_gradient_button.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+tests:
+  - test/widgets/animated_value_text_test.dart
+  - test/widgets/tool_section_card_test.dart
+  - test/widgets/bouncing_button_test.dart
+  - test/widgets/tool_gradient_button_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/password_generator_test.dart
+-->
+
+---
+### Requirement: Value change animation with AnimatedSwitcher
+
+Numeric result displays in tool pages SHALL animate value transitions using AnimatedSwitcher. When a result value changes, the old value SHALL slide out upward while fading out, and the new value SHALL slide in from below while fading in. The transition duration SHALL be 200ms. High-frequency update displays (stopwatch centiseconds) SHALL NOT use this animation to avoid performance impact.
+
+#### Scenario: Calculator result animates on evaluation
+
+- **WHEN** user presses equals on the calculator and a new result appears
+- **THEN** the result text SHALL transition with a slide-up fade animation over 200ms
+
+#### Scenario: BMI value animates on slider change
+
+- **WHEN** user adjusts the height or weight slider on the BMI calculator
+- **THEN** the BMI result number SHALL animate with a slide-up fade transition
+
+#### Scenario: Stopwatch centiseconds do not animate
+
+- **WHEN** the stopwatch is running and centiseconds are updating
+- **THEN** the time display SHALL update immediately without AnimatedSwitcher animation
+
+<!-- @trace
+source: tool-pages-bento-redesign
+updated: 2026-03-22
+code:
+  - lib/theme/design_tokens.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/widgets/animated_value_text.dart
+  - CLAUDE.md
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/widgets/tool_section_card.dart
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/password_generator/password_generator_page.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/widgets/tool_gradient_button.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+tests:
+  - test/widgets/animated_value_text_test.dart
+  - test/widgets/tool_section_card_test.dart
+  - test/widgets/bouncing_button_test.dart
+  - test/widgets/tool_gradient_button_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/password_generator_test.dart
 -->

@@ -312,6 +312,9 @@ class _TimerTabState extends State<_TimerTab> {
   Timer? _ticker;
   _TimerState _state = _TimerState.idle;
 
+  /// Tracks real elapsed time to avoid Timer.periodic drift.
+  final Stopwatch _elapsed = Stopwatch();
+
   Duration get _pickerDuration => Duration(
         hours: _hours,
         minutes: _minutes,
@@ -323,17 +326,20 @@ class _TimerTabState extends State<_TimerTab> {
       _totalDuration = _pickerDuration;
       if (_totalDuration == Duration.zero) return;
       _remaining = _totalDuration;
+      _elapsed.reset();
     }
     _state = _TimerState.running;
+    _elapsed.start();
+    _ticker?.cancel();
     _ticker = Timer.periodic(const Duration(milliseconds: 100), (_) {
       setState(() {
-        final newRemaining = _remaining - const Duration(milliseconds: 100);
+        final newRemaining = _totalDuration - _elapsed.elapsed;
         if (newRemaining <= Duration.zero) {
           _remaining = Duration.zero;
           _state = _TimerState.finished;
+          _elapsed.stop();
           _ticker?.cancel();
           _ticker = null;
-          // TODO: Play alarm sound (requires platform channels)
         } else {
           _remaining = newRemaining;
         }
@@ -343,6 +349,7 @@ class _TimerTabState extends State<_TimerTab> {
   }
 
   void _pauseTimer() {
+    _elapsed.stop();
     _ticker?.cancel();
     _ticker = null;
     setState(() {
@@ -351,6 +358,9 @@ class _TimerTabState extends State<_TimerTab> {
   }
 
   void _resetTimer() {
+    _elapsed
+      ..stop()
+      ..reset();
     _ticker?.cancel();
     _ticker = null;
     setState(() {
@@ -362,6 +372,7 @@ class _TimerTabState extends State<_TimerTab> {
 
   @override
   void dispose() {
+    _elapsed.stop();
     _ticker?.cancel();
     super.dispose();
   }

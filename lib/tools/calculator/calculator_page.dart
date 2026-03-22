@@ -271,8 +271,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
       onPressed = () => _onDigit(label);
     }
 
+    // onTap intentionally omitted — FilledButton.onPressed is the sole handler.
     return BouncingButton(
-      onTap: onPressed,
       child: FilledButton(
         key: Key('btn_$label'),
         onPressed: onPressed,

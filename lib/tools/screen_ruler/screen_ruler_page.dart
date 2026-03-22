@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
@@ -108,6 +109,9 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isMobilePlatform()) {
+      return const PlatformUnsupportedView(toolName: '螢幕尺規');
+    }
     if (_showCalibration) {
       return _buildCalibrationScreen(context);
     }

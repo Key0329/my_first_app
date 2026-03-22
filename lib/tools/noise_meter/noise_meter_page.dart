@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -149,6 +150,10 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isMobilePlatform()) {
+      return const PlatformUnsupportedView(toolName: '噪音計');
+    }
+
     if (_permissionDenied) {
       // 權限被拒時使用普通 Scaffold 顯示錯誤畫面
       return Scaffold(

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -110,6 +111,10 @@ class _LevelPageState extends State<LevelPage>
 
   @override
   Widget build(BuildContext context) {
+    if (!isMobilePlatform()) {
+      return const PlatformUnsupportedView(toolName: '水平儀');
+    }
+
     final theme = Theme.of(context);
     final isLevel = _isLevel;
 

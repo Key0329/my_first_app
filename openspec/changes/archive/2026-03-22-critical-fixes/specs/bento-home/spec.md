@@ -1,10 +1,4 @@
-# bento-home Specification
-
-## Purpose
-
-TBD - created by archiving change 'design-overhaul-bento'. Update Purpose after archive.
-
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Home page tool search
 
@@ -24,26 +18,3 @@ The home page SHALL provide a functional search feature accessible via the searc
 
 - **WHEN** user types a query that matches no tools
 - **THEN** the search interface SHALL display a "no results found" message
-
-<!-- @trace
-source: critical-fixes
-updated: 2026-03-22
-code:
-  - lib/pages/tool_search_delegate.dart
-  - lib/tools/screen_ruler/screen_ruler_page.dart
-  - lib/tools/compass/compass_page.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/pages/home_page.dart
-  - lib/tools/calculator/calculator_page.dart
-  - .mcp.json
-  - lib/tools/color_picker/color_picker_page.dart
-  - lib/tools/level/level_page.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/utils/platform_check.dart
-tests:
-  - test/pages/tool_search_test.dart
-  - test/tools/stopwatch_timer_widget_test.dart
-  - test/tools/calculator_page_test.dart
-  - test/utils/platform_check_test.dart
--->
