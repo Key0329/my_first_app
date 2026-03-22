@@ -3,8 +3,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/tools/compass/compass_logic.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/utils/platform_check.dart';
+import 'package:my_first_app/widgets/error_state.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -118,18 +120,6 @@ class _CompassPageState extends State<CompassPage>
     _heading = heading;
   }
 
-  String _cardinalDirection(double heading) {
-    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    final index = ((heading + 22.5) % 360 / 45).floor();
-    return directions[index];
-  }
-
-  String _cardinalDirectionChinese(double heading) {
-    const directions = ['北', '東北', '東', '東南', '南', '西南', '西', '西北'];
-    final index = ((heading + 22.5) % 360 / 45).floor();
-    return directions[index];
-  }
-
   @override
   void dispose() {
     _subscription?.cancel();
@@ -160,19 +150,12 @@ class _CompassPageState extends State<CompassPage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              StaggeredFadeIn(
-                index: 0,
-                totalItems: 1,
-                child: ToolSectionCard(
-                  label: '說明',
-                  child: Text(
-                    '指南針需要磁力計感測器才能運作。\n'
-                    '模擬器及部分桌面裝置不支援此功能。',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
+              ErrorState(
+                message: '指南針需要磁力計感測器才能運作。\n模擬器及部分桌面裝置不支援此功能。',
+                onRetry: () {
+                  setState(() => _unsupported = false);
+                  _startListening();
+                },
               ),
             ],
           ),
@@ -181,8 +164,8 @@ class _CompassPageState extends State<CompassPage>
     }
 
     final heading = _heading ?? 0;
-    final cardinal = _cardinalDirection(heading);
-    final cardinalChinese = _cardinalDirectionChinese(heading);
+    final cardinal = degreeToDirection(heading);
+    final cardinalChinese = degreeToDirectionChinese(heading);
     final degrees = heading.toStringAsFixed(0);
 
     return ImmersiveToolScaffold(
@@ -228,39 +211,42 @@ class _CompassPageState extends State<CompassPage>
             StaggeredFadeIn(
               index: 0,
               totalItems: 2,
-              child: ToolSectionCard(
-                label: '方位',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Degrees
-                    Text(
-                      '$degrees\u00B0',
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
+              child: Semantics(
+                label: '$cardinalChinese，$degrees 度',
+                child: ToolSectionCard(
+                  label: '方位',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Degrees
+                      Text(
+                        '$degrees\u00B0',
+                        style: theme.textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    // Cardinal direction
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          cardinal,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w700,
+                      // Cardinal direction
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            cardinal,
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        Text(
-                          cardinalChinese,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
+                          Text(
+                            cardinalChinese,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

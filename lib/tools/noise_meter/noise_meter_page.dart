@@ -6,6 +6,7 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
+import 'package:my_first_app/widgets/error_state.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -155,10 +156,20 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
     }
 
     if (_permissionDenied) {
-      // 權限被拒時使用普通 Scaffold 顯示錯誤畫面
       return Scaffold(
         appBar: AppBar(title: const Text('噪音計')),
-        body: _buildPermissionDenied(),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(DT.toolBodyPadding),
+            child: ErrorState(
+              message: '需要麥克風權限。\n請在系統設定中允許此 App 使用麥克風。',
+              onRetry: () {
+                setState(() => _permissionDenied = false);
+                _startRecording();
+              },
+            ),
+          ),
+        ),
       );
     }
 
@@ -178,23 +189,35 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                _isRecording
-                    ? _currentDb.toStringAsFixed(1)
-                    : '--',
-                style: TextStyle(
-                  fontSize: 72,
-                  fontWeight: FontWeight.bold,
-                  color: _isRecording ? dbColor : colorScheme.outline,
-                ),
-              ),
-              Text(
-                'dB',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: _isRecording
-                      ? dbColor
-                      : colorScheme.outline,
+              Semantics(
+                label: '目前噪音等級',
+                value: _isRecording
+                    ? '${_currentDb.toStringAsFixed(1)} dB'
+                    : '未測量',
+                liveRegion: true,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _isRecording
+                          ? _currentDb.toStringAsFixed(1)
+                          : '--',
+                      style: TextStyle(
+                        fontSize: 72,
+                        fontWeight: FontWeight.bold,
+                        color: _isRecording ? dbColor : colorScheme.outline,
+                      ),
+                    ),
+                    Text(
+                      'dB',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: _isRecording
+                            ? dbColor
+                            : colorScheme.outline,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               if (_isRecording && _minDb != double.infinity) ...[
@@ -335,63 +358,6 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                         textColor: colorScheme.onSurfaceVariant,
                       ),
                     ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // 權限被拒畫面
-  // ---------------------------------------------------------------------------
-
-  Widget _buildPermissionDenied() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.mic_off,
-              size: 64,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              '需要麥克風權限',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              '噪音計需要使用麥克風來測量環境噪音。\n請在系統設定中允許此 App 使用麥克風。',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-            ),
-            const SizedBox(height: 24),
-            FilledButton.icon(
-              onPressed: () {
-                setState(() {
-                  _permissionDenied = false;
-                });
-                _startRecording();
-              },
-              icon: const Icon(Icons.refresh),
-              label: const Text('重試'),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('請前往「設定 > 隱私權 > 麥克風」開啟權限'),
-                    duration: Duration(seconds: 4),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.settings),
-              label: const Text('開啟系統設定'),
             ),
           ],
         ),

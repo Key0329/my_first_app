@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
+import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -175,6 +176,21 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     });
     _textController.clear();
     _textFocusNode.requestFocus();
+  }
+
+  Future<void> _confirmRemoveOption(int index) async {
+    if (_options.length <= _minOptions) return;
+    final confirmed = await showConfirmDialog(
+      context: context,
+      title: '刪除選項',
+      message: '確定要刪除「${_options[index]}」嗎？',
+      confirmLabel: '刪除',
+    );
+    if (confirmed) {
+      setState(() {
+        _options.removeAt(index);
+      });
+    }
   }
 
   void _removeOption(int index) {
@@ -387,6 +403,12 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     return Dismissible(
       key: ValueKey('option_${option}_$index'),
       direction: canDelete ? DismissDirection.endToStart : DismissDirection.none,
+      confirmDismiss: (_) => showConfirmDialog(
+        context: context,
+        title: '刪除選項',
+        message: '確定要刪除「$option」嗎？',
+        confirmLabel: '刪除',
+      ),
       onDismissed: (_) => _removeOption(index),
       background: Container(
         alignment: Alignment.centerRight,
@@ -410,7 +432,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
         ),
         trailing: canDelete
             ? BouncingButton(
-                onTap: () => _removeOption(index),
+                onTap: () => _confirmRemoveOption(index),
                 child: Padding(
                   padding: const EdgeInsets.all(DT.spaceSm),
                   child: Icon(

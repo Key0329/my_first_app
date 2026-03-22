@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
+import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -113,6 +114,20 @@ class _StopwatchTabState extends State<_StopwatchTab> {
     });
   }
 
+  Future<void> _confirmReset() async {
+    if (_elapsed == Duration.zero && _laps.isEmpty) {
+      _reset();
+      return;
+    }
+    final confirmed = await showConfirmDialog(
+      context: context,
+      title: '重設碼錶',
+      message: '確定要重設碼錶嗎？計時與圈數記錄將被清除。',
+      confirmLabel: '重設',
+    );
+    if (confirmed) _reset();
+  }
+
   void _reset() {
     _stopwatch.reset();
     _ticker?.cancel();
@@ -194,7 +209,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
               ] else ...[
                 BouncingButton(
                   child: OutlinedButton.icon(
-                    onPressed: _reset,
+                    onPressed: _confirmReset,
                     icon: const Icon(Icons.refresh),
                     label: const Text('重設'),
                   ),
@@ -357,6 +372,20 @@ class _TimerTabState extends State<_TimerTab> {
     });
   }
 
+  Future<void> _confirmResetTimer() async {
+    if (_state == _TimerState.idle) {
+      _resetTimer();
+      return;
+    }
+    final confirmed = await showConfirmDialog(
+      context: context,
+      title: '重設計時器',
+      message: '確定要重設計時器嗎？目前的倒數計時將被清除。',
+      confirmLabel: '重設',
+    );
+    if (confirmed) _resetTimer();
+  }
+
   void _resetTimer() {
     _elapsed
       ..stop()
@@ -512,7 +541,7 @@ class _TimerTabState extends State<_TimerTab> {
           children: [
             BouncingButton(
               child: OutlinedButton.icon(
-                onPressed: _resetTimer,
+                onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
                 label: const Text('重設'),
               ),
@@ -533,7 +562,7 @@ class _TimerTabState extends State<_TimerTab> {
           children: [
             BouncingButton(
               child: OutlinedButton.icon(
-                onPressed: _resetTimer,
+                onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
                 label: const Text('重設'),
               ),
@@ -550,7 +579,7 @@ class _TimerTabState extends State<_TimerTab> {
       case _TimerState.finished:
         return BouncingButton(
           child: FilledButton.icon(
-            onPressed: _resetTimer,
+            onPressed: _confirmResetTimer,
             icon: const Icon(Icons.refresh),
             label: const Text('重設'),
           ),
@@ -563,7 +592,7 @@ class _TimerTabState extends State<_TimerTab> {
 // Number Picker Widget
 // ---------------------------------------------------------------------------
 
-class _NumberPicker extends StatelessWidget {
+class _NumberPicker extends StatefulWidget {
   final String label;
   final int value;
   final int maxValue;
@@ -577,12 +606,40 @@ class _NumberPicker extends StatelessWidget {
   });
 
   @override
+  State<_NumberPicker> createState() => _NumberPickerState();
+}
+
+class _NumberPickerState extends State<_NumberPicker> {
+  late FixedExtentScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = FixedExtentScrollController(initialItem: widget.value);
+  }
+
+  @override
+  void didUpdateWidget(_NumberPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value &&
+        _scrollController.selectedItem != widget.value) {
+      _scrollController.jumpToItem(widget.value);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label, style: theme.textTheme.labelSmall),
+        Text(widget.label, style: theme.textTheme.labelSmall),
         const SizedBox(height: DT.spaceXs),
         SizedBox(
           width: 72,
@@ -592,12 +649,12 @@ class _NumberPicker extends StatelessWidget {
             perspective: 0.005,
             diameterRatio: 1.2,
             physics: const FixedExtentScrollPhysics(),
-            controller: FixedExtentScrollController(initialItem: value),
-            onSelectedItemChanged: onChanged,
+            controller: _scrollController,
+            onSelectedItemChanged: widget.onChanged,
             childDelegate: ListWheelChildBuilderDelegate(
-              childCount: maxValue + 1,
+              childCount: widget.maxValue + 1,
               builder: (context, index) {
-                final isSelected = index == value;
+                final isSelected = index == widget.value;
                 return Center(
                   child: Text(
                     index.toString().padLeft(2, '0'),

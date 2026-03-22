@@ -7,6 +7,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
+import 'package:my_first_app/widgets/error_state.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -26,6 +27,9 @@ class LevelPage extends StatefulWidget {
 class _LevelPageState extends State<LevelPage>
     with SingleTickerProviderStateMixin {
   StreamSubscription<AccelerometerEvent>? _subscription;
+
+  /// Whether the sensor is unavailable on this device.
+  bool _sensorError = false;
 
   /// Raw accelerometer values (m/s^2).
   double _accelX = 0.0;
@@ -61,9 +65,18 @@ class _LevelPageState extends State<LevelPage>
   }
 
   void _startListening() {
-    _subscription = accelerometerEventStream(
-      samplingPeriod: const Duration(milliseconds: 50),
-    ).listen(_onAccelerometerEvent);
+    try {
+      _subscription = accelerometerEventStream(
+        samplingPeriod: const Duration(milliseconds: 50),
+      ).listen(
+        _onAccelerometerEvent,
+        onError: (_) {
+          if (mounted) setState(() => _sensorError = true);
+        },
+      );
+    } catch (_) {
+      if (mounted) setState(() => _sensorError = true);
+    }
   }
 
   void _onAccelerometerEvent(AccelerometerEvent event) {
@@ -113,6 +126,24 @@ class _LevelPageState extends State<LevelPage>
   Widget build(BuildContext context) {
     if (!isMobilePlatform()) {
       return const PlatformUnsupportedView(toolName: '水平儀');
+    }
+
+    if (_sensorError) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('水平儀')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(DT.toolBodyPadding),
+            child: ErrorState(
+              message: '無法初始化加速度感測器。\n此裝置可能不支援此功能。',
+              onRetry: () {
+                setState(() => _sensorError = false);
+                _startListening();
+              },
+            ),
+          ),
+        ),
+      );
     }
 
     final theme = Theme.of(context);

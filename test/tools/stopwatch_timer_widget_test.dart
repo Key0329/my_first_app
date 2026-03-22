@@ -121,7 +121,11 @@ void main() {
       await tester.tap(find.text('開始'));
       await tester.pump();
       await tester.tap(find.text('重設'));
-      await tester.pump();
+      await tester.pumpAndSettle();
+
+      // Confirm the reset dialog
+      await tester.tap(find.text('重設').last);
+      await tester.pumpAndSettle();
 
       // Should be back to idle
       expect(find.text('設定時間'), findsOneWidget);

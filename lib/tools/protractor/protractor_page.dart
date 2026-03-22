@@ -84,19 +84,22 @@ class _ProtractorPageState extends State<ProtractorPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // 角度數值顯示區段
-            ToolSectionCard(
-              label: '角度',
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${_angleDegrees.toStringAsFixed(1)}°',
-                    style: TextStyle(
-                      fontSize: DT.fontToolResult,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
+            Semantics(
+              label: '測量角度',
+              value: '${_angleDegrees.toStringAsFixed(1)} 度',
+              child: ToolSectionCard(
+                label: '角度',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${_angleDegrees.toStringAsFixed(1)}°',
+                      style: TextStyle(
+                        fontSize: DT.fontToolResult,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
-                  ),
                   // 重設按鈕
                   BouncingButton(
                     onTap: _reset,
@@ -134,6 +137,7 @@ class _ProtractorPageState extends State<ProtractorPage> {
                   ),
                 ],
               ),
+            ),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
+import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'calculator_logic.dart';
@@ -235,6 +236,19 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
+  static const Map<String, String> _semanticLabels = {
+    '+': '加法',
+    '-': '減法',
+    '*': '乘法',
+    '/': '除法',
+    '=': '等於',
+    'C': '清除',
+    '<-': '退格',
+    '.': '小數點',
+    '(': '左括號',
+    ')': '右括號',
+  };
+
   Widget _buildButton(String label, ColorScheme colorScheme) {
     Color bgColor;
     Color fgColor;
@@ -271,8 +285,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
       onPressed = () => _onDigit(label);
     }
 
+    final semanticLabel = _semanticLabels[label] ?? label;
+
     // onTap intentionally omitted — FilledButton.onPressed is the sole handler.
-    return BouncingButton(
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: BouncingButton(
       child: FilledButton(
         key: Key('btn_$label'),
         onPressed: onPressed,
@@ -293,6 +312,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+      ),
       ),
     );
   }
@@ -323,9 +343,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
                       ),
                       TextButton.icon(
                         key: const Key('btn_clear_history'),
-                        onPressed: () {
+                        onPressed: () async {
+                          final confirmed = await showConfirmDialog(
+                            context: context,
+                            title: '清除歷史紀錄',
+                            message: '確定要清除所有計算歷史紀錄嗎？此操作無法復原。',
+                            confirmLabel: '清除',
+                          );
+                          if (!confirmed) return;
                           _clearHistory();
-                          Navigator.pop(context);
+                          if (context.mounted) Navigator.pop(context);
                         },
                         icon: const Icon(Icons.delete_outline, size: 18),
                         label: const Text('清除'),

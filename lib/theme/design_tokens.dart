@@ -47,6 +47,16 @@ abstract final class DT {
   static const fontToolLabel = 14.0;
   static const fontToolButton = 16.0;
 
+  // ── Motion Token ──
+  static const durationFast = Duration(milliseconds: 150);
+  static const durationMedium = Duration(milliseconds: 300);
+  static const durationSlow = Duration(milliseconds: 500);
+
+  // ── Opacity Token ──
+  static const opacityDisabled = 0.38;
+  static const opacityOverlay = 0.08;
+  static const opacityHover = 0.04;
+
   // ── 元件尺寸 ──
   static const iconContainerSize = 48.0;
   static const iconSize = 24.0;

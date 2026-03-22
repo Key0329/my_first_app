@@ -39,4 +39,32 @@ void main() {
       expect(DT.fontToolButton, 16.0);
     });
   });
+
+  group('DT Motion Token', () {
+    test('durationFast 為 150ms', () {
+      expect(DT.durationFast, const Duration(milliseconds: 150));
+    });
+
+    test('durationMedium 為 300ms', () {
+      expect(DT.durationMedium, const Duration(milliseconds: 300));
+    });
+
+    test('durationSlow 為 500ms', () {
+      expect(DT.durationSlow, const Duration(milliseconds: 500));
+    });
+  });
+
+  group('DT Opacity Token', () {
+    test('opacityDisabled 為 0.38', () {
+      expect(DT.opacityDisabled, 0.38);
+    });
+
+    test('opacityOverlay 為 0.08', () {
+      expect(DT.opacityOverlay, 0.08);
+    });
+
+    test('opacityHover 為 0.04', () {
+      expect(DT.opacityHover, 0.04);
+    });
+  });
 }

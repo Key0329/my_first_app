@@ -28,10 +28,34 @@ Changes can be parked（暫存）— temporarily moved out of `openspec/changes/
 
 ## Code Review 規則
 
-當執行 `/spectra:apply` 時，每完成一個 task 後，必須對本次變更的檔案執行 code review：
-- 使用 Agent tool 啟動 subagent（subagent_type: `feature-dev:code-reviewer`）進行 code review，避免佔用主 context
-- 若 review 發現問題 → 先修正 → 再次啟動 subagent review，重複直到無重大問題
-- 若 review 無問題 → 繼續下一個 task
+當執行 `/spectra:apply` 時，每完成一個 task 後，必須根據變更內容啟動對應的 review。所有 review 均使用 Agent tool 啟動 subagent 以避免佔用主 context。
+
+### 必要 Review（每個 task 完成後都要跑）
+
+| Review | Subagent / 工具 | 用途 |
+|--------|-----------------|------|
+| **Code Quality** | Agent（subagent_type: `feature-dev:code-reviewer`） | 檢查 bug、邏輯錯誤、安全漏洞、程式碼品質 |
+| **Static Analysis** | `flutter analyze` | Dart/Flutter 靜態分析，確保零 warning/error |
+
+### 條件式 Review（依變更內容判斷是否需要）
+
+| 條件 | Review | Subagent / 工具 | 用途 |
+|------|--------|-----------------|------|
+| 新增或修改測試檔案 | **Test Runner** | Agent（subagent_type: `flutter-tester`） | 執行相關 unit/widget test，確認測試通過 |
+| 修改 UI/Widget 程式碼 | **Test Runner** | Agent（subagent_type: `flutter-tester`） | 執行相關 widget test，確認 UI 行為正確 |
+| 有 App 在模擬器上執行中 | **MCP UI Testing** | Skill `flutter-mcp-testing` | 透過 dart-tooling + mobile-mcp 進行 UI 自動化測試 |
+
+### 判斷流程
+
+1. **完成 task** → 一律跑 Code Quality review + Static Analysis
+2. **有新增/修改測試？有修改 UI？** → 加跑 flutter-tester
+3. **有模擬器/裝置正在跑 App？** → 加跑 flutter-mcp-testing
+4. 若任一 review 發現問題 → 修正 → 重新跑該 review，直到無重大問題
+5. 所有 review 通過 → 繼續下一個 task
+
+### 平行執行
+
+獨立的 review 應盡量平行派發（一次送出多個 Agent tool call），減少等待時間。例如 Code Quality + flutter-tester 可同時啟動。
 
 # CLAUDE.md
 
