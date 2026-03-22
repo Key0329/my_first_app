@@ -72,7 +72,30 @@ metadata:
 - [檔案:行號] 錯誤描述 → 建議修正
 ```
 
-## 注意事項
+## 已知陷阱與解法
+
+### mobile-mcp 座標點擊不可靠
+
+元素密集頁面（如首頁 Grid）座標容易點錯，動態區段（「最近使用」）會推移其他元素座標。
+
+**解法：** 精準導航改用 adb deep link：
+```bash
+/Users/keycheng/Library/Android/sdk/platform-tools/adb -s emulator-5554 shell am start \
+  -a android.intent.action.VIEW -d "https://spectra.app/tools/bmi-calculator" com.spectra.toolbox
+```
+mobile-mcp 最適合**截圖驗證**，複雜互動優先用 `flutter test`。
+
+### dart-tooling 必須用 launch_app 啟動 App
+
+用 `flutter run` CLI 啟動的 App，`list_running_apps` 看不到，無法用 hot reload、widget tree。必須用 `mcp__dart-tooling__launch_app` 啟動。首次 build 可能超過 90 秒 timeout，需多試幾次。
+
+### Android Build 已知問題
+
+- **core library desugaring**：`flutter_local_notifications` 等套件需要 `isCoreLibraryDesugaringEnabled = true`（本專案已設定）
+- **namespace vs applicationId**：`namespace` 對應 Kotlin package 結構（不能改），只改 `applicationId` 設定上架 bundle ID
+- **Bundle ID 變更後**需先 `adb uninstall <舊package>` 再安裝
+
+## 其他注意事項
 
 - 執行 UI 測試前，確認模擬器已啟動且 App 已安裝
 - `run_tests` 和 `create_project` 等工具預設為停用，需要時會自動啟用
