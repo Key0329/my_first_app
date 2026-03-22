@@ -644,5 +644,33 @@
   "@splitBillSummary": {
     "description": "Split bill: Summary in header",
     "placeholders": { "total": { "type": "String" }, "count": { "type": "int" } }
-  }
+  },
+
+  "toolWordCounter": "文字計數器",
+  "@toolWordCounter": { "description": "Tool name: Word Counter" },
+  "wordCounterTitle": "文字計數器",
+  "@wordCounterTitle": { "description": "Word counter page title" },
+  "wordCounterInputHint": "在這裡輸入或貼上文字...",
+  "@wordCounterInputHint": { "description": "Word counter text field hint" },
+  "wordCounterCharsWithSpaces": "字元（含空白）",
+  "@wordCounterCharsWithSpaces": { "description": "Characters including spaces" },
+  "wordCounterCharsNoSpaces": "字元（不含空白）",
+  "@wordCounterCharsNoSpaces": { "description": "Characters excluding spaces" },
+  "wordCounterWords": "字數",
+  "@wordCounterWords": { "description": "Word count label" },
+  "wordCounterLines": "行數",
+  "@wordCounterLines": { "description": "Line count label" },
+  "wordCounterParagraphs": "段落數",
+  "@wordCounterParagraphs": { "description": "Paragraph count label" },
+  "wordCounterReadingTime": "閱讀時間",
+  "@wordCounterReadingTime": { "description": "Reading time label" },
+  "wordCounterReadingTimeValue": "{minutes} 分鐘",
+  "@wordCounterReadingTimeValue": {
+    "description": "Reading time value",
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "wordCounterReadingTimeLessThan1": "< 1 分鐘",
+  "@wordCounterReadingTimeLessThan1": { "description": "Reading time less than 1 minute" },
+  "wordCounterCopiedSummary": "已複製統計摘要",
+  "@wordCounterCopiedSummary": { "description": "Snackbar after copying summary" }
 }

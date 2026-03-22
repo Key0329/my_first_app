@@ -171,11 +171,11 @@
 
 ## Phase 5 — 新工具 & 成長功能（第 7-12 週）
 
-### Change #15: `tool-word-counter`
+### ~~Change #15: `tool-word-counter`~~ ✅ archived 2026-03-23
 
 > 預估：1 天 | 依賴：#7 tool-registry
 
-- [ ] 文字計數器（字數、字元數、段落數、預估閱讀時間）
+- [x] 文字計數器（字數、字元數、段落數、預估閱讀時間）
 
 ### Change #16: `tool-pomodoro`
 
@@ -343,7 +343,7 @@
 | ~~12~~ | ~~`enhance-split-bill`~~ ✅ | 4 | 2d | #1 |
 | ~~13~~ | ~~`enhance-color-picker`~~ ✅ | 4 | 2d | #1 |
 | ~~14~~ | ~~`enhance-life-tools`~~ ✅ | 4 | 2d | #1 |
-| 15 | `tool-word-counter` | 5 | 1d | #7 |
+| ~~15~~ | ~~`tool-word-counter`~~ ✅ | 5 | 1d | #7 |
 | 16 | `tool-pomodoro` | 5 | 3d | #7 |
 | 17 | `tool-quick-notes` | 5 | 2d | #7 |
 | 18 | `tool-invoice-checker` | 5 | 2d | #7 |

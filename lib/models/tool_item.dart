@@ -18,6 +18,7 @@ import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
 import 'package:my_first_app/tools/qr_scanner_live/qr_scanner_live_page.dart';
 import 'package:my_first_app/tools/currency_converter/currency_converter_page.dart';
 import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
+import 'package:my_first_app/tools/word_counter/word_counter_page.dart';
 
 /// 工具分類，用於首頁 Tab 篩選。
 enum ToolCategory {
@@ -217,5 +218,14 @@ final List<ToolItem> allTools = [
     routePath: '/tools/random-wheel',
     category: ToolCategory.life,
     pageBuilder: () => const RandomWheelPage(),
+  ),
+  ToolItem(
+    id: 'word_counter',
+    nameKey: 'tool_word_counter',
+    fallbackName: '文字計數器',
+    icon: Icons.text_fields,
+    routePath: '/tools/word-counter',
+    category: ToolCategory.life,
+    pageBuilder: () => const WordCounterPage(),
   ),
 ];

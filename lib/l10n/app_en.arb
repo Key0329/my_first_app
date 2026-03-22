@@ -312,5 +312,18 @@
   "splitBillFirstPaysDetail": "Person 1 pays extra {remainder} (total ${firstTotal})",
   "splitBillPerPersonSemantic": "Per person {amount}",
   "splitBillShareFirstPays": "Person 1 pays extra {remainder}",
-  "splitBillSummary": "${total} ÷ {count} people"
+  "splitBillSummary": "${total} ÷ {count} people",
+
+  "toolWordCounter": "Word Counter",
+  "wordCounterTitle": "Word Counter",
+  "wordCounterInputHint": "Type or paste text here...",
+  "wordCounterCharsWithSpaces": "Characters (spaces)",
+  "wordCounterCharsNoSpaces": "Characters (no spaces)",
+  "wordCounterWords": "Words",
+  "wordCounterLines": "Lines",
+  "wordCounterParagraphs": "Paragraphs",
+  "wordCounterReadingTime": "Reading Time",
+  "wordCounterReadingTimeValue": "{minutes} min",
+  "wordCounterReadingTimeLessThan1": "< 1 min",
+  "wordCounterCopiedSummary": "Statistics copied"
 }

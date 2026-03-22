@@ -898,4 +898,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String splitBillSummary(String total, int count) {
     return '\$$total ÷ $count people';
   }
+
+  @override
+  String get toolWordCounter => 'Word Counter';
+
+  @override
+  String get wordCounterTitle => 'Word Counter';
+
+  @override
+  String get wordCounterInputHint => 'Type or paste text here...';
+
+  @override
+  String get wordCounterCharsWithSpaces => 'Characters (spaces)';
+
+  @override
+  String get wordCounterCharsNoSpaces => 'Characters (no spaces)';
+
+  @override
+  String get wordCounterWords => 'Words';
+
+  @override
+  String get wordCounterLines => 'Lines';
+
+  @override
+  String get wordCounterParagraphs => 'Paragraphs';
+
+  @override
+  String get wordCounterReadingTime => 'Reading Time';
+
+  @override
+  String wordCounterReadingTimeValue(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get wordCounterReadingTimeLessThan1 => '< 1 min';
+
+  @override
+  String get wordCounterCopiedSummary => 'Statistics copied';
 }

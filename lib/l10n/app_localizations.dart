@@ -1777,6 +1777,78 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'\${total} ÷ {count} 人'**
   String splitBillSummary(String total, int count);
+
+  /// Tool name: Word Counter
+  ///
+  /// In zh, this message translates to:
+  /// **'文字計數器'**
+  String get toolWordCounter;
+
+  /// Word counter page title
+  ///
+  /// In zh, this message translates to:
+  /// **'文字計數器'**
+  String get wordCounterTitle;
+
+  /// Word counter text field hint
+  ///
+  /// In zh, this message translates to:
+  /// **'在這裡輸入或貼上文字...'**
+  String get wordCounterInputHint;
+
+  /// Characters including spaces
+  ///
+  /// In zh, this message translates to:
+  /// **'字元（含空白）'**
+  String get wordCounterCharsWithSpaces;
+
+  /// Characters excluding spaces
+  ///
+  /// In zh, this message translates to:
+  /// **'字元（不含空白）'**
+  String get wordCounterCharsNoSpaces;
+
+  /// Word count label
+  ///
+  /// In zh, this message translates to:
+  /// **'字數'**
+  String get wordCounterWords;
+
+  /// Line count label
+  ///
+  /// In zh, this message translates to:
+  /// **'行數'**
+  String get wordCounterLines;
+
+  /// Paragraph count label
+  ///
+  /// In zh, this message translates to:
+  /// **'段落數'**
+  String get wordCounterParagraphs;
+
+  /// Reading time label
+  ///
+  /// In zh, this message translates to:
+  /// **'閱讀時間'**
+  String get wordCounterReadingTime;
+
+  /// Reading time value
+  ///
+  /// In zh, this message translates to:
+  /// **'{minutes} 分鐘'**
+  String wordCounterReadingTimeValue(int minutes);
+
+  /// Reading time less than 1 minute
+  ///
+  /// In zh, this message translates to:
+  /// **'< 1 分鐘'**
+  String get wordCounterReadingTimeLessThan1;
+
+  /// Snackbar after copying summary
+  ///
+  /// In zh, this message translates to:
+  /// **'已複製統計摘要'**
+  String get wordCounterCopiedSummary;
 }
 
 class _AppLocalizationsDelegate

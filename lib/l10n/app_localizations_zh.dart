@@ -882,4 +882,42 @@ class AppLocalizationsZh extends AppLocalizations {
   String splitBillSummary(String total, int count) {
     return '\$$total ÷ $count 人';
   }
+
+  @override
+  String get toolWordCounter => '文字計數器';
+
+  @override
+  String get wordCounterTitle => '文字計數器';
+
+  @override
+  String get wordCounterInputHint => '在這裡輸入或貼上文字...';
+
+  @override
+  String get wordCounterCharsWithSpaces => '字元（含空白）';
+
+  @override
+  String get wordCounterCharsNoSpaces => '字元（不含空白）';
+
+  @override
+  String get wordCounterWords => '字數';
+
+  @override
+  String get wordCounterLines => '行數';
+
+  @override
+  String get wordCounterParagraphs => '段落數';
+
+  @override
+  String get wordCounterReadingTime => '閱讀時間';
+
+  @override
+  String wordCounterReadingTimeValue(int minutes) {
+    return '$minutes 分鐘';
+  }
+
+  @override
+  String get wordCounterReadingTimeLessThan1 => '< 1 分鐘';
+
+  @override
+  String get wordCounterCopiedSummary => '已複製統計摘要';
 }
