@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/pages/tool_search_delegate.dart';
 import 'package:my_first_app/services/analytics_service.dart';
+import 'package:my_first_app/services/review_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   void _openTool(BuildContext context, ToolItem tool) {
     AnalyticsService.instance.logToolOpen(toolId: tool.id, source: 'home');
     widget.settings.addRecentTool(tool.id);
+    ReviewService.instance.recordToolUseAndPrompt();
     context.push(tool.routePath);
   }
 

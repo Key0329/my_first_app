@@ -31,25 +31,25 @@
 
 ## Phase 1 — 品質底線 & 快速致勝（第 1-2 週）
 
-### Change #1: `fix-quality-baseline`
+### ~~Change #1: `fix-quality-baseline`~~ ✅ archived 2026-03-22
 
 > 合併：1.1 Bug 修復 + 1.3 暗色對比度 | 預估：1 天
 > 依賴：無
 
-- [ ] **匯率 fallback bug**：`CurrencyApi.convert()` 未知幣別靜默 fallback 為 1.0，應 throw error
-- [ ] **dart:io import**：`timer_notification_service.dart` 直接 import dart:io，Web build 會編譯失敗
-- [ ] **toolColor 不匹配**：calculator（綠 vs 紫）、compass（深橘 vs 綠）等工具的 toolColor 與 toolGradients 衝突
-- [ ] **Random Wheel OverlayEntry 洩漏**：返回鍵離開時 overlay 未正確移除
-- [ ] **darkSubtitle** 對比度 3.2:1 → 提升至 4.5:1+（改為 ~#9999BB）
-- [ ] **darkNavInactive** 對比度 2.1:1 → 提升至 4.5:1+（改為 ~#7777AA）
+- [x] **匯率 fallback bug**：`CurrencyApi.convert()` 未知幣別靜默 fallback 為 1.0，應 throw error
+- [x] **dart:io import**：`timer_notification_service.dart` 直接 import dart:io，Web build 會編譯失敗
+- [x] **toolColor 不匹配**：calculator（綠 vs 紫）、compass（深橘 vs 綠）等工具的 toolColor 與 toolGradients 衝突
+- [x] **Random Wheel OverlayEntry 洩漏**：返回鍵離開時 overlay 未正確移除
+- [x] **darkSubtitle** 對比度 3.2:1 → 提升至 4.5:1+（改為 ~#9999BB）
+- [x] **darkNavInactive** 對比度 2.1:1 → 提升至 4.5:1+（改為 ~#7777AA）
 
-### Change #2: `app-review-prompt`
+### ~~Change #2: `app-review-prompt`~~ ✅ archived 2026-03-22
 
 > 預估：0.5 天 | 依賴：無
 
-- [ ] 整合 `in_app_review` 套件
-- [ ] 在 `addRecentTool` 計數達 3 時觸發評分彈窗
-- [ ] 觸發時機：工具完成結果後（正向情緒高點）
+- [x] 整合 `in_app_review` 套件
+- [x] 在 `addRecentTool` 計數達 3 時觸發評分彈窗
+- [x] 觸發時機：工具完成結果後（正向情緒高點）
 
 ---
 
@@ -329,8 +329,8 @@
 
 | # | Change 名稱 | Phase | 預估 | 依賴 |
 |---|------------|-------|------|------|
-| 1 | `fix-quality-baseline` | 1 | 1d | — |
-| 2 | `app-review-prompt` | 1 | 0.5d | — |
+| ~~1~~ | ~~`fix-quality-baseline`~~ ✅ | 1 | 1d | — |
+| ~~2~~ | ~~`app-review-prompt`~~ ✅ | 1 | 0.5d | — |
 | 3 | `home-screen-widgets` | 2 | 3d | #1 |
 | 4 | `calculator-history` | 2 | 1d | #1 |
 | 5 | `tool-recommendations` | 2 | 1.5d | #1 |
