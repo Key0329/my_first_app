@@ -5,6 +5,7 @@ import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'calculator_history_service.dart';
 import 'calculator_logic.dart';
 
 final Color _toolColor =
@@ -20,8 +21,20 @@ class CalculatorPage extends StatefulWidget {
 class _CalculatorPageState extends State<CalculatorPage> {
   String _expression = '';
   String _result = '';
-  final List<CalculationEntry> _history = [];
+  List<CalculationEntry> _history = [];
   bool _evaluated = false;
+  final CalculatorHistoryService _historyService = CalculatorHistoryService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final loaded = await _historyService.load();
+    if (mounted) setState(() => _history = loaded);
+  }
 
   void _onDigit(String digit) {
     setState(() {
@@ -108,30 +121,32 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   void _onEquals() {
     if (_expression.isEmpty) return;
-    setState(() {
-      try {
-        final value = CalculatorLogic.evaluate(_expression);
-        _result = CalculatorLogic.formatResult(value);
-        _history.insert(
-          0,
-          CalculationEntry(
-            expression: _expression,
-            result: _result,
-            timestamp: DateTime.now(),
-          ),
-        );
+    try {
+      final value = CalculatorLogic.evaluate(_expression);
+      final result = CalculatorLogic.formatResult(value);
+      final entry = CalculationEntry(
+        expression: _expression,
+        result: result,
+        timestamp: DateTime.now(),
+      );
+      setState(() {
+        _result = result;
         _evaluated = true;
-      } on ArgumentError {
-        _result = '錯誤：除以零';
-      } on FormatException {
-        _result = '格式錯誤';
-      }
-    });
+      });
+      _historyService.add(entry, _history).then((updated) {
+        if (mounted) setState(() => _history = updated);
+      });
+    } on ArgumentError {
+      setState(() => _result = '錯誤：除以零');
+    } on FormatException {
+      setState(() => _result = '格式錯誤');
+    }
   }
 
   void _clearHistory() {
+    _historyService.clear();
     setState(() {
-      _history.clear();
+      _history = [];
     });
   }
 
@@ -325,75 +340,135 @@ class _CalculatorPageState extends State<CalculatorPage> {
       context: context,
       isScrollControlled: true,
       builder: (ctx) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.5,
-          maxChildSize: 0.85,
-          builder: (context, scrollController) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '歷史紀錄',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      TextButton.icon(
-                        key: const Key('btn_clear_history'),
-                        onPressed: () async {
-                          final confirmed = await showConfirmDialog(
-                            context: context,
-                            title: '清除歷史紀錄',
-                            message: '確定要清除所有計算歷史紀錄嗎？此操作無法復原。',
-                            confirmLabel: '清除',
-                          );
-                          if (!confirmed) return;
-                          _clearHistory();
-                          if (context.mounted) Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.delete_outline, size: 18),
-                        label: const Text('清除'),
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(height: 1),
-                Expanded(
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: _history.length,
-                    itemBuilder: (context, index) {
-                      final entry = _history[index];
-                      return ListTile(
-                        title: Text(entry.expression),
-                        trailing: Text(
-                          '= ${entry.result}',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _expression = entry.result;
-                            _result = '';
-                            _evaluated = false;
-                          });
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
+        return _HistorySheet(
+          history: _history,
+          onClear: () async {
+            final confirmed = await showConfirmDialog(
+              context: ctx,
+              title: '清除歷史紀錄',
+              message: '確定要清除所有計算歷史紀錄嗎？此操作無法復原。',
+              confirmLabel: '清除',
             );
+            if (!confirmed) return;
+            _clearHistory();
+            if (ctx.mounted) Navigator.pop(ctx);
           },
+          onSelect: (entry) {
+            setState(() {
+              _expression = entry.result;
+              _result = '';
+              _evaluated = false;
+            });
+            Navigator.pop(ctx);
+          },
+        );
+      },
+    );
+  }
+}
+
+/// 歷史紀錄 Bottom Sheet（含搜尋功能）。
+class _HistorySheet extends StatefulWidget {
+  const _HistorySheet({
+    required this.history,
+    required this.onClear,
+    required this.onSelect,
+  });
+
+  final List<CalculationEntry> history;
+  final VoidCallback onClear;
+  final ValueChanged<CalculationEntry> onSelect;
+
+  @override
+  State<_HistorySheet> createState() => _HistorySheetState();
+}
+
+class _HistorySheetState extends State<_HistorySheet> {
+  String _searchQuery = '';
+
+  List<CalculationEntry> get _filteredHistory {
+    if (_searchQuery.isEmpty) return widget.history;
+    final q = _searchQuery.toLowerCase();
+    return widget.history
+        .where((e) =>
+            e.expression.toLowerCase().contains(q) ||
+            e.result.toLowerCase().contains(q))
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final filtered = _filteredHistory;
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.5,
+      maxChildSize: 0.85,
+      builder: (context, scrollController) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '歷史紀錄',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  TextButton.icon(
+                    key: const Key('btn_clear_history'),
+                    onPressed: widget.onClear,
+                    icon: const Icon(Icons.delete_outline, size: 18),
+                    label: const Text('清除'),
+                  ),
+                ],
+              ),
+            ),
+            // 搜尋欄
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: '搜尋歷史紀錄...',
+                  prefixIcon: const Icon(Icons.search, size: 20),
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onChanged: (value) => setState(() => _searchQuery = value),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Divider(height: 1),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final entry = filtered[index];
+                  return ListTile(
+                    title: Text(entry.expression),
+                    trailing: Text(
+                      '= ${entry.result}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () => widget.onSelect(entry),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );

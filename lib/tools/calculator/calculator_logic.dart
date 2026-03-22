@@ -172,4 +172,17 @@ class CalculationEntry {
     required this.result,
     required this.timestamp,
   });
+
+  Map<String, dynamic> toJson() => {
+        'expression': expression,
+        'result': result,
+        'timestamp': timestamp.toIso8601String(),
+      };
+
+  factory CalculationEntry.fromJson(Map<String, dynamic> json) =>
+      CalculationEntry(
+        expression: json['expression'] as String,
+        result: json['result'] as String,
+        timestamp: DateTime.parse(json['timestamp'] as String),
+      );
 }

@@ -62,13 +62,13 @@
 - [x] 計算機 Widget（iOS + Android）
 - [x] 匯率 Widget（iOS + Android）
 
-### Change #4: `calculator-history`
+### ~~Change #4: `calculator-history`~~ ✅ archived 2026-03-22
 
 > 預估：1 天 | 依賴：#1
 
-- [ ] 計算機 `_history` 持久化到 SharedPreferences
-- [ ] 歷史上限 100 筆
-- [ ] 支援搜尋歷史
+- [x] 計算機 `_history` 持久化到 SharedPreferences
+- [x] 歷史上限 100 筆
+- [x] 支援搜尋歷史
 
 ### Change #5: `tool-recommendations`
 
@@ -332,7 +332,7 @@
 | ~~1~~ | ~~`fix-quality-baseline`~~ ✅ | 1 | 1d | — |
 | ~~2~~ | ~~`app-review-prompt`~~ ✅ | 1 | 0.5d | — |
 | ~~3~~ | ~~`home-screen-widgets`~~ ✅ | 2 | 3d | #1 |
-| 4 | `calculator-history` | 2 | 1d | #1 |
+| ~~4~~ | ~~`calculator-history`~~ ✅ | 2 | 1d | #1 |
 | 5 | `tool-recommendations` | 2 | 1.5d | #1 |
 | 6 | `share-result-cards` | 2 | 2d | #1 |
 | 7 | `tool-registry` | 3 | 2d | #1 |
