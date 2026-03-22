@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.RemoteViews
-import com.spectra.toolbox.R
+import com.example.my_first_app.R
 
 class CurrencyWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(
