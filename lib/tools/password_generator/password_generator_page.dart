@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Color _toolColor =
     toolGradients['password_generator']?.first ?? const Color(0xFF3F51B5);
@@ -27,15 +29,40 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   bool _numbers = true;
   bool _special = false;
   String _password = '';
+  bool _isMemorableMode = false;
+  int _wordCount = 4;
+
+  // Password history state
+  final List<String> _passwordHistory = [];
+  final Set<int> _revealedIndices = {};
+  static const _historyKey = 'password_history';
+  static const _maxHistory = 20;
 
   static const _uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   static const _lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
   static const _numberChars = '0123456789';
   static const _specialChars = '!@#\$%^&*()_+-=[]{}|;:,.<>?';
 
+  static const _words = [
+    'apple', 'beach', 'cloud', 'dance', 'eagle', 'flame', 'grape', 'honey',
+    'ivory', 'jewel', 'karma', 'lemon', 'mango', 'noble', 'ocean', 'pearl',
+    'quest', 'river', 'storm', 'tiger', 'ultra', 'vivid', 'whale', 'xenon',
+    'youth', 'zebra', 'amber', 'bloom', 'coral', 'dream', 'ember', 'frost',
+    'glow', 'haven', 'inlet', 'lunar', 'maple', 'north', 'oasis', 'plume',
+    'quilt', 'ridge', 'solar', 'trail', 'unity', 'vapor', 'winds', 'axis',
+    'blaze', 'crest', 'delta', 'epoch', 'flora', 'grain', 'haste', 'irony',
+    'joint', 'knelt', 'light', 'march', 'nerve', 'orbit', 'pilot', 'razor',
+    'scale', 'thorn', 'urban', 'vault', 'wrist', 'yield', 'acorn', 'brave',
+    'charm', 'drift', 'elect', 'forge', 'glide', 'hound', 'image', 'judge',
+    'knack', 'lance', 'minor', 'novel', 'oxide', 'plaza', 'reign', 'slate',
+    'tempo', 'usher', 'vigor', 'worth', 'atlas', 'brine', 'cliff', 'dune',
+    'elfin', 'fable', 'guild', 'hazel',
+  ];
+
   @override
   void initState() {
     super.initState();
+    _loadHistory();
     _generatePassword();
   }
 
@@ -48,20 +75,78 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
     return pool.toString();
   }
 
-  void _generatePassword() {
-    final pool = _buildCharPool();
-    if (pool.isEmpty) return;
+  String _generateMemorablePassword() {
     final random = Random.secure();
-    final len = _length.round();
-    final password = List.generate(len, (_) => pool[random.nextInt(pool.length)])
-        .join();
-    setState(() => _password = password);
+    return List.generate(
+      _wordCount,
+      (_) => _words[random.nextInt(_words.length)],
+    ).join('-');
+  }
+
+  void _generatePassword() {
+    if (_isMemorableMode) {
+      final password = _generateMemorablePassword();
+      setState(() => _password = password);
+    } else {
+      final pool = _buildCharPool();
+      if (pool.isEmpty) return;
+      final random = Random.secure();
+      final len = _length.round();
+      final password =
+          List.generate(len, (_) => pool[random.nextInt(pool.length)]).join();
+      setState(() => _password = password);
+    }
+    _addToHistory(_password);
+  }
+
+  void _addToHistory(String password) {
+    if (password.isEmpty) return;
+    setState(() {
+      _passwordHistory.insert(0, password);
+      if (_passwordHistory.length > _maxHistory) {
+        _passwordHistory.removeRange(_maxHistory, _passwordHistory.length);
+      }
+      // Reset revealed indices since list shifted
+      _revealedIndices.clear();
+    });
+    _saveHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final historyJson = prefs.getString(_historyKey);
+    if (historyJson != null) {
+      final List<dynamic> decoded = json.decode(historyJson) as List<dynamic>;
+      setState(() {
+        _passwordHistory.clear();
+        _passwordHistory.addAll(decoded.cast<String>());
+      });
+    }
+  }
+
+  Future<void> _saveHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_historyKey, json.encode(_passwordHistory));
+  }
+
+  void _clearHistory() {
+    setState(() {
+      _passwordHistory.clear();
+      _revealedIndices.clear();
+    });
+    _saveHistory();
   }
 
   int get _activeTypeCount =>
       [_uppercase, _lowercase, _numbers, _special].where((v) => v).length;
 
   PasswordStrength get _strength {
+    if (_isMemorableMode) {
+      if (_wordCount >= 6) return PasswordStrength.veryStrong;
+      if (_wordCount >= 5) return PasswordStrength.strong;
+      if (_wordCount >= 4) return PasswordStrength.medium;
+      return PasswordStrength.weak;
+    }
     final len = _length.round();
     final types = _activeTypeCount;
     if (len >= 20 && types >= 3) return PasswordStrength.veryStrong;
@@ -166,104 +251,168 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   /// 選項控制區（下方操作區）
   Widget _buildOptionsArea(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    const totalSections = 3; // 密碼長度、字元類型、按鈕
+    const totalSections = 5; // 易記模式、密碼長度/單詞數、字元類型、按鈕、歷史
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 密碼長度滑桿卡片
+          // 易記模式切換
           StaggeredFadeIn(
             index: 0,
             totalItems: totalSections,
             child: ToolSectionCard(
-              label: l10n.passwordLength,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${_length.round()}',
-                        style: const TextStyle(
-                          fontSize: DT.fontToolLabel,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        '8 - 64',
-                        style: TextStyle(
-                          fontSize: DT.fontToolLabel,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Slider(
-                    value: _length,
-                    min: 8,
-                    max: 64,
-                    divisions: 56,
-                    label: _length.round().toString(),
-                    onChanged: (v) {
-                      setState(() => _length = v);
-                      _generatePassword();
-                    },
-                  ),
-                ],
+              child: SwitchListTile(
+                title: Text(l10n.passwordMemorable),
+                value: _isMemorableMode,
+                contentPadding: EdgeInsets.zero,
+                onChanged: (v) {
+                  setState(() => _isMemorableMode = v);
+                  _generatePassword();
+                },
               ),
             ),
           ),
 
           const SizedBox(height: DT.toolSectionGap),
 
-          // 字元類型開關卡片
-          StaggeredFadeIn(
-            index: 1,
-            totalItems: totalSections,
-            child: ToolSectionCard(
-              label: l10n.passwordCharTypes,
-              child: Column(
-                children: [
-                  SwitchListTile(
-                    title: Text(l10n.passwordUppercase),
-                    value: _uppercase,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (_) =>
-                        _toggleType(_uppercase, (v) => _uppercase = v),
-                  ),
-                  SwitchListTile(
-                    title: Text(l10n.passwordLowercase),
-                    value: _lowercase,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (_) =>
-                        _toggleType(_lowercase, (v) => _lowercase = v),
-                  ),
-                  SwitchListTile(
-                    title: Text(l10n.passwordDigits),
-                    value: _numbers,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (_) =>
-                        _toggleType(_numbers, (v) => _numbers = v),
-                  ),
-                  SwitchListTile(
-                    title: Text(l10n.passwordSpecial),
-                    value: _special,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (_) =>
-                        _toggleType(_special, (v) => _special = v),
-                  ),
-                ],
+          if (_isMemorableMode) ...[
+            // 單詞數量滑桿卡片
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: totalSections,
+              child: ToolSectionCard(
+                label: l10n.passwordWordCount,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$_wordCount',
+                          style: const TextStyle(
+                            fontSize: DT.fontToolLabel,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          '3 - 6',
+                          style: TextStyle(
+                            fontSize: DT.fontToolLabel,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: _wordCount.toDouble(),
+                      min: 3,
+                      max: 6,
+                      divisions: 3,
+                      label: _wordCount.toString(),
+                      onChanged: (v) {
+                        setState(() => _wordCount = v.round());
+                        _generatePassword();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          ] else ...[
+            // 密碼長度滑桿卡片
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: totalSections,
+              child: ToolSectionCard(
+                label: l10n.passwordLength,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${_length.round()}',
+                          style: const TextStyle(
+                            fontSize: DT.fontToolLabel,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          '8 - 64',
+                          style: TextStyle(
+                            fontSize: DT.fontToolLabel,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: _length,
+                      min: 8,
+                      max: 64,
+                      divisions: 56,
+                      label: _length.round().toString(),
+                      onChanged: (v) {
+                        setState(() => _length = v);
+                        _generatePassword();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: DT.toolSectionGap),
+
+            // 字元類型開關卡片
+            StaggeredFadeIn(
+              index: 2,
+              totalItems: totalSections,
+              child: ToolSectionCard(
+                label: l10n.passwordCharTypes,
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      title: Text(l10n.passwordUppercase),
+                      value: _uppercase,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (_) =>
+                          _toggleType(_uppercase, (v) => _uppercase = v),
+                    ),
+                    SwitchListTile(
+                      title: Text(l10n.passwordLowercase),
+                      value: _lowercase,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (_) =>
+                          _toggleType(_lowercase, (v) => _lowercase = v),
+                    ),
+                    SwitchListTile(
+                      title: Text(l10n.passwordDigits),
+                      value: _numbers,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (_) =>
+                          _toggleType(_numbers, (v) => _numbers = v),
+                    ),
+                    SwitchListTile(
+                      title: Text(l10n.passwordSpecial),
+                      value: _special,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (_) =>
+                          _toggleType(_special, (v) => _special = v),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
 
           const SizedBox(height: DT.toolSectionGap),
 
           // 產生新密碼按鈕
           StaggeredFadeIn(
-            index: 2,
+            index: 3,
             totalItems: totalSections,
             child: ToolGradientButton(
               gradientColors: toolGradients['password_generator']!,
@@ -272,6 +421,93 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
               onPressed: _generatePassword,
             ),
           ),
+
+          const SizedBox(height: DT.toolSectionGap),
+
+          // 密碼歷史
+          if (_passwordHistory.isNotEmpty)
+            StaggeredFadeIn(
+              index: 4,
+              totalItems: totalSections,
+              child: ToolSectionCard(
+                label: l10n.passwordHistory,
+                child: Column(
+                  children: [
+                    ...List.generate(_passwordHistory.length, (index) {
+                      final isRevealed = _revealedIndices.contains(index);
+                      final password = _passwordHistory[index];
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          isRevealed
+                              ? password
+                              : '\u2022' * (password.length.clamp(5, 20)),
+                          style: TextStyle(
+                            fontFamily: isRevealed ? 'monospace' : null,
+                            fontSize: 14,
+                            letterSpacing: isRevealed ? 1.0 : 2.0,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                isRevealed
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                size: 20,
+                              ),
+                              tooltip: isRevealed
+                                  ? l10n.passwordHidePassword
+                                  : l10n.passwordShowPassword,
+                              onPressed: () {
+                                setState(() {
+                                  if (isRevealed) {
+                                    _revealedIndices.remove(index);
+                                  } else {
+                                    _revealedIndices.add(index);
+                                  }
+                                });
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.copy, size: 20),
+                              tooltip: l10n.commonCopy,
+                              onPressed: () async {
+                                final messenger =
+                                    ScaffoldMessenger.of(context);
+                                await Clipboard.setData(
+                                  ClipboardData(text: password),
+                                );
+                                if (mounted) {
+                                  messenger.showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10n.copiedToClipboard),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: _clearHistory,
+                        icon: const Icon(Icons.delete_outline, size: 18),
+                        label: Text(l10n.passwordClearHistory),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -458,6 +458,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stopwatchResetConfirm => 'Are you sure you want to reset?';
 
   @override
+  String get stopwatchQuickSet3 => '3 min';
+
+  @override
+  String get stopwatchQuickSet5 => '5 min';
+
+  @override
+  String get stopwatchQuickSet10 => '10 min';
+
+  @override
+  String get stopwatchQuickSet15 => '15 min';
+
+  @override
+  String get stopwatchQuickSet30 => '30 min';
+
+  @override
+  String get stopwatchRepeat => 'Repeat';
+
+  @override
+  String get stopwatchExportLaps => 'Copy Lap Records';
+
+  @override
+  String get stopwatchLapsExported => 'Lap records copied';
+
+  @override
   String get passwordLength => 'Password Length';
 
   @override
@@ -497,6 +521,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordMinOneType => 'At least one character type required';
 
   @override
+  String get passwordMemorable => 'Memorable';
+
+  @override
+  String get passwordWordCount => 'Word Count';
+
+  @override
+  String get passwordHistory => 'Password History';
+
+  @override
+  String get passwordClearHistory => 'Clear History';
+
+  @override
+  String get passwordShowPassword => 'Show Password';
+
+  @override
+  String get passwordHidePassword => 'Hide Password';
+
+  @override
   String get colorPickerTitle => 'Pick Color';
 
   @override
@@ -528,6 +570,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qrGeneratorGenerate => 'Generate QR Code';
+
+  @override
+  String get qrTypeText => 'Text';
+
+  @override
+  String get qrTypeWifi => 'WiFi';
+
+  @override
+  String get qrTypeEmail => 'Email';
+
+  @override
+  String get qrWifiSsid => 'WiFi Name (SSID)';
+
+  @override
+  String get qrWifiPassword => 'WiFi Password';
+
+  @override
+  String get qrWifiEncryption => 'Encryption';
+
+  @override
+  String get qrEmailTo => 'Recipient';
+
+  @override
+  String get qrEmailSubject => 'Subject';
+
+  @override
+  String get qrEmailBody => 'Body';
 
   @override
   String get randomWheelTitle => 'Random Wheel';

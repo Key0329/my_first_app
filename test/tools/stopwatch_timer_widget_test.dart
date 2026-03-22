@@ -32,6 +32,14 @@ void main() {
 
   group('Timer Tab — state transitions', () {
     Future<void> switchToTimerTab(WidgetTester tester) async {
+      // Use a taller viewport to accommodate quick-set chips + picker + button
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
       await tester.pumpWidget(_buildApp());
       // Tap the 計時器 tab
       await tester.tap(find.text('計時器'));
@@ -43,7 +51,11 @@ void main() {
       await switchToTimerTab(tester);
 
       expect(find.text('設定時間'), findsOneWidget);
-      expect(find.text('開始'), findsOneWidget);
+      // Scroll to see the 開始 button if needed
+      final startBtn = find.text('開始');
+      await tester.ensureVisible(startBtn);
+      await tester.pumpAndSettle();
+      expect(startBtn, findsOneWidget);
     });
 
     testWidgets('開始 button is disabled when time is zero', (tester) async {
@@ -52,6 +64,8 @@ void main() {
       // The ToolGradientButton should have Opacity 0.5 when disabled
       // Default picker values are 0:0:0, so the button should be disabled
       final toolGradientButton = find.text('開始');
+      await tester.ensureVisible(toolGradientButton);
+      await tester.pumpAndSettle();
       expect(toolGradientButton, findsOneWidget);
 
       // Tap should not change state (no countdown display should appear)
@@ -84,7 +98,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Now tap 開始
-      await tester.tap(find.text('開始'));
+      final startBtn = find.text('開始');
+      await tester.ensureVisible(startBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(startBtn);
       await tester.pump();
 
       // Should now show running state with 暫停 and 重設 buttons
@@ -106,7 +123,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start
-      await tester.tap(find.text('開始'));
+      final startBtn = find.text('開始');
+      await tester.ensureVisible(startBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(startBtn);
       await tester.pump(const Duration(milliseconds: 500));
 
       // Pause
@@ -139,7 +159,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start then reset
-      await tester.tap(find.text('開始'));
+      final startBtn = find.text('開始');
+      await tester.ensureVisible(startBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(startBtn);
       await tester.pump();
       await tester.tap(find.text('重設'));
       await tester.pumpAndSettle();
@@ -167,7 +190,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start — should switch from picker to countdown display
-      await tester.tap(find.text('開始'));
+      final startBtn = find.text('開始');
+      await tester.ensureVisible(startBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(startBtn);
       await tester.pump();
 
       // Countdown display has CircularProgressIndicator

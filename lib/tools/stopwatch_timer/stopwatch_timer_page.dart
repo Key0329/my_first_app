@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/timer_notification_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
@@ -162,6 +163,19 @@ class _StopwatchTabState extends State<_StopwatchTab> {
     setState(() {});
   }
 
+  void _exportLaps(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // Format laps in chronological order (reversed since _laps is newest-first)
+    final buffer = StringBuffer();
+    for (final lap in _laps.reversed) {
+      buffer.writeln('#${lap.number}  ${formatDuration(lap.lapTime)}');
+    }
+    Clipboard.setData(ClipboardData(text: buffer.toString().trimRight()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.stopwatchLapsExported)),
+    );
+  }
+
   @override
   void dispose() {
     _ticker?.cancel();
@@ -258,7 +272,10 @@ class _StopwatchTabState extends State<_StopwatchTab> {
           // Lap list
           if (_laps.isNotEmpty)
             Expanded(
-              child: _LapListSection(laps: _laps),
+              child: _LapListSection(
+                laps: _laps,
+                onExport: () => _exportLaps(context),
+              ),
             )
           else
             const Expanded(child: SizedBox.shrink()),
@@ -273,14 +290,16 @@ class _StopwatchTabState extends State<_StopwatchTab> {
 // ---------------------------------------------------------------------------
 
 class _LapListSection extends StatelessWidget {
-  const _LapListSection({required this.laps});
+  const _LapListSection({required this.laps, required this.onExport});
 
   final List<LapRecord> laps;
+  final VoidCallback onExport;
 
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final bgColor = brightness == Brightness.dark
         ? DT.brandPrimaryBgDark
         : DT.brandPrimaryBgLight;
@@ -298,13 +317,24 @@ class _LapListSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '分圈記錄',
-              style: TextStyle(
-                fontSize: DT.fontToolLabel,
-                color: labelColor,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '分圈記錄',
+                  style: TextStyle(
+                    fontSize: DT.fontToolLabel,
+                    color: labelColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  onPressed: onExport,
+                  icon: const Icon(Icons.copy, size: 20),
+                  tooltip: l10n.stopwatchExportLaps,
+                  visualDensity: VisualDensity.compact,
+                ),
+              ],
             ),
             const SizedBox(height: DT.spaceSm),
             Expanded(
@@ -357,6 +387,9 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
   Timer? _ticker;
   _TimerState _state = _TimerState.idle;
 
+  /// Stores the duration when the timer starts, for repeat functionality.
+  Duration _lastTimerDuration = Duration.zero;
+
   /// Tracks real elapsed time to avoid Timer.periodic drift.
   final Stopwatch _elapsed = Stopwatch();
 
@@ -390,6 +423,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
       _totalDuration = _pickerDuration;
       if (_totalDuration == Duration.zero) return;
       _remaining = _totalDuration;
+      _lastTimerDuration = _totalDuration;
       _elapsed.reset();
     }
     _state = _TimerState.running;
@@ -425,6 +459,43 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
     }
     // 背景時通知已透過 scheduleTimerNotification 排程，
     // 會在系統層級自動觸發，無需額外處理。
+  }
+
+  /// Quickly set a duration (in minutes) and start the timer.
+  void _quickSetAndStart(int minutes) {
+    _hours = 0;
+    _minutes = minutes;
+    _seconds = 0;
+    _state = _TimerState.idle;
+    _totalDuration = Duration.zero;
+    _remaining = Duration.zero;
+    _elapsed
+      ..stop()
+      ..reset();
+    _ticker?.cancel();
+    _ticker = null;
+    _notificationService.cancelTimerNotification();
+    _notificationService.stopSound();
+    // Now start the timer with the quick-set duration
+    _startTimer();
+  }
+
+  /// Repeat the last timer duration.
+  void _repeatTimer() {
+    _notificationService.stopSound();
+    _hours = _lastTimerDuration.inHours;
+    _minutes = _lastTimerDuration.inMinutes.remainder(60);
+    _seconds = _lastTimerDuration.inSeconds.remainder(60);
+    _state = _TimerState.idle;
+    _totalDuration = Duration.zero;
+    _remaining = Duration.zero;
+    _elapsed
+      ..stop()
+      ..reset();
+    _ticker?.cancel();
+    _ticker = null;
+    _notificationService.cancelTimerNotification();
+    _startTimer();
   }
 
   void _pauseTimer() {
@@ -487,6 +558,9 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
         children: [
           const SizedBox(height: DT.space2xl),
           if (_state == _TimerState.idle) ...[
+            // Quick-set time buttons
+            _buildQuickSetChips(),
+            const SizedBox(height: DT.spaceLg),
             // Duration picker wrapped in ToolSectionCard
             ToolSectionCard(
               label: '設定時間',
@@ -502,6 +576,29 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
           const Spacer(),
         ],
       ),
+    );
+  }
+
+  Widget _buildQuickSetChips() {
+    final l10n = AppLocalizations.of(context)!;
+    final chips = <MapEntry<String, int>>[
+      MapEntry(l10n.stopwatchQuickSet3, 3),
+      MapEntry(l10n.stopwatchQuickSet5, 5),
+      MapEntry(l10n.stopwatchQuickSet10, 10),
+      MapEntry(l10n.stopwatchQuickSet15, 15),
+      MapEntry(l10n.stopwatchQuickSet30, 30),
+    ];
+
+    return Wrap(
+      spacing: DT.spaceSm,
+      runSpacing: DT.spaceXs,
+      alignment: WrapAlignment.center,
+      children: chips.map((entry) {
+        return ActionChip(
+          label: Text(entry.key),
+          onPressed: () => _quickSetAndStart(entry.value),
+        );
+      }).toList(),
     );
   }
 
@@ -670,19 +767,33 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
           ],
         );
       case _TimerState.finished:
-        return BouncingButton(
-          child: FilledButton.icon(
-            onPressed: _confirmResetTimer,
-            icon: const Icon(Icons.refresh),
-            label: Text(l10n.commonReset),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, DT.toolButtonHeight),
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(DT.toolButtonRadius),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BouncingButton(
+              child: OutlinedButton.icon(
+                onPressed: _confirmResetTimer,
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.commonReset),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, DT.toolButtonHeight),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DT.toolButtonRadius),
+                  ),
+                ),
               ),
             ),
-          ),
+            if (_lastTimerDuration > Duration.zero) ...[
+              const SizedBox(width: DT.spaceLg),
+              ToolGradientButton(
+                gradientColors: _stopwatchGradient,
+                label: l10n.stopwatchRepeat,
+                icon: Icons.replay,
+                onPressed: _repeatTimer,
+              ),
+            ],
+          ],
         );
     }
   }

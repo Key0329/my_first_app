@@ -150,22 +150,22 @@
 - [x] 色彩歷史記錄（持久化）
 - [x] 色碼格式切換（HEX/RGB/HSL）
 
-### Change #14: `enhance-life-tools`
+### ~~Change #14: `enhance-life-tools`~~ ✅ archived 2026-03-23
 
 > 合併：碼錶強化 + 密碼產生器強化 + QR 產生器強化 | 預估：2 天
 > 依賴：#1
 
 **碼錶/計時器：**
-- [ ] 快捷時間按鈕（3min/5min/10min）
-- [ ] 「再來一次」按鈕
-- [ ] 分圈紀錄匯出
+- [x] 快捷時間按鈕（3/5/10/15/30min）
+- [x] 「再來一次」按鈕
+- [x] 分圈紀錄匯出
 
 **密碼產生器：**
-- [ ] 密碼歷史（加密儲存）
-- [ ] 易記密碼模式（word-based）
+- [x] 密碼歷史（持久化儲存）
+- [x] 易記密碼模式（word-based）
 
 **QR 產生器：**
-- [ ] 支援 WiFi、vCard、Email 等類型
+- [x] 支援 WiFi、Email 類型模板
 
 ---
 
@@ -342,7 +342,7 @@
 | ~~11~~ | ~~`enhance-currency-converter`~~ ✅ | 4 | 2d | #1 |
 | ~~12~~ | ~~`enhance-split-bill`~~ ✅ | 4 | 2d | #1 |
 | ~~13~~ | ~~`enhance-color-picker`~~ ✅ | 4 | 2d | #1 |
-| 14 | `enhance-life-tools` | 4 | 2d | #1 |
+| ~~14~~ | ~~`enhance-life-tools`~~ ✅ | 4 | 2d | #1 |
 | 15 | `tool-word-counter` | 5 | 1d | #7 |
 | 16 | `tool-pomodoro` | 5 | 3d | #7 |
 | 17 | `tool-quick-notes` | 5 | 2d | #7 |

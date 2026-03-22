@@ -16,10 +16,17 @@ void main() {
           home: const QrGeneratorPage(),
         ),
       );
+      await tester.pumpAndSettle();
 
-      // Enter text and generate
-      await tester.enterText(find.byType(TextField), 'Hello World');
-      await tester.tap(find.text('產生 QR Code'));
+      // Default QR type is Text (index 0), enter text in the TextField
+      await tester.enterText(find.byType(TextField).first, 'Hello World');
+      await tester.pumpAndSettle();
+
+      // Scroll to make the generate button visible, then tap
+      final generateBtn = find.text('產生 QR Code');
+      await tester.ensureVisible(generateBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(generateBtn);
       await tester.pumpAndSettle();
 
       // Should find a QrImageView widget, not just a placeholder icon
@@ -36,18 +43,28 @@ void main() {
           home: const QrGeneratorPage(),
         ),
       );
+      await tester.pumpAndSettle();
 
       // Generate first QR Code
-      await tester.enterText(find.byType(TextField), 'Hello');
-      await tester.tap(find.text('產生 QR Code'));
+      await tester.enterText(find.byType(TextField).first, 'Hello');
+      await tester.pumpAndSettle();
+
+      final generateBtn = find.text('產生 QR Code');
+      await tester.ensureVisible(generateBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(generateBtn);
       await tester.pumpAndSettle();
 
       // QrImageView should exist
       expect(find.byType(QrImageView), findsOneWidget);
 
       // Generate second QR Code with different text
-      await tester.enterText(find.byType(TextField), 'World');
-      await tester.tap(find.text('產生 QR Code'));
+      await tester.enterText(find.byType(TextField).first, 'World');
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(generateBtn);
+      await tester.pumpAndSettle();
+      await tester.tap(generateBtn);
       await tester.pumpAndSettle();
 
       // QrImageView should still exist (widget rebuilt with new data)

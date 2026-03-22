@@ -1,10 +1,4 @@
-# tool-qr-scanner Specification
-
-## Purpose
-
-TBD - created by archiving change 'mvp-v1-toolbox-app'. Update Purpose after archive.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: QR Code generation
 
@@ -19,21 +13,3 @@ The QR generator SHALL support multiple content types via a mode selector: Text 
 
 - **WHEN** user selects Email mode and fills in recipient and subject
 - **THEN** the QR code SHALL encode in mailto: format
-
-<!-- @trace
-source: enhance-life-tools
-updated: 2026-03-23
-code:
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/l10n/app_en.arb
-  - lib/l10n/app_localizations_en.dart
-  - lib/l10n/app_zh.arb
-  - lib/l10n/app_localizations.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-tests:
-  - test/tools/stopwatch_timer_widget_test.dart
-  - test/tools/password_generator_test.dart
-  - test/tools/qr_generator_test.dart
--->

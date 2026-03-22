@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/tools/password_generator/password_generator_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget _buildApp() {
   return MaterialApp(
@@ -15,13 +16,21 @@ Widget _buildApp() {
 
 void main() {
   group('PasswordGeneratorPage', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
     testWidgets('renders initial UI elements', (tester) async {
       await tester.pumpWidget(_buildApp());
+      await tester.pumpAndSettle();
 
       // AppBar title
       expect(find.text('密碼產生器'), findsOneWidget);
 
-      // Character type toggles
+      // Memorable mode toggle (new)
+      expect(find.text('易記模式'), findsOneWidget);
+
+      // Character type toggles (need to scroll to see them)
       expect(find.text('大寫字母 (A-Z)'), findsOneWidget);
       expect(find.text('小寫字母 (a-z)'), findsOneWidget);
       expect(find.text('數字 (0-9)'), findsOneWidget);
@@ -34,8 +43,8 @@ void main() {
       // Strength label
       expect(find.text('強度'), findsOneWidget);
 
-      // Copy button
-      expect(find.byIcon(Icons.copy), findsOneWidget);
+      // Copy button in header — may have multiple copy icons (header + history)
+      expect(find.byIcon(Icons.copy), findsAtLeast(1));
 
       // Slider exists
       expect(find.byType(Slider), findsOneWidget);
@@ -166,6 +175,7 @@ void main() {
     testWidgets('copy button copies password and shows snackbar',
         (tester) async {
       await tester.pumpWidget(_buildApp());
+      await tester.pumpAndSettle();
 
       // Set up mock clipboard
       final List<MethodCall> clipboardCalls = [];
@@ -179,7 +189,8 @@ void main() {
         },
       );
 
-      await tester.tap(find.byIcon(Icons.copy));
+      // Tap the first copy icon (in the header area, not the history)
+      await tester.tap(find.byIcon(Icons.copy).first);
       await tester.pump();
 
       expect(find.text('已複製到剪貼簿'), findsOneWidget);

@@ -450,6 +450,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stopwatchResetConfirm => '確定要重設嗎？';
 
   @override
+  String get stopwatchQuickSet3 => '3 分鐘';
+
+  @override
+  String get stopwatchQuickSet5 => '5 分鐘';
+
+  @override
+  String get stopwatchQuickSet10 => '10 分鐘';
+
+  @override
+  String get stopwatchQuickSet15 => '15 分鐘';
+
+  @override
+  String get stopwatchQuickSet30 => '30 分鐘';
+
+  @override
+  String get stopwatchRepeat => '再來一次';
+
+  @override
+  String get stopwatchExportLaps => '複製分圈紀錄';
+
+  @override
+  String get stopwatchLapsExported => '分圈紀錄已複製';
+
+  @override
   String get passwordLength => '密碼長度';
 
   @override
@@ -489,6 +513,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get passwordMinOneType => '至少需選擇一種字元類型';
 
   @override
+  String get passwordMemorable => '易記模式';
+
+  @override
+  String get passwordWordCount => '單詞數量';
+
+  @override
+  String get passwordHistory => '密碼歷史';
+
+  @override
+  String get passwordClearHistory => '清除歷史';
+
+  @override
+  String get passwordShowPassword => '顯示密碼';
+
+  @override
+  String get passwordHidePassword => '隱藏密碼';
+
+  @override
   String get colorPickerTitle => '擷取色值';
 
   @override
@@ -520,6 +562,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get qrGeneratorGenerate => '產生 QR Code';
+
+  @override
+  String get qrTypeText => '文字';
+
+  @override
+  String get qrTypeWifi => 'WiFi';
+
+  @override
+  String get qrTypeEmail => 'Email';
+
+  @override
+  String get qrWifiSsid => 'WiFi 名稱 (SSID)';
+
+  @override
+  String get qrWifiPassword => 'WiFi 密碼';
+
+  @override
+  String get qrWifiEncryption => '加密方式';
+
+  @override
+  String get qrEmailTo => '收件人';
+
+  @override
+  String get qrEmailSubject => '主旨';
+
+  @override
+  String get qrEmailBody => '內文';
 
   @override
   String get randomWheelTitle => '隨機轉盤';

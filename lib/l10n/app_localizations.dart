@@ -968,6 +968,54 @@ abstract class AppLocalizations {
   /// **'確定要重設嗎？'**
   String get stopwatchResetConfirm;
 
+  /// Timer: Quick set 3 minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'3 分鐘'**
+  String get stopwatchQuickSet3;
+
+  /// Timer: Quick set 5 minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'5 分鐘'**
+  String get stopwatchQuickSet5;
+
+  /// Timer: Quick set 10 minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'10 分鐘'**
+  String get stopwatchQuickSet10;
+
+  /// Timer: Quick set 15 minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'15 分鐘'**
+  String get stopwatchQuickSet15;
+
+  /// Timer: Quick set 30 minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'30 分鐘'**
+  String get stopwatchQuickSet30;
+
+  /// Timer: Repeat button
+  ///
+  /// In zh, this message translates to:
+  /// **'再來一次'**
+  String get stopwatchRepeat;
+
+  /// Stopwatch: Export/copy lap records
+  ///
+  /// In zh, this message translates to:
+  /// **'複製分圈紀錄'**
+  String get stopwatchExportLaps;
+
+  /// Stopwatch: Lap records copied snackbar
+  ///
+  /// In zh, this message translates to:
+  /// **'分圈紀錄已複製'**
+  String get stopwatchLapsExported;
+
   /// Password: Length label
   ///
   /// In zh, this message translates to:
@@ -1046,6 +1094,42 @@ abstract class AppLocalizations {
   /// **'至少需選擇一種字元類型'**
   String get passwordMinOneType;
 
+  /// Password: Memorable mode toggle
+  ///
+  /// In zh, this message translates to:
+  /// **'易記模式'**
+  String get passwordMemorable;
+
+  /// Password: Word count for memorable mode
+  ///
+  /// In zh, this message translates to:
+  /// **'單詞數量'**
+  String get passwordWordCount;
+
+  /// Password: History section title
+  ///
+  /// In zh, this message translates to:
+  /// **'密碼歷史'**
+  String get passwordHistory;
+
+  /// Password: Clear history button
+  ///
+  /// In zh, this message translates to:
+  /// **'清除歷史'**
+  String get passwordClearHistory;
+
+  /// Password: Show password toggle
+  ///
+  /// In zh, this message translates to:
+  /// **'顯示密碼'**
+  String get passwordShowPassword;
+
+  /// Password: Hide password toggle
+  ///
+  /// In zh, this message translates to:
+  /// **'隱藏密碼'**
+  String get passwordHidePassword;
+
   /// Color picker: Pick color section
   ///
   /// In zh, this message translates to:
@@ -1111,6 +1195,60 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'產生 QR Code'**
   String get qrGeneratorGenerate;
+
+  /// QR generator: Type text
+  ///
+  /// In zh, this message translates to:
+  /// **'文字'**
+  String get qrTypeText;
+
+  /// QR generator: Type WiFi
+  ///
+  /// In zh, this message translates to:
+  /// **'WiFi'**
+  String get qrTypeWifi;
+
+  /// QR generator: Type Email
+  ///
+  /// In zh, this message translates to:
+  /// **'Email'**
+  String get qrTypeEmail;
+
+  /// QR generator: WiFi SSID label
+  ///
+  /// In zh, this message translates to:
+  /// **'WiFi 名稱 (SSID)'**
+  String get qrWifiSsid;
+
+  /// QR generator: WiFi password label
+  ///
+  /// In zh, this message translates to:
+  /// **'WiFi 密碼'**
+  String get qrWifiPassword;
+
+  /// QR generator: WiFi encryption label
+  ///
+  /// In zh, this message translates to:
+  /// **'加密方式'**
+  String get qrWifiEncryption;
+
+  /// QR generator: Email recipient label
+  ///
+  /// In zh, this message translates to:
+  /// **'收件人'**
+  String get qrEmailTo;
+
+  /// QR generator: Email subject label
+  ///
+  /// In zh, this message translates to:
+  /// **'主旨'**
+  String get qrEmailSubject;
+
+  /// QR generator: Email body label
+  ///
+  /// In zh, this message translates to:
+  /// **'內文'**
+  String get qrEmailBody;
 
   /// Random wheel: Page title
   ///

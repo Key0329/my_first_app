@@ -23,23 +23,54 @@ class QrGeneratorPage extends StatefulWidget {
 
 class _QrGeneratorPageState extends State<QrGeneratorPage> {
   final _textController = TextEditingController();
+  final _wifiSsidController = TextEditingController();
+  final _wifiPasswordController = TextEditingController();
+  final _emailToController = TextEditingController();
+  final _emailSubjectController = TextEditingController();
+  final _emailBodyController = TextEditingController();
+  int _qrType = 0; // 0=Text, 1=WiFi, 2=Email
+  String _wifiEncryption = 'WPA';
   String? _generatedText;
 
   @override
   void dispose() {
     _textController.dispose();
+    _wifiSsidController.dispose();
+    _wifiPasswordController.dispose();
+    _emailToController.dispose();
+    _emailSubjectController.dispose();
+    _emailBodyController.dispose();
     super.dispose();
   }
 
+  String _getQrContent() {
+    switch (_qrType) {
+      case 1: // WiFi
+        final ssid = _wifiSsidController.text.trim();
+        final password = _wifiPasswordController.text.trim();
+        final encryption = _wifiEncryption;
+        return 'WIFI:T:$encryption;S:$ssid;P:$password;;';
+      case 2: // Email
+        final to = _emailToController.text.trim();
+        final subject = Uri.encodeComponent(_emailSubjectController.text.trim());
+        final body = Uri.encodeComponent(_emailBodyController.text.trim());
+        return 'mailto:$to?subject=$subject&body=$body';
+      default: // Text
+        return _textController.text.trim();
+    }
+  }
+
   void _generate() {
-    final text = _textController.text.trim();
-    if (text.isEmpty) {
+    final content = _getQrContent();
+    if (content.isEmpty ||
+        (_qrType == 1 && _wifiSsidController.text.trim().isEmpty) ||
+        (_qrType == 2 && _emailToController.text.trim().isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('請先輸入要編碼的文字')),
+        const SnackBar(content: Text('請先輸入要編碼的內容')),
       );
       return;
     }
-    setState(() => _generatedText = text);
+    setState(() => _generatedText = content);
     AnalyticsService.instance.logToolComplete(
       toolId: 'qr_generator',
       resultType: 'qr_generated',
@@ -125,44 +156,154 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
     );
   }
 
+  /// 根據目前 _qrType 建構對應的輸入欄位
+  Widget _buildTypeInputFields(AppLocalizations l10n) {
+    switch (_qrType) {
+      case 1: // WiFi
+        return Column(
+          children: [
+            TextField(
+              controller: _wifiSsidController,
+              decoration: InputDecoration(
+                labelText: l10n.qrWifiSsid,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.wifi),
+              ),
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: DT.spaceMd),
+            TextField(
+              controller: _wifiPasswordController,
+              decoration: InputDecoration(
+                labelText: l10n.qrWifiPassword,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.lock),
+              ),
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _generate(),
+            ),
+            const SizedBox(height: DT.spaceMd),
+            DropdownButtonFormField<String>(
+              initialValue: _wifiEncryption,
+              decoration: InputDecoration(
+                labelText: l10n.qrWifiEncryption,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.security),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'WPA', child: Text('WPA')),
+                DropdownMenuItem(value: 'WPA2', child: Text('WPA2')),
+                DropdownMenuItem(value: 'None', child: Text('None')),
+              ],
+              onChanged: (value) {
+                if (value != null) setState(() => _wifiEncryption = value);
+              },
+            ),
+          ],
+        );
+      case 2: // Email
+        return Column(
+          children: [
+            TextField(
+              controller: _emailToController,
+              decoration: InputDecoration(
+                labelText: l10n.qrEmailTo,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.email),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: DT.spaceMd),
+            TextField(
+              controller: _emailSubjectController,
+              decoration: InputDecoration(
+                labelText: l10n.qrEmailSubject,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.subject),
+              ),
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: DT.spaceMd),
+            TextField(
+              controller: _emailBodyController,
+              decoration: InputDecoration(
+                labelText: l10n.qrEmailBody,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.notes),
+              ),
+              maxLines: 3,
+              minLines: 1,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _generate(),
+            ),
+          ],
+        );
+      default: // Text
+        return TextField(
+          controller: _textController,
+          decoration: InputDecoration(
+            labelText: l10n.qrGeneratorInputHint,
+            hintText: '例如：https://example.com',
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.text_fields),
+          ),
+          maxLines: 3,
+          minLines: 1,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => _generate(),
+        );
+    }
+  }
+
   /// 輸入與按鈕控制區（下方操作區）
   Widget _buildInputArea(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     // 計算 StaggeredFadeIn 的 totalItems
     final hasResult = _generatedText != null;
-    final totalItems = hasResult ? 3 : 2;
+    final totalItems = hasResult ? 4 : 3;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 輸入欄位區段
+          // QR 類型切換
           StaggeredFadeIn(
             index: 0,
             totalItems: totalItems,
+            child: SegmentedButton<int>(
+              segments: [
+                ButtonSegment(value: 0, label: Text(l10n.qrTypeText), icon: const Icon(Icons.text_fields)),
+                ButtonSegment(value: 1, label: Text(l10n.qrTypeWifi), icon: const Icon(Icons.wifi)),
+                ButtonSegment(value: 2, label: Text(l10n.qrTypeEmail), icon: const Icon(Icons.email)),
+              ],
+              selected: {_qrType},
+              onSelectionChanged: (selected) {
+                setState(() {
+                  _qrType = selected.first;
+                  _generatedText = null;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: DT.toolSectionGap),
+
+          // 輸入欄位區段
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: totalItems,
             child: ToolSectionCard(
               label: l10n.qrGeneratorInput,
-              child: TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  labelText: l10n.qrGeneratorInputHint,
-                  hintText: '例如：https://example.com',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.text_fields),
-                ),
-                maxLines: 3,
-                minLines: 1,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _generate(),
-              ),
+              child: _buildTypeInputFields(l10n),
             ),
           ),
           const SizedBox(height: DT.toolSectionGap),
 
           // 產生按鈕
           StaggeredFadeIn(
-            index: 1,
+            index: 2,
             totalItems: totalItems,
             child: ToolGradientButton(
               gradientColors: toolGradients['qr_generator']!,
@@ -176,7 +317,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
           if (hasResult) ...[
             const SizedBox(height: DT.toolSectionGap),
             StaggeredFadeIn(
-              index: 2,
+              index: 3,
               totalItems: totalItems,
               child: ToolSectionCard(
                 label: '編碼內容',
