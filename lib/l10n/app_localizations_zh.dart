@@ -549,6 +549,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tool_currency_converter_select_currency => '選擇幣別';
 
   @override
+  String get tool_currency_converter_mode_single => '一對一';
+
+  @override
+  String get tool_currency_converter_mode_multi => '一對多';
+
+  @override
+  String get tool_currency_converter_multi_targets => '目標幣別';
+
+  @override
+  String get tool_currency_converter_cache_expired => '匯率資料已超過 24 小時，建議重新整理';
+
+  @override
+  String get tool_currency_converter_refresh => '重新整理';
+
+  @override
+  String get tool_currency_converter_timeout => '連線逾時，請檢查網路後重試';
+
+  @override
   String get tool_qr_scanner_live_title => 'QR Code 掃描器';
 
   @override

@@ -47,12 +47,26 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
   String? _errorMessage;
   DateTime? _cacheTimestamp;
 
-  /// Sorted list of currency codes for the dropdown.
+  // Multi-currency mode
+  bool _isMultiMode = false;
+  final Set<String> _multiTargets = {'TWD', 'USD', 'JPY', 'EUR'};
+
+  /// Favorite currencies pinned at top.
+  static const _favoriteCurrencies = ['TWD', 'USD', 'JPY', 'EUR'];
+
+  /// Sorted list of currency codes with favorites pinned at top.
   List<String> get _currencyCodes {
     final codes = <String>{_ratesBase, ..._rates.keys};
-    final sorted = codes.toList()..sort();
-    return sorted;
+    final favorites = _favoriteCurrencies.where(codes.contains).toList();
+    final rest = (codes.toList()..sort())
+        .where((c) => !favorites.contains(c))
+        .toList();
+    return [...favorites, ...rest];
   }
+
+  /// Index where the divider should appear (after favorites).
+  int get _favoriteDividerIndex =>
+      _favoriteCurrencies.where(_currencyCodes.contains).length;
 
   @override
   void initState() {
@@ -317,6 +331,10 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
         '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
   }
 
+  bool get _isCacheExpired =>
+      _cacheTimestamp != null &&
+      DateTime.now().difference(_cacheTimestamp!) > const Duration(hours: 24);
+
   /// Total body sections for stagger animation.
   static const _totalSections = 3;
 
@@ -335,6 +353,39 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ── Cache expiry warning ──
+          if (_isCacheExpired)
+            Padding(
+              padding: const EdgeInsets.only(bottom: DT.toolSectionGap),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.warning_amber, color: Colors.amber, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.tool_currency_converter_cache_expired,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: _loadRates,
+                      child: Text(l10n.tool_currency_converter_refresh),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
           // ── Section 0: Source currency + Amount ──
           StaggeredFadeIn(
             index: 0,
@@ -380,48 +431,81 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
           ),
           const SizedBox(height: DT.toolSectionGap),
 
-          // ── Swap button (Task 3.4) ──
+          // ── Mode toggle ──
           Center(
-            child: Semantics(
-              button: true,
-              label: l10n.tool_currency_converter_swap,
-              child: BouncingButton(
-                key: const Key('swap_button'),
-                onTap: _swapCurrencies,
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: _toolColor.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.swap_vert,
-                    color: _toolColor,
-                  ),
+            child: SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(
+                  value: false,
+                  label: Text(l10n.tool_currency_converter_mode_single),
+                  icon: const Icon(Icons.swap_vert, size: 18),
                 ),
-              ),
+                ButtonSegment(
+                  value: true,
+                  label: Text(l10n.tool_currency_converter_mode_multi),
+                  icon: const Icon(Icons.grid_view, size: 18),
+                ),
+              ],
+              selected: {_isMultiMode},
+              onSelectionChanged: (v) => setState(() => _isMultiMode = v.first),
             ),
           ),
           const SizedBox(height: DT.toolSectionGap),
 
-          // ── Section 1: Target currency ──
-          StaggeredFadeIn(
-            index: 1,
-            totalItems: _totalSections,
-            child: ToolSectionCard(
-              label: l10n.tool_currency_converter_to,
-              child: _buildCurrencyDropdown(
-                key: const Key('to_currency_dropdown'),
-                value: _toCurrency,
-                onChanged: (code) {
-                  if (code == null) return;
-                  setState(() => _toCurrency = code);
-                  _updateResult();
-                },
+          if (!_isMultiMode) ...[
+            // ── Swap button ──
+            Center(
+              child: Semantics(
+                button: true,
+                label: l10n.tool_currency_converter_swap,
+                child: BouncingButton(
+                  key: const Key('swap_button'),
+                  onTap: _swapCurrencies,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: _toolColor.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.swap_vert,
+                      color: _toolColor,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(height: DT.toolSectionGap),
+
+            // ── Section 1: Target currency (single mode) ──
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: _totalSections,
+              child: ToolSectionCard(
+                label: l10n.tool_currency_converter_to,
+                child: _buildCurrencyDropdown(
+                  key: const Key('to_currency_dropdown'),
+                  value: _toCurrency,
+                  onChanged: (code) {
+                    if (code == null) return;
+                    setState(() => _toCurrency = code);
+                    _updateResult();
+                  },
+                ),
+              ),
+            ),
+          ] else ...[
+            // ── Multi-currency results ──
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: _totalSections,
+              child: ToolSectionCard(
+                label: l10n.tool_currency_converter_multi_targets,
+                child: _buildMultiCurrencyResults(l10n),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -437,20 +521,111 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
     // Ensure the selected value exists in the list
     final effectiveValue = codes.contains(value) ? value : codes.first;
 
+    final dividerIdx = _favoriteDividerIndex;
+
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         key: key,
         value: effectiveValue,
         isExpanded: true,
-        items: codes.map((code) {
-          final name = _currencyNames[code] ?? code;
-          return DropdownMenuItem(
-            value: code,
-            child: Text('$code — $name'),
-          );
-        }).toList(),
+        items: [
+          for (var i = 0; i < codes.length; i++) ...[
+            if (i == dividerIdx && dividerIdx > 0)
+              const DropdownMenuItem<String>(
+                enabled: false,
+                child: Divider(height: 1),
+              ),
+            DropdownMenuItem(
+              value: codes[i],
+              child: Text('${codes[i]} — ${_currencyNames[codes[i]] ?? codes[i]}'),
+            ),
+          ],
+        ],
         onChanged: onChanged,
       ),
+    );
+  }
+
+  /// Multi-currency result list.
+  Widget _buildMultiCurrencyResults(AppLocalizations l10n) {
+    final text = _amountController.text.trim();
+    final amount = double.tryParse(text);
+    final targets = _multiTargets
+        .where((c) => c != _fromCurrency && _currencyCodes.contains(c))
+        .toList()
+      ..sort();
+
+    // Target currency chips
+    final allCodes = _currencyCodes
+        .where((c) => c != _fromCurrency)
+        .toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Chip selector for targets
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: _favoriteCurrencies
+              .where((c) => c != _fromCurrency && allCodes.contains(c))
+              .followedBy(
+                allCodes.where((c) =>
+                    !_favoriteCurrencies.contains(c) &&
+                    _multiTargets.contains(c)),
+              )
+              .toSet()
+              .map((code) => FilterChip(
+                    label: Text(code),
+                    selected: _multiTargets.contains(code),
+                    onSelected: (selected) {
+                      setState(() {
+                        if (selected) {
+                          _multiTargets.add(code);
+                        } else {
+                          _multiTargets.remove(code);
+                        }
+                      });
+                    },
+                  ))
+              .toList(),
+        ),
+        if (amount != null && targets.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          ...targets.map((code) {
+            try {
+              final converted = CurrencyApi.convert(
+                amount,
+                _fromCurrency,
+                code,
+                _rates,
+                _ratesBase,
+              );
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '$code — ${_currencyNames[code] ?? code}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      _formatNumber(converted),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } catch (_) {
+              return const SizedBox.shrink();
+            }
+          }),
+        ],
+      ],
     );
   }
 

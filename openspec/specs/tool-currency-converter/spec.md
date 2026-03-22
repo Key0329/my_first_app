@@ -8,46 +8,30 @@ TBD - created by archiving change 'feature-expansion'. Update Purpose after arch
 
 ### Requirement: Currency conversion with live rates
 
-The tool SHALL fetch live exchange rates from the `frankfurter.app` API and allow users to convert between currencies. The user SHALL be able to select a source currency and a target currency from a list of supported currencies, enter an amount, and see the converted result in real-time. The conversion result SHALL update automatically when the amount or selected currencies change. If a selected currency is not present in the fetched rates data, the tool SHALL throw an `ArgumentError` and display an error message to the user instead of silently producing incorrect results.
+The tool SHALL fetch live exchange rates from the `frankfurter.app` API and allow users to convert between currencies. The user SHALL be able to select a source currency and a target currency from a list of supported currencies, enter an amount, and see the converted result in real-time. The conversion result SHALL update automatically when the amount or selected currencies change. If a selected currency is not present in the fetched rates data, the tool SHALL throw an `ArgumentError` and display an error message to the user instead of silently producing incorrect results. The HTTP request SHALL have a timeout of 10 seconds. The currency selector SHALL display favorite currencies (TWD, USD, JPY, EUR) at the top, separated by a divider from alphabetically sorted remaining currencies.
 
 #### Scenario: User converts currency
 
 - **WHEN** user selects USD as source currency, EUR as target currency, and enters 100 as the amount
-- **THEN** the tool SHALL display the converted amount in EUR based on the latest exchange rate from the API
+- **THEN** the converted amount in EUR SHALL display based on the fetched exchange rate
 
-#### Scenario: Exchange rates are fetched on tool open
+#### Scenario: Currency selector shows favorites first
 
-- **WHEN** user opens the currency converter tool
-- **THEN** the tool SHALL fetch the latest exchange rates from the `frankfurter.app` API and display the last updated timestamp
-
-#### Scenario: Unknown currency selected
-
-- **WHEN** user selects a currency that is not present in the fetched rates data
-- **THEN** the tool SHALL throw an `ArgumentError` and the UI SHALL display an error message indicating the currency is not supported
+- **WHEN** user opens the currency selector
+- **THEN** TWD, USD, JPY, EUR SHALL appear at the top with a divider below
 
 
 <!-- @trace
-source: fix-quality-baseline
-updated: 2026-03-22
+source: enhance-currency-converter
+updated: 2026-03-23
 code:
-  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/l10n/app_localizations_zh.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/l10n/app_localizations.dart
+  - lib/l10n/app_en.arb
   - lib/tools/currency_converter/currency_api.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/random_wheel/random_wheel_page.dart
   - lib/tools/currency_converter/currency_converter_page.dart
-  - lib/tools/compass/compass_page.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - lib/tools/calculator/calculator_page.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - lib/theme/design_tokens.dart
-  - lib/services/timer_notification_service.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/tools/level/level_page.dart
-tests:
-  - test/tools/currency_converter_test.dart
+  - lib/l10n/app_zh.arb
 -->
 
 ---

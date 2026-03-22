@@ -1166,6 +1166,42 @@ abstract class AppLocalizations {
   /// **'選擇幣別'**
   String get tool_currency_converter_select_currency;
 
+  /// Mode: Single conversion
+  ///
+  /// In zh, this message translates to:
+  /// **'一對一'**
+  String get tool_currency_converter_mode_single;
+
+  /// Mode: Multi-currency
+  ///
+  /// In zh, this message translates to:
+  /// **'一對多'**
+  String get tool_currency_converter_mode_multi;
+
+  /// Multi mode: target currencies label
+  ///
+  /// In zh, this message translates to:
+  /// **'目標幣別'**
+  String get tool_currency_converter_multi_targets;
+
+  /// Cache expired warning
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率資料已超過 24 小時，建議重新整理'**
+  String get tool_currency_converter_cache_expired;
+
+  /// Refresh button label
+  ///
+  /// In zh, this message translates to:
+  /// **'重新整理'**
+  String get tool_currency_converter_refresh;
+
+  /// Timeout error message
+  ///
+  /// In zh, this message translates to:
+  /// **'連線逾時，請檢查網路後重試'**
+  String get tool_currency_converter_timeout;
+
   /// QR scanner page title
   ///
   /// In zh, this message translates to:

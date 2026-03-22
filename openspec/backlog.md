@@ -125,14 +125,14 @@
 
 ## Phase 4 — 工具深度優化（第 5-8 週）
 
-### Change #11: `enhance-currency-converter`
+### ~~Change #11: `enhance-currency-converter`~~ ✅ archived 2026-03-23
 
 > 預估：2 天 | 依賴：#1
 
-- [ ] 常用幣別置頂（TWD、USD、JPY、EUR）
-- [ ] 多幣別同時顯示（一對多）
-- [ ] API timeout 設定
-- [ ] 快取過期機制（24h 顯示警告）
+- [x] 常用幣別置頂（TWD、USD、JPY、EUR）
+- [x] 多幣別同時顯示（一對多）
+- [x] API timeout 設定
+- [x] 快取過期機制（24h 顯示警告）
 
 ### Change #12: `enhance-split-bill`
 
@@ -339,7 +339,7 @@
 | ~~8~~ | ~~`ci-cd-pipeline`~~ ✅ | 3 | 1.5d | — |
 | ~~9~~ | ~~`services-refactor`~~ ✅ | 3 | 2d | #1 |
 | ~~10~~ | ~~`i18n-completion`~~ ✅ | 3 | 2-3d | #1 |
-| 11 | `enhance-currency-converter` | 4 | 2d | #1 |
+| ~~11~~ | ~~`enhance-currency-converter`~~ ✅ | 4 | 2d | #1 |
 | 12 | `enhance-split-bill` | 4 | 2d | #1 |
 | 13 | `enhance-color-picker` | 4 | 2d | #1 |
 | 14 | `enhance-life-tools` | 4 | 2d | #1 |

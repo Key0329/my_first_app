@@ -76,7 +76,9 @@ class CurrencyApi {
   Future<ExchangeRatesResult> fetchRates(String baseCurrency) async {
     try {
       final uri = Uri.parse('$_baseUrl/latest?from=$baseCurrency');
-      final response = await _client.get(uri);
+      final response = await _client
+          .get(uri)
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw CurrencyApiException(
@@ -100,7 +102,9 @@ class CurrencyApi {
   Future<Map<String, String>> fetchCurrencies() async {
     try {
       final uri = Uri.parse('$_baseUrl/currencies');
-      final response = await _client.get(uri);
+      final response = await _client
+          .get(uri)
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw CurrencyApiException(

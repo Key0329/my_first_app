@@ -558,6 +558,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tool_currency_converter_select_currency => 'Select currency';
 
   @override
+  String get tool_currency_converter_mode_single => 'Single';
+
+  @override
+  String get tool_currency_converter_mode_multi => 'Multi';
+
+  @override
+  String get tool_currency_converter_multi_targets => 'Target Currencies';
+
+  @override
+  String get tool_currency_converter_cache_expired =>
+      'Exchange rates are over 24 hours old, consider refreshing';
+
+  @override
+  String get tool_currency_converter_refresh => 'Refresh';
+
+  @override
+  String get tool_currency_converter_timeout =>
+      'Connection timed out, please check your network and retry';
+
+  @override
   String get tool_qr_scanner_live_title => 'QR Code Scanner';
 
   @override
