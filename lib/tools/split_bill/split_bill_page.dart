@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/share_button.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
@@ -97,6 +99,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
   final TextEditingController _amountController = TextEditingController();
   int _count = 2;
   int _total = 0;
+  bool _hasTrackedComplete = false;
 
   @override
   void initState() {
@@ -119,6 +122,13 @@ class _SplitBillPageState extends State<SplitBillPage> {
       setState(() {
         _total = parsed < 0 ? 0 : parsed;
       });
+      if (_total > 0 && !_hasTrackedComplete) {
+        _hasTrackedComplete = true;
+        AnalyticsService.instance.logToolComplete(
+          toolId: 'split_bill',
+          resultType: 'bill_split',
+        );
+      }
     }
   }
 
@@ -148,6 +158,15 @@ class _SplitBillPageState extends State<SplitBillPage> {
       heroTag: 'tool_hero_split_bill',
       headerFlex: 2,
       bodyFlex: 3,
+      actions: [
+        ShareButton(
+          toolId: 'split_bill',
+          enabled: _total > 0,
+          shareText: _total > 0
+              ? 'AA 分帳結果 💰\n總金額：NT\$${formatWithThousands(_total)}\n每人：NT\$${formatWithThousands(calculateSplitBill(total: _total, count: _count).base)}（$_count人）\n\n用 Spectra 工具箱快速分帳 👉 https://spectra.app/tools/split-bill'
+              : null,
+        ),
+      ],
       headerChild: _SplitBillHeader(total: _total, count: _count),
       bodyChild: _SplitBillBody(
         amountController: _amountController,

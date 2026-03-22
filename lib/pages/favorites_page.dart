@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_first_app/models/tool_item.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/widgets/tool_card.dart';
 
@@ -36,7 +37,11 @@ class FavoritesPage extends StatelessWidget {
               key: ValueKey(tool.id),
               tool: tool,
               isFavorite: true,
-              onTap: () => context.push(tool.routePath),
+              onTap: () {
+                AnalyticsService.instance
+                    .logToolOpen(toolId: tool.id, source: 'favorites');
+                context.push(tool.routePath);
+              },
               onLongPress: () => settings.toggleFavorite(tool.id),
               onFavoriteToggle: () => settings.toggleFavorite(tool.id),
             );

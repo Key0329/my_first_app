@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/share_button.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -34,6 +36,10 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
       return;
     }
     setState(() => _generatedText = text);
+    AnalyticsService.instance.logToolComplete(
+      toolId: 'qr_generator',
+      resultType: 'qr_generated',
+    );
   }
 
   Future<void> _copyToClipboard() async {
@@ -54,6 +60,13 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
       heroTag: 'tool_hero_qr_generator',
       headerFlex: 2,
       bodyFlex: 2,
+      actions: [
+        ShareButton(
+          toolId: 'qr_generator',
+          enabled: _generatedText != null,
+          shareText: '用 Spectra 工具箱產生 QR Code 👉 https://spectra.app/tools/qr-generator',
+        ),
+      ],
       headerChild: _buildQrPreview(context),
       bodyChild: _buildInputArea(context),
     );

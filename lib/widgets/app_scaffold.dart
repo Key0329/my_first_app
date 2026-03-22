@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/services/haptic_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
@@ -37,6 +38,8 @@ class AppScaffold extends StatelessWidget {
             selectedIndex: currentIndex,
             onDestinationSelected: (index) {
               HapticService.selection();
+              final tabName = _tabs[index].$3;
+              AnalyticsService.instance.logTabSwitch(tabName: tabName);
               context.go(_tabs[index].$1);
             },
             destinations: _tabs

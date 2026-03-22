@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/pages/tool_search_delegate.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openTool(BuildContext context, ToolItem tool) {
+    AnalyticsService.instance.logToolOpen(toolId: tool.id, source: 'home');
     widget.settings.addRecentTool(tool.id);
     context.push(tool.routePath);
   }
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: DT.spaceXs),
                       Text(
-                        '${allTools.length} 個工具，隨手可用',
+                        '15+ 實用工具，一個 App 搞定',
                         style: TextStyle(
                           fontSize: DT.fontSubtitle,
                           fontWeight: FontWeight.w400,

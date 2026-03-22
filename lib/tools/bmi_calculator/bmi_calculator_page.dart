@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/share_button.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'bmi_logic.dart';
@@ -24,8 +26,32 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
 
   double _heightCm = 170;
   double _weightKg = 65;
+  bool _hasTrackedComplete = false;
 
   BmiResult get _result => BmiLogic.calculate(_heightCm, _weightKg);
+
+  void _trackCompleteOnce() {
+    if (!_hasTrackedComplete) {
+      _hasTrackedComplete = true;
+      AnalyticsService.instance.logToolComplete(
+        toolId: 'bmi_calculator',
+        resultType: 'bmi_calculated',
+      );
+    }
+  }
+
+  String _categoryLabel(BmiCategory category) {
+    switch (category) {
+      case BmiCategory.underweight:
+        return '體重過輕';
+      case BmiCategory.normal:
+        return '正常體重';
+      case BmiCategory.overweight:
+        return '體重過重';
+      case BmiCategory.obese:
+        return '肥胖';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +64,14 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
       heroTag: 'tool_hero_bmi_calculator',
       headerFlex: 2,
       bodyFlex: 3,
+      actions: [
+        ShareButton(
+          toolId: 'bmi_calculator',
+          enabled: true,
+          shareText:
+              '📊 我的 BMI：${result.bmi.toStringAsFixed(1)}（${_categoryLabel(result.category)}）\n身高：${_heightCm.round()}cm / 體重：${_weightKg.round()}kg\n\n用 Spectra 工具箱計算 BMI 👉 https://spectra.app/tools/bmi-calculator',
+        ),
+      ],
       headerChild: _BmiGauge(result: result),
       bodyChild: _BmiControls(
         toolColor: _toolColor,
@@ -46,8 +80,14 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
         result: result,
         minWeight: minWeight,
         maxWeight: maxWeight,
-        onHeightChanged: (v) => setState(() => _heightCm = v),
-        onWeightChanged: (v) => setState(() => _weightKg = v),
+        onHeightChanged: (v) {
+          setState(() => _heightCm = v);
+          _trackCompleteOnce();
+        },
+        onWeightChanged: (v) {
+          setState(() => _weightKg = v);
+          _trackCompleteOnce();
+        },
       ),
     );
   }

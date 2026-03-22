@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/confirm_dialog.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/share_button.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
@@ -37,6 +39,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
   // ── 選項資料 ──────────────────────────────────────────────────
   final List<String> _options = ['選項 1', '選項 2'];
+  String? _lastResult;
 
   // ── 動畫 ──────────────────────────────────────────────────────
   late AnimationController _animationController;
@@ -95,6 +98,10 @@ class _RandomWheelPageState extends State<RandomWheelPage>
       setState(() {
         _isSpinning = false;
       });
+      AnalyticsService.instance.logToolComplete(
+        toolId: 'random_wheel',
+        resultType: 'wheel_spun',
+      );
       _showResultOverlay();
     }
   }
@@ -144,6 +151,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   void _showResultOverlay() {
     final index = _calculateResultIndex();
     final result = _options[index];
+    _lastResult = result;
     final colors = toolGradients['random_wheel'] ?? [_toolColor, _toolColor];
 
     _overlayEntry = OverlayEntry(
@@ -219,6 +227,15 @@ class _RandomWheelPageState extends State<RandomWheelPage>
       heroTag: _heroTag,
       headerFlex: 3,
       bodyFlex: 2,
+      actions: [
+        ShareButton(
+          toolId: 'random_wheel',
+          enabled: _lastResult != null,
+          shareText: _lastResult != null
+              ? '🎯 轉盤結果：$_lastResult\n\n用 Spectra 工具箱隨機決定 👉 https://spectra.app/tools/random-wheel'
+              : null,
+        ),
+      ],
       headerChild: _buildHeader(),
       bodyChild: _buildBody(),
     );

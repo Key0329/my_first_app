@@ -42,6 +42,7 @@ class ImmersiveToolScaffold extends StatelessWidget {
     this.bodyFlex = 3,
     this.heroTag,
     this.showHeaderGradient = true,
+    this.actions,
   });
 
   /// 工具指定顏色，用於計算漸層背景色
@@ -70,6 +71,9 @@ class ImmersiveToolScaffold extends StatelessWidget {
   /// 是否在 header 區域顯示漸層背景，預設 true。
   /// 設為 false 時 header 背景透明，適用於相機預覽等需要完整顯示內容的場景。
   final bool showHeaderGradient;
+
+  /// AppBar 右側的 action 按鈕列表（如分享按鈕）。
+  final List<Widget>? actions;
 
   /// 根據 brightness 計算漸層色彩
   ///
@@ -144,6 +148,7 @@ class ImmersiveToolScaffold extends StatelessWidget {
       // 透明 AppBar（主題已設定 backgroundColor: transparent）
       appBar: AppBar(
         title: Text(title),
+        actions: actions,
       ),
       // 使漸層背景延伸至 AppBar 後方
       extendBodyBehindAppBar: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/services/analytics_route_observer.dart';
 import 'package:my_first_app/l10n/l10n.dart';
 import 'package:my_first_app/pages/favorites_page.dart';
 import 'package:my_first_app/pages/home_page.dart';
@@ -59,6 +60,7 @@ class _ToolboxAppState extends State<ToolboxApp> {
 
     return GoRouter(
       initialLocation: initialLocation,
+      observers: [AnalyticsRouteObserver()],
       routes: [
         GoRoute(
           path: '/onboarding',
