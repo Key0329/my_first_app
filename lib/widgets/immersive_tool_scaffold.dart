@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'tool_recommendation_bar.dart';
+
 /// 沉浸式工具頁面 Scaffold。
 ///
 /// 提供漸層背景的上半區（工具色）與白色圓角的下半操作區，
@@ -43,6 +45,7 @@ class ImmersiveToolScaffold extends StatelessWidget {
     this.heroTag,
     this.showHeaderGradient = true,
     this.actions,
+    this.toolId,
   });
 
   /// 工具指定顏色，用於計算漸層背景色
@@ -74,6 +77,9 @@ class ImmersiveToolScaffold extends StatelessWidget {
 
   /// AppBar 右側的 action 按鈕列表（如分享按鈕）。
   final List<Widget>? actions;
+
+  /// 工具 ID，提供後在 body 底部顯示「你可能也需要」推薦列。
+  final String? toolId;
 
   /// 根據 brightness 計算漸層色彩
   ///
@@ -173,7 +179,14 @@ class ImmersiveToolScaffold extends StatelessWidget {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: bodyChild,
+              child: toolId != null
+                  ? Column(
+                      children: [
+                        Expanded(child: bodyChild),
+                        ToolRecommendationBar(toolId: toolId!),
+                      ],
+                    )
+                  : bodyChild,
             ),
           ),
         ],

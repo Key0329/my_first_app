@@ -153,6 +153,7 @@ class _LevelPageState extends State<LevelPage>
     final isLevel = _isLevel;
 
     return ImmersiveToolScaffold(
+      toolId: 'level',
       toolColor: _toolColor,
       title: '水平儀',
       heroTag: 'tool_hero_level',

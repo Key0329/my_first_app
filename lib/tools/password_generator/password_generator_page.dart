@@ -98,6 +98,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
+      toolId: 'password_generator',
       toolColor: _toolColor,
       title: '密碼產生器',
       heroTag: 'tool_hero_password_generator',

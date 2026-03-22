@@ -139,6 +139,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
     }
 
     return ImmersiveToolScaffold(
+      toolId: 'qr_scanner_live',
       toolColor: _toolColor,
       title: 'QR Code 掃描器',
       heroTag: 'tool_hero_qr_scanner_live',

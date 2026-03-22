@@ -140,6 +140,7 @@ class _CompassPageState extends State<CompassPage>
 
     if (_unsupported) {
       return ImmersiveToolScaffold(
+        toolId: 'compass',
         toolColor: _toolColor,
         title: '指南針',
         heroTag: 'tool_hero_compass',
@@ -172,6 +173,7 @@ class _CompassPageState extends State<CompassPage>
     final degrees = heading.toStringAsFixed(0);
 
     return ImmersiveToolScaffold(
+      toolId: 'compass',
       toolColor: const Color(0xFFFF5722),
       title: '指南針',
       heroTag: 'tool_hero_compass',

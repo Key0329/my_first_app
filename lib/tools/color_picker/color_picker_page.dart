@@ -232,6 +232,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     }
 
     return ImmersiveToolScaffold(
+      toolId: 'color_picker',
       toolColor: _toolColor,
       title: '色彩擷取',
       // 不使用 Hero 動畫 — 相機需要穩定的 widget tree，

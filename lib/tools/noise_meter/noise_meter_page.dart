@@ -180,6 +180,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
     final dbColor = _getDbColor(_currentDb);
 
     return ImmersiveToolScaffold(
+      toolId: 'noise_meter',
       toolColor: _toolColor,
       title: '噪音計',
       heroTag: 'tool_hero_noise_meter',

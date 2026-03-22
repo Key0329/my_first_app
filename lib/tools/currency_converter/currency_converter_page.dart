@@ -208,6 +208,7 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
     final l10n = AppLocalizations.of(context)!;
 
     return ImmersiveToolScaffold(
+      toolId: 'currency_converter',
       toolColor: _toolColor,
       title: l10n.tool_currency_converter_title,
       heroTag: 'tool_hero_currency_converter',

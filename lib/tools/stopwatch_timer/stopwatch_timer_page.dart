@@ -50,6 +50,7 @@ class StopwatchTimerPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: ImmersiveToolScaffold(
+        toolId: 'stopwatch_timer',
         toolColor: _toolColor,
         title: '碼錶 / 計時器',
         heroTag: 'tool_hero_stopwatch_timer',

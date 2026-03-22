@@ -291,6 +291,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
         : const Color(0xFF546E7A); // blue-grey 600
 
     return ImmersiveToolScaffold(
+      toolId: 'screen_ruler',
       toolColor: _toolColor,
       title: '螢幕尺規',
       heroTag: _heroTag,

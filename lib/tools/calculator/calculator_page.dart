@@ -156,6 +156,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     final colorScheme = theme.colorScheme;
 
     return ImmersiveToolScaffold(
+      toolId: 'calculator',
       toolColor: _toolColor,
       title: '計算機',
       heroTag: 'tool_hero_calculator',

@@ -70,12 +70,12 @@
 - [x] 歷史上限 100 筆
 - [x] 支援搜尋歷史
 
-### Change #5: `tool-recommendations`
+### ~~Change #5: `tool-recommendations`~~ ✅ archived 2026-03-22
 
 > 預估：1.5 天 | 依賴：#1
 
-- [ ] 建立工具關聯圖譜（計算機→單位換算、匯率→分帳 等）
-- [ ] 在工具結果頁底部顯示推薦卡片
+- [x] 建立工具關聯圖譜（計算機→單位換算、匯率→分帳 等）
+- [x] 在工具結果頁底部顯示推薦卡片
 
 ### Change #6: `share-result-cards`
 
@@ -333,7 +333,7 @@
 | ~~2~~ | ~~`app-review-prompt`~~ ✅ | 1 | 0.5d | — |
 | ~~3~~ | ~~`home-screen-widgets`~~ ✅ | 2 | 3d | #1 |
 | ~~4~~ | ~~`calculator-history`~~ ✅ | 2 | 1d | #1 |
-| 5 | `tool-recommendations` | 2 | 1.5d | #1 |
+| ~~5~~ | ~~`tool-recommendations`~~ ✅ | 2 | 1.5d | #1 |
 | 6 | `share-result-cards` | 2 | 2d | #1 |
 | 7 | `tool-registry` | 3 | 2d | #1 |
 | 8 | `ci-cd-pipeline` | 3 | 1.5d | — |

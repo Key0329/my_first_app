@@ -46,6 +46,7 @@ class _ProtractorPageState extends State<ProtractorPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return ImmersiveToolScaffold(
+      toolId: 'protractor',
       toolColor: _toolColor,
       title: '量角器',
       heroTag: 'tool_hero_protractor',

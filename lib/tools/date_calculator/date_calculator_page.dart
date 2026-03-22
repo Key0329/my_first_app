@@ -160,6 +160,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
+      toolId: 'date_calculator',
       toolColor: _toolColor,
       title: '日期計算機',
       heroTag: 'tool_hero_date_calculator',

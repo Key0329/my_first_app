@@ -59,6 +59,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
     final (minWeight, maxWeight) = BmiLogic.healthyWeightRange(_heightCm);
 
     return ImmersiveToolScaffold(
+      toolId: 'bmi_calculator',
       toolColor: _toolColor,
       title: 'BMI 計算機',
       heroTag: 'tool_hero_bmi_calculator',

@@ -96,6 +96,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
+      toolId: 'unit_converter',
       toolColor: _toolColor,
       title: '單位換算',
       heroTag: 'tool_hero_unit_converter',

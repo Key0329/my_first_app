@@ -224,6 +224,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
+      toolId: 'random_wheel',
       toolColor: _toolColor,
       title: '隨機轉盤',
       heroTag: _heroTag,

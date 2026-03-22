@@ -153,6 +153,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
     final result = calculateSplitBill(total: _total, count: _count);
 
     return ImmersiveToolScaffold(
+      toolId: 'split_bill',
       toolColor: _toolColor,
       title: '分帳計算',
       heroTag: 'tool_hero_split_bill',

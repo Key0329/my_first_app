@@ -58,6 +58,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
+      toolId: 'qr_generator',
       toolColor: _toolColor,
       title: 'QR Code 產生器',
       heroTag: 'tool_hero_qr_generator',

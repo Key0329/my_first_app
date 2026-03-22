@@ -194,6 +194,7 @@ class _FlashlightPageState extends State<FlashlightPage> {
     final colorScheme = theme.colorScheme;
 
     return ImmersiveToolScaffold(
+      toolId: 'flashlight',
       toolColor: _toolColor,
       title: '手電筒',
       heroTag: 'tool_hero_flashlight',
