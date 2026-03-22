@@ -95,7 +95,7 @@ class _ToolboxAppState extends State<ToolboxApp> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: widget.settings,
+      listenable: widget.settings.themeService,
       builder: (context, _) {
         return MaterialApp.router(
           title: '工具箱 Pro',

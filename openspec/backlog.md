@@ -105,14 +105,14 @@
 - [x] 測試覆蓋率報告（lcov）+ 覆蓋率門檻
 - [ ] 自動建構 APK/IPA（Fastlane）— 留待後續獨立 change
 
-### Change #9: `services-refactor`
+### ~~Change #9: `services-refactor`~~ ✅ archived 2026-03-22
 
 > 合併：3.3 SP 快取 + 3.4 AppSettings 拆分 | 預估：2 天
 > 依賴：#1 | 備註：Phase 6 freemium 的前置條件
 
-- [ ] `init()` 時保存 SharedPreferences instance 為成員變數，移除重複 `getInstance()` 呼叫
-- [ ] 拆為 ThemeService / FavoritesService / UserPreferencesService
-- [ ] 解決 MaterialApp.router 過度 rebuild 問題
+- [x] `init()` 時保存 SharedPreferences instance 為成員變數，移除重複 `getInstance()` 呼叫
+- [x] 拆為 ThemeService / FavoritesService / UserPreferencesService
+- [x] 解決 MaterialApp.router 過度 rebuild 問題
 
 ### Change #10: `i18n-completion`
 
@@ -337,7 +337,7 @@
 | ~~6~~ | ~~`share-result-cards`~~ ✅ | 2 | 2d | #1 |
 | ~~7~~ | ~~`tool-registry`~~ ✅ | 3 | 2d | #1 |
 | ~~8~~ | ~~`ci-cd-pipeline`~~ ✅ | 3 | 1.5d | — |
-| 9 | `services-refactor` | 3 | 2d | #1 |
+| ~~9~~ | ~~`services-refactor`~~ ✅ | 3 | 2d | #1 |
 | 10 | `i18n-completion` | 3 | 2-3d | #1 |
 | 11 | `enhance-currency-converter` | 4 | 2d | #1 |
 | 12 | `enhance-split-bill` | 4 | 2d | #1 |
