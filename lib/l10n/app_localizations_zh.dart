@@ -498,6 +498,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get colorPickerPermission => '需要相機權限';
 
   @override
+  String get colorPickerHsl => 'HSL';
+
+  @override
+  String get colorPickerGallery => '從相簿選取';
+
+  @override
+  String get colorPickerCamera => '相機';
+
+  @override
+  String get colorPickerTapToPickColor => '點擊圖片取色';
+
+  @override
+  String get colorPickerClearHistory => '清除歷史';
+
+  @override
   String get qrGeneratorInput => '輸入內容';
 
   @override

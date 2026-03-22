@@ -73,133 +73,58 @@ tests:
 ---
 ### Requirement: Color value display
 
-The color picker SHALL display the selected color in both HEX (e.g., #FF5733) and RGB (e.g., 255, 87, 51) formats. Users SHALL be able to copy either format with one tap.
+The tool SHALL display the picked color with its HEX, RGB, and HSL values. Users SHALL be able to copy any color value to the clipboard. The HSL format SHALL show Hue (0-360), Saturation (0-100%), and Lightness (0-100%).
 
-#### Scenario: User copies color value
+#### Scenario: Color values show all three formats
 
-- **WHEN** user taps the HEX or RGB value
-- **THEN** the value SHALL be copied to the clipboard with a confirmation message
+- **WHEN** a color is selected or picked
+- **THEN** HEX, RGB, and HSL values SHALL all be displayed
 
 
 <!-- @trace
-source: mvp-v1-toolbox-app
-updated: 2026-03-18
+source: enhance-color-picker
+updated: 2026-03-23
 code:
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - macos/Flutter/GeneratedPluginRegistrant.swift
-  - lib/tools/unit_converter/units_data.dart
-  - lib/pages/home_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - windows/flutter/generated_plugins.cmake
-  - pubspec.lock
-  - lib/l10n/l10n.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/services/settings_service.dart
-  - android/app/src/main/AndroidManifest.xml
-  - lib/l10n/app_localizations.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - lib/l10n/app_en.arb
-  - lib/pages/settings_page.dart
-  - lib/tools/level/level_page.dart
-  - windows/flutter/generated_plugin_registrant.cc
-  - lib/tools/compass/compass_page.dart
-  - l10n.yaml
-  - lib/models/tool_item.dart
-  - lib/app.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/theme/app_theme.dart
-  - lib/main.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - linux/flutter/generated_plugins.cmake
   - pubspec.yaml
-  - lib/tools/invoice_checker/invoice_api.dart
+  - windows/flutter/generated_plugin_registrant.cc
+  - lib/l10n/app_zh.arb
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - pubspec.lock
+  - lib/l10n/app_en.arb
+  - windows/flutter/generated_plugins.cmake
+  - linux/flutter/generated_plugin_registrant.cc
+  - lib/l10n/app_localizations.dart
   - lib/l10n/app_localizations_en.dart
-  - lib/widgets/tool_card.dart
-  - lib/tools/calculator/calculator_logic.dart
-  - lib/tools/calculator/calculator_page.dart
-  - ios/Runner/Info.plist
-tests:
-  - test/widget_test.dart
-  - test/tools/calculator_logic_test.dart
-  - test/tools/password_generator_test.dart
-  - test/tools/invoice_checker_test.dart
-  - test/tools/unit_converter_test.dart
-  - test/tools/stopwatch_timer_test.dart
-  - test/services/settings_service_test.dart
+  - macos/Flutter/GeneratedPluginRegistrant.swift
 -->
 
 ---
 ### Requirement: Color history palette
 
-The color picker SHALL maintain a history of recently picked colors (up to 20 entries). Users SHALL be able to tap a history entry to view its details.
+The color pick history SHALL persist across app sessions using SharedPreferences. The history SHALL load on page entry and save on every addition or clear operation. The maximum history size SHALL be 20 entries.
 
-#### Scenario: User picks multiple colors
+#### Scenario: History persists after leaving and returning
 
-- **WHEN** user picks a new color
-- **THEN** the color SHALL be added to the history palette
-
-#### Scenario: User views a color from history
-
-- **WHEN** user taps a color in the history palette
-- **THEN** the color details (HEX, RGB) SHALL be displayed
+- **WHEN** user picks colors, leaves the page, and returns
+- **THEN** the previously picked colors SHALL still appear in the history palette
 
 <!-- @trace
-source: mvp-v1-toolbox-app
-updated: 2026-03-18
+source: enhance-color-picker
+updated: 2026-03-23
 code:
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - macos/Flutter/GeneratedPluginRegistrant.swift
-  - lib/tools/unit_converter/units_data.dart
-  - lib/pages/home_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - windows/flutter/generated_plugins.cmake
-  - pubspec.lock
-  - lib/l10n/l10n.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/services/settings_service.dart
-  - android/app/src/main/AndroidManifest.xml
-  - lib/l10n/app_localizations.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - lib/l10n/app_en.arb
-  - lib/pages/settings_page.dart
-  - lib/tools/level/level_page.dart
-  - windows/flutter/generated_plugin_registrant.cc
-  - lib/tools/compass/compass_page.dart
-  - l10n.yaml
-  - lib/models/tool_item.dart
-  - lib/app.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/theme/app_theme.dart
-  - lib/main.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - linux/flutter/generated_plugins.cmake
   - pubspec.yaml
-  - lib/tools/invoice_checker/invoice_api.dart
+  - windows/flutter/generated_plugin_registrant.cc
+  - lib/l10n/app_zh.arb
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - pubspec.lock
+  - lib/l10n/app_en.arb
+  - windows/flutter/generated_plugins.cmake
+  - linux/flutter/generated_plugin_registrant.cc
+  - lib/l10n/app_localizations.dart
   - lib/l10n/app_localizations_en.dart
-  - lib/widgets/tool_card.dart
-  - lib/tools/calculator/calculator_logic.dart
-  - lib/tools/calculator/calculator_page.dart
-  - ios/Runner/Info.plist
-tests:
-  - test/widget_test.dart
-  - test/tools/calculator_logic_test.dart
-  - test/tools/password_generator_test.dart
-  - test/tools/invoice_checker_test.dart
-  - test/tools/unit_converter_test.dart
-  - test/tools/stopwatch_timer_test.dart
-  - test/services/settings_service_test.dart
+  - macos/Flutter/GeneratedPluginRegistrant.swift
 -->

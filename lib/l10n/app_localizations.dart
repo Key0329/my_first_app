@@ -1064,6 +1064,36 @@ abstract class AppLocalizations {
   /// **'需要相機權限'**
   String get colorPickerPermission;
 
+  /// Color picker: HSL format label
+  ///
+  /// In zh, this message translates to:
+  /// **'HSL'**
+  String get colorPickerHsl;
+
+  /// Color picker: Gallery button
+  ///
+  /// In zh, this message translates to:
+  /// **'從相簿選取'**
+  String get colorPickerGallery;
+
+  /// Color picker: Camera button
+  ///
+  /// In zh, this message translates to:
+  /// **'相機'**
+  String get colorPickerCamera;
+
+  /// Color picker: Tap image hint
+  ///
+  /// In zh, this message translates to:
+  /// **'點擊圖片取色'**
+  String get colorPickerTapToPickColor;
+
+  /// Color picker: Clear history button
+  ///
+  /// In zh, this message translates to:
+  /// **'清除歷史'**
+  String get colorPickerClearHistory;
+
   /// QR generator: Input label
   ///
   /// In zh, this message translates to:

@@ -183,6 +183,11 @@
   "colorPickerTitle": "Pick Color",
   "colorPickerHistory": "History",
   "colorPickerPermission": "Camera Permission Required",
+  "colorPickerHsl": "HSL",
+  "colorPickerGallery": "Pick from Gallery",
+  "colorPickerCamera": "Camera",
+  "colorPickerTapToPickColor": "Tap image to pick color",
+  "colorPickerClearHistory": "Clear History",
 
   "qrGeneratorInput": "Content",
   "qrGeneratorInputHint": "Enter content",

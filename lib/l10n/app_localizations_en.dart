@@ -506,6 +506,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get colorPickerPermission => 'Camera Permission Required';
 
   @override
+  String get colorPickerHsl => 'HSL';
+
+  @override
+  String get colorPickerGallery => 'Pick from Gallery';
+
+  @override
+  String get colorPickerCamera => 'Camera';
+
+  @override
+  String get colorPickerTapToPickColor => 'Tap image to pick color';
+
+  @override
+  String get colorPickerClearHistory => 'Clear History';
+
+  @override
   String get qrGeneratorInput => 'Content';
 
   @override

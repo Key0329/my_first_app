@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -37,6 +40,23 @@ class _ColorEntry {
           .toUpperCase();
 
   String get rgb => '$r8, $g8, $b8';
+
+  String get hsl {
+    final hslColor = HSLColor.fromColor(color);
+    return '${hslColor.hue.round()}°, ${(hslColor.saturation * 100).round()}%, ${(hslColor.lightness * 100).round()}%';
+  }
+
+  Map<String, dynamic> toJson() => {
+    'r': r8, 'g': g8, 'b': b8,
+    'pickedAt': pickedAt.toIso8601String(),
+  };
+
+  static _ColorEntry fromJson(Map<String, dynamic> json) {
+    return _ColorEntry(
+      color: Color.fromARGB(255, json['r'] as int, json['g'] as int, json['b'] as int),
+      pickedAt: DateTime.parse(json['pickedAt'] as String),
+    );
+  }
 }
 
 /// Color Picker tool page.
@@ -63,11 +83,17 @@ class _ColorPickerPageState extends State<ColorPickerPage>
   bool _controllerInitialized = false;
 
   static const int _maxHistory = 20;
+  static const _historyKey = 'color_picker_history';
+
+  Uint8List? _galleryImageBytes;
+  ui.Image? _galleryImage;
+  bool _isGalleryMode = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _loadHistory();
     _initCamera();
   }
 
@@ -131,6 +157,34 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     super.dispose();
   }
 
+  Future<void> _loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonStr = prefs.getString(_historyKey);
+    if (jsonStr != null) {
+      try {
+        final list = (jsonDecode(jsonStr) as List)
+            .map((e) => _ColorEntry.fromJson(e as Map<String, dynamic>))
+            .toList();
+        if (mounted) {
+          setState(() {
+            _history.addAll(list);
+            if (_history.isNotEmpty) {
+              _selectedEntry = _history.first;
+            }
+          });
+        }
+      } catch (_) {
+        // Corrupted data — ignore
+      }
+    }
+  }
+
+  Future<void> _saveHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonStr = jsonEncode(_history.map((e) => e.toJson()).toList());
+    await prefs.setString(_historyKey, jsonStr);
+  }
+
   /// Captures the center pixel color from the camera preview using
   /// RepaintBoundary screenshot.
   Future<void> _captureColor() async {
@@ -177,6 +231,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
           }
           _selectedEntry = entry;
         });
+        _saveHistory();
       }
     } catch (_) {
       // Capture failed — silently ignore
@@ -223,6 +278,77 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     );
   }
 
+  Future<void> _pickFromGallery() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+
+    final bytes = await picked.readAsBytes();
+    final codec = await ui.instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    final decodedImage = frame.image;
+
+    if (mounted) {
+      setState(() {
+        _galleryImageBytes = bytes;
+        _galleryImage = decodedImage;
+        _isGalleryMode = true;
+      });
+    }
+  }
+
+  Future<void> _pickColorFromImage(
+    TapDownDetails details,
+    BoxConstraints constraints,
+  ) async {
+    final image = _galleryImage;
+    if (image == null) return;
+
+    // Calculate tap position relative to the displayed image
+    final tapX = details.localPosition.dx;
+    final tapY = details.localPosition.dy;
+
+    // Map tap coordinates to image pixel coordinates
+    final scaleX = image.width / constraints.maxWidth;
+    final scaleY = image.height / constraints.maxHeight;
+
+    // Use BoxFit.contain logic
+    final scale = scaleX > scaleY ? scaleX : scaleY;
+    final displayW = image.width / scale;
+    final displayH = image.height / scale;
+    final offsetX = (constraints.maxWidth - displayW) / 2;
+    final offsetY = (constraints.maxHeight - displayH) / 2;
+
+    final imgX = ((tapX - offsetX) / displayW * image.width).round();
+    final imgY = ((tapY - offsetY) / displayH * image.height).round();
+
+    if (imgX < 0 || imgX >= image.width || imgY < 0 || imgY >= image.height) {
+      return;
+    }
+
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+    if (byteData == null) return;
+
+    final pixelIndex = (imgY * image.width + imgX) * 4;
+    if (pixelIndex + 3 >= byteData.lengthInBytes) return;
+
+    final r = byteData.getUint8(pixelIndex);
+    final g = byteData.getUint8(pixelIndex + 1);
+    final b = byteData.getUint8(pixelIndex + 2);
+
+    final color = Color.fromARGB(255, r, g, b);
+    if (mounted) {
+      final entry = _ColorEntry(color: color, pickedAt: DateTime.now());
+      setState(() {
+        _history.insert(0, entry);
+        if (_history.length > _maxHistory) {
+          _history.removeLast();
+        }
+        _selectedEntry = entry;
+      });
+      _saveHistory();
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Build methods
   // ---------------------------------------------------------------------------
@@ -249,8 +375,11 @@ class _ColorPickerPageState extends State<ColorPickerPage>
 
   /// 相機預覽區（上方漸層 header）
   Widget _buildCameraHeader(BuildContext context) {
-    if (!_hasPermission) {
+    if (!_hasPermission && !_isGalleryMode) {
       return _buildPermissionDenied();
+    }
+    if (_isGalleryMode) {
+      return _buildGalleryPreview();
     }
     return _buildCameraPreview();
   }
@@ -321,6 +450,29 @@ class _ColorPickerPageState extends State<ColorPickerPage>
             size: const Size(80, 80),
             painter: _CrosshairPainter(color: Colors.white),
           ),
+          // Mode toggle buttons
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildModeButton(
+                  icon: Icons.camera_alt,
+                  label: AppLocalizations.of(context)!.colorPickerCamera,
+                  isActive: !_isGalleryMode,
+                  onTap: () => setState(() => _isGalleryMode = false),
+                ),
+                const SizedBox(width: 8),
+                _buildModeButton(
+                  icon: Icons.photo_library,
+                  label: AppLocalizations.of(context)!.colorPickerGallery,
+                  isActive: _isGalleryMode,
+                  onTap: _pickFromGallery,
+                ),
+              ],
+            ),
+          ),
           // Capture button
           Positioned(
             bottom: 16,
@@ -340,6 +492,114 @@ class _ColorPickerPageState extends State<ColorPickerPage>
               label: Text(_isCapturing ? '擷取中...' : '擷取顏色'),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModeButton({
+    required IconData icon,
+    required String label,
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.white.withValues(alpha: 0.3) : Colors.black.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isActive ? Colors.white : Colors.white38,
+            width: isActive ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.white, size: 16),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGalleryPreview() {
+    final l10n = AppLocalizations.of(context)!;
+
+    return SafeArea(
+      top: true,
+      bottom: false,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (_galleryImageBytes != null)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return GestureDetector(
+                  onTapDown: (details) =>
+                      _pickColorFromImage(details, constraints),
+                  child: Image.memory(
+                    _galleryImageBytes!,
+                    fit: BoxFit.contain,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                  ),
+                );
+              },
+            )
+          else
+            Center(
+              child: Text(
+                l10n.colorPickerTapToPickColor,
+                style: const TextStyle(color: Colors.white70, fontSize: 16),
+              ),
+            ),
+          // Mode toggle buttons
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildModeButton(
+                  icon: Icons.camera_alt,
+                  label: l10n.colorPickerCamera,
+                  isActive: false,
+                  onTap: () => setState(() => _isGalleryMode = false),
+                ),
+                const SizedBox(width: 8),
+                _buildModeButton(
+                  icon: Icons.photo_library,
+                  label: l10n.colorPickerGallery,
+                  isActive: true,
+                  onTap: _pickFromGallery,
+                ),
+              ],
+            ),
+          ),
+          // Hint text at bottom
+          if (_galleryImageBytes != null)
+            Positioned(
+              bottom: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  l10n.colorPickerTapToPickColor,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -430,6 +690,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
             children: [
               _buildValueRow('HEX', entry.hex),
               _buildValueRow('RGB', entry.rgb),
+              _buildValueRow('HSL', entry.hsl),
             ],
           ),
         ),

@@ -142,13 +142,13 @@
 - [x] 小費百分比選項（0/5/10/15/20%）
 - [x] 多項目拆分
 
-### Change #13: `enhance-color-picker`
+### ~~Change #13: `enhance-color-picker`~~ ✅ archived 2026-03-23
 
 > 預估：2 天 | 依賴：#1
 
-- [ ] 從相簿選圖取色
-- [ ] 色彩歷史記錄
-- [ ] 色碼格式切換（HEX/RGB/HSL）
+- [x] 從相簿選圖取色
+- [x] 色彩歷史記錄（持久化）
+- [x] 色碼格式切換（HEX/RGB/HSL）
 
 ### Change #14: `enhance-life-tools`
 
@@ -341,7 +341,7 @@
 | ~~10~~ | ~~`i18n-completion`~~ ✅ | 3 | 2-3d | #1 |
 | ~~11~~ | ~~`enhance-currency-converter`~~ ✅ | 4 | 2d | #1 |
 | ~~12~~ | ~~`enhance-split-bill`~~ ✅ | 4 | 2d | #1 |
-| 13 | `enhance-color-picker` | 4 | 2d | #1 |
+| ~~13~~ | ~~`enhance-color-picker`~~ ✅ | 4 | 2d | #1 |
 | 14 | `enhance-life-tools` | 4 | 2d | #1 |
 | 15 | `tool-word-counter` | 5 | 1d | #7 |
 | 16 | `tool-pomodoro` | 5 | 3d | #7 |
