@@ -55,12 +55,12 @@
 
 ## Phase 2 — 留存核心（第 3-4 週）
 
-### Change #3: `home-screen-widgets`
+### ~~Change #3: `home-screen-widgets`~~ ✅ archived 2026-03-22
 
-> 預估：3 天 | 依賴：#1
+> 預估：3 天 | 依賴：#1 | 備註：模擬器測試待補，iOS 需 Xcode 手動加 Widget Extension target
 
-- [ ] 計算機 Widget（iOS + Android）
-- [ ] 匯率 Widget（iOS + Android）
+- [x] 計算機 Widget（iOS + Android）
+- [x] 匯率 Widget（iOS + Android）
 
 ### Change #4: `calculator-history`
 
@@ -331,7 +331,7 @@
 |---|------------|-------|------|------|
 | ~~1~~ | ~~`fix-quality-baseline`~~ ✅ | 1 | 1d | — |
 | ~~2~~ | ~~`app-review-prompt`~~ ✅ | 1 | 0.5d | — |
-| 3 | `home-screen-widgets` | 2 | 3d | #1 |
+| ~~3~~ | ~~`home-screen-widgets`~~ ✅ | 2 | 3d | #1 |
 | 4 | `calculator-history` | 2 | 1d | #1 |
 | 5 | `tool-recommendations` | 2 | 1.5d | #1 |
 | 6 | `share-result-cards` | 2 | 2d | #1 |

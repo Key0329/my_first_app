@@ -7,6 +7,8 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+import 'package:my_first_app/services/widget_service.dart';
+
 import 'currency_api.dart';
 
 /// Tool color for the currency converter (teal).
@@ -156,10 +158,17 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
         _rates,
         _ratesBase,
       );
+      final formattedResult = _formatNumber(converted);
       setState(() {
-        _result = _formatNumber(converted);
+        _result = formattedResult;
         _errorMessage = null;
       });
+      // 更新桌面匯率 Widget
+      WidgetService.instance.updateCurrencyWidget(
+        fromCurrency: _fromCurrency,
+        toCurrency: _toCurrency,
+        rate: formattedResult,
+      );
     } on ArgumentError catch (e) {
       setState(() {
         _result = '';
