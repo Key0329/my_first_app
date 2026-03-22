@@ -613,3 +613,200 @@ tests:
   - test/theme/design_tokens_test.dart
   - test/tools/password_generator_test.dart
 -->
+
+---
+### Requirement: Unified error state display
+
+Tool pages that encounter errors (sensor initialization failure, network errors, permission denied) SHALL display a standardized error state within a ToolSectionCard. The error state SHALL use `colorScheme.error` for text and icon color, SHALL display `Icons.error_outline` as the error icon, and SHALL center the error message within the card. An optional retry button SHALL be provided when the error is recoverable. The error state pattern SHALL be consistent across all tool pages.
+
+#### Scenario: Sensor initialization failure shows error state
+
+- **WHEN** a sensor-dependent tool (noise meter, compass, level) fails to initialize its sensor
+- **THEN** the tool page SHALL display the standardized error state with the error icon, an error message in colorScheme.error color, and a retry button
+
+#### Scenario: Error state uses consistent styling
+
+- **WHEN** any tool page displays an error state
+- **THEN** the error icon SHALL be Icons.error_outline, the text color SHALL be colorScheme.error, and the layout SHALL be centered within a ToolSectionCard
+
+#### Scenario: Retry button triggers re-initialization
+
+- **WHEN** user taps the retry button on an error state display
+- **THEN** the tool SHALL attempt to re-initialize the failed resource and show a loading indicator during the attempt
+
+
+<!-- @trace
+source: quality-hardening
+updated: 2026-03-22
+code:
+  - lib/tools/compass/compass_logic.dart
+  - CLAUDE.md
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/pages/home_page.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/pages/tool_search_delegate.dart
+  - lib/widgets/error_state.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/flashlight/flashlight_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - .mcp.json
+  - lib/tools/color_picker/color_picker_logic.dart
+tests:
+  - test/tools/compass_logic_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/level_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/tool_search_test.dart
+  - test/utils/platform_check_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/tools/flashlight_logic_test.dart
+-->
+
+---
+### Requirement: Confirmation dialog for destructive actions
+
+Tool pages with destructive actions SHALL display a confirmation dialog before executing the action. The confirmation dialog SHALL use `showAdaptiveDialog` with `AlertDialog.adaptive` for platform-appropriate styling. The destructive action button SHALL use `colorScheme.error` color. The following actions SHALL require confirmation: calculator clear history, stopwatch reset, and random wheel delete option.
+
+#### Scenario: Calculator clear history shows confirmation
+
+- **WHEN** user taps the clear history button in the calculator
+- **THEN** a confirmation dialog SHALL appear asking the user to confirm the action before clearing the history
+
+#### Scenario: Stopwatch reset shows confirmation
+
+- **WHEN** user taps the reset button on the stopwatch while it has recorded time or laps
+- **THEN** a confirmation dialog SHALL appear asking the user to confirm the reset action
+
+#### Scenario: Random wheel delete option shows confirmation
+
+- **WHEN** user attempts to delete an option from the random wheel
+- **THEN** a confirmation dialog SHALL appear asking the user to confirm the deletion
+
+#### Scenario: Destructive button uses error color
+
+- **WHEN** a confirmation dialog is displayed for any destructive action
+- **THEN** the confirm/delete button SHALL use colorScheme.error as its text or background color
+
+
+<!-- @trace
+source: quality-hardening
+updated: 2026-03-22
+code:
+  - lib/tools/compass/compass_logic.dart
+  - CLAUDE.md
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/pages/home_page.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/pages/tool_search_delegate.dart
+  - lib/widgets/error_state.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/flashlight/flashlight_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - .mcp.json
+  - lib/tools/color_picker/color_picker_logic.dart
+tests:
+  - test/tools/compass_logic_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/level_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/tool_search_test.dart
+  - test/utils/platform_check_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/tools/flashlight_logic_test.dart
+-->
+
+---
+### Requirement: NumberPicker controller lifecycle fix
+
+All widget pages that create controllers (TextEditingController, ScrollController, or similar) for NumberPicker or other input widgets SHALL create the controller in `initState` and call `controller.dispose()` in the `dispose` method. Controllers SHALL NOT be created inside the `build` method. The random wheel page SHALL be the primary target for this fix.
+
+#### Scenario: Random wheel page disposes controllers properly
+
+- **WHEN** the random wheel page is removed from the widget tree
+- **THEN** all controllers created by the page SHALL be disposed via the dispose method
+
+#### Scenario: Controllers are not recreated on rebuild
+
+- **WHEN** the random wheel page widget rebuilds due to state changes
+- **THEN** existing controllers SHALL be reused and SHALL NOT be recreated in the build method
+
+<!-- @trace
+source: quality-hardening
+updated: 2026-03-22
+code:
+  - lib/tools/compass/compass_logic.dart
+  - CLAUDE.md
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/pages/home_page.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/pages/tool_search_delegate.dart
+  - lib/widgets/error_state.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/flashlight/flashlight_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - .mcp.json
+  - lib/tools/color_picker/color_picker_logic.dart
+tests:
+  - test/tools/compass_logic_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/level_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/tool_search_test.dart
+  - test/utils/platform_check_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/tools/flashlight_logic_test.dart
+-->

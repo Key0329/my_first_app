@@ -354,3 +354,134 @@ tests:
   - test/theme/design_tokens_test.dart
   - test/tools/password_generator_test.dart
 -->
+
+---
+### Requirement: Motion Token constants in Design Tokens
+
+The DT class SHALL define Motion Token constants for animation durations. The following constants SHALL be defined: `durationFast` as Duration(milliseconds: 150) for button feedback and micro-interactions, `durationMedium` as Duration(milliseconds: 300) for page transitions and expand/collapse animations, and `durationSlow` as Duration(milliseconds: 500) for complex animations and initial page load effects. All animation durations throughout the app SHALL reference these Motion Token constants instead of using inline magic numbers.
+
+#### Scenario: Motion Token durationFast is defined
+
+- **WHEN** code references DT.durationFast
+- **THEN** it SHALL resolve to Duration(milliseconds: 150)
+
+#### Scenario: Motion Token durationMedium is defined
+
+- **WHEN** code references DT.durationMedium
+- **THEN** it SHALL resolve to Duration(milliseconds: 300)
+
+#### Scenario: Motion Token durationSlow is defined
+
+- **WHEN** code references DT.durationSlow
+- **THEN** it SHALL resolve to Duration(milliseconds: 500)
+
+
+<!-- @trace
+source: quality-hardening
+updated: 2026-03-22
+code:
+  - lib/tools/compass/compass_logic.dart
+  - CLAUDE.md
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/pages/home_page.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/pages/tool_search_delegate.dart
+  - lib/widgets/error_state.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/flashlight/flashlight_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - .mcp.json
+  - lib/tools/color_picker/color_picker_logic.dart
+tests:
+  - test/tools/compass_logic_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/level_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/tool_search_test.dart
+  - test/utils/platform_check_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/tools/flashlight_logic_test.dart
+-->
+
+---
+### Requirement: Opacity Token constants in Design Tokens
+
+The DT class SHALL define Opacity Token constants. The following constants SHALL be defined: `opacityDisabled` as 0.38 for disabled state elements, `opacityOverlay` as 0.08 for press overlay effects, and `opacityHover` as 0.04 for hover overlay effects. All opacity values throughout the app SHALL reference these Opacity Token constants instead of using inline magic numbers.
+
+#### Scenario: Opacity Token opacityDisabled is defined
+
+- **WHEN** code references DT.opacityDisabled
+- **THEN** it SHALL resolve to 0.38
+
+#### Scenario: Opacity Token opacityOverlay is defined
+
+- **WHEN** code references DT.opacityOverlay
+- **THEN** it SHALL resolve to 0.08
+
+#### Scenario: Opacity Token opacityHover is defined
+
+- **WHEN** code references DT.opacityHover
+- **THEN** it SHALL resolve to 0.04
+
+<!-- @trace
+source: quality-hardening
+updated: 2026-03-22
+code:
+  - lib/tools/compass/compass_logic.dart
+  - CLAUDE.md
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/pages/home_page.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/pages/tool_search_delegate.dart
+  - lib/widgets/error_state.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/flashlight/flashlight_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - .mcp.json
+  - lib/tools/color_picker/color_picker_logic.dart
+tests:
+  - test/tools/compass_logic_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/level_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/tool_search_test.dart
+  - test/utils/platform_check_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/tools/flashlight_logic_test.dart
+-->
