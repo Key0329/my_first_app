@@ -81,13 +81,12 @@ class _ToolCardState extends State<ToolCard>
               borderRadius: BorderRadius.circular(DT.radiusLg),
               border: Border.all(color: borderColor, width: 0.5),
             ),
-            padding: const EdgeInsets.only(
-              top: DT.spaceLg,
-              bottom: DT.radiusMd,
-              left: DT.spaceMd,
-              right: DT.spaceMd,
+            padding: const EdgeInsets.symmetric(
+              vertical: DT.spaceMd,
+              horizontal: DT.spaceMd,
             ),
             child: Stack(
+              alignment: Alignment.center,
               children: [
                 // 主要內容
                 Column(
