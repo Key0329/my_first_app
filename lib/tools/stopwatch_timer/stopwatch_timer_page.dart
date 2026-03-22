@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/timer_notification_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -47,6 +48,7 @@ class StopwatchTimerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: ImmersiveToolScaffold(
@@ -60,9 +62,9 @@ class StopwatchTimerPage extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: TabBar(
-              tabs: const [
-                Tab(icon: Icon(Icons.timer_outlined), text: '碼錶'),
-                Tab(icon: Icon(Icons.hourglass_bottom), text: '計時器'),
+              tabs: [
+                Tab(icon: const Icon(Icons.timer_outlined), text: l10n.stopwatchTitle),
+                Tab(icon: const Icon(Icons.hourglass_bottom), text: l10n.timerTitle),
               ],
               labelColor: Theme.of(context).colorScheme.onSurface,
               unselectedLabelColor:
@@ -124,11 +126,12 @@ class _StopwatchTabState extends State<_StopwatchTab> {
       _reset();
       return;
     }
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showConfirmDialog(
       context: context,
       title: '重設碼錶',
-      message: '確定要重設碼錶嗎？計時與圈數記錄將被清除。',
-      confirmLabel: '重設',
+      message: l10n.stopwatchResetConfirm,
+      confirmLabel: l10n.commonReset,
     );
     if (confirmed) _reset();
   }
@@ -170,6 +173,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
   Widget build(BuildContext context) {
     final isRunning = _stopwatch.isRunning;
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
@@ -191,7 +195,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
               if (!isRunning && _elapsed == Duration.zero)
                 ToolGradientButton(
                   gradientColors: _stopwatchGradient,
-                  label: '開始',
+                  label: l10n.stopwatchStart,
                   icon: Icons.play_arrow,
                   onPressed: _start,
                 )
@@ -200,7 +204,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                   child: OutlinedButton.icon(
                     onPressed: _lap,
                     icon: const Icon(Icons.flag),
-                    label: const Text('分圈'),
+                    label: Text(l10n.stopwatchLap),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
@@ -215,7 +219,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                   child: FilledButton.icon(
                     onPressed: _stop,
                     icon: const Icon(Icons.pause),
-                    label: const Text('暫停'),
+                    label: Text(l10n.stopwatchPause),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
@@ -230,7 +234,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                   child: OutlinedButton.icon(
                     onPressed: _confirmReset,
                     icon: const Icon(Icons.refresh),
-                    label: const Text('重設'),
+                    label: Text(l10n.commonReset),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
@@ -243,7 +247,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                 const SizedBox(width: DT.spaceLg),
                 ToolGradientButton(
                   gradientColors: _stopwatchGradient,
-                  label: '繼續',
+                  label: l10n.stopwatchContinue,
                   icon: Icons.play_arrow,
                   onPressed: _start,
                 ),
@@ -439,11 +443,12 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
       _resetTimer();
       return;
     }
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showConfirmDialog(
       context: context,
       title: '重設計時器',
-      message: '確定要重設計時器嗎？目前的倒數計時將被清除。',
-      confirmLabel: '重設',
+      message: l10n.stopwatchResetConfirm,
+      confirmLabel: l10n.commonReset,
     );
     if (confirmed) _resetTimer();
   }
@@ -593,11 +598,12 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
   }
 
   Widget _buildControls() {
+    final l10n = AppLocalizations.of(context)!;
     switch (_state) {
       case _TimerState.idle:
         return ToolGradientButton(
           gradientColors: _stopwatchGradient,
-          label: '開始',
+          label: l10n.stopwatchStart,
           icon: Icons.play_arrow,
           onPressed: _pickerDuration > Duration.zero ? _startTimer : null,
         );
@@ -609,7 +615,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
               child: OutlinedButton.icon(
                 onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
-                label: const Text('重設'),
+                label: Text(l10n.commonReset),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
@@ -624,7 +630,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
               child: FilledButton.icon(
                 onPressed: _pauseTimer,
                 icon: const Icon(Icons.pause),
-                label: const Text('暫停'),
+                label: Text(l10n.stopwatchPause),
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
@@ -644,7 +650,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
               child: OutlinedButton.icon(
                 onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
-                label: const Text('重設'),
+                label: Text(l10n.commonReset),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
@@ -657,7 +663,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
             const SizedBox(width: DT.spaceLg),
             ToolGradientButton(
               gradientColors: _stopwatchGradient,
-              label: '繼續',
+              label: l10n.stopwatchContinue,
               icon: Icons.play_arrow,
               onPressed: _startTimer,
             ),
@@ -668,7 +674,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
           child: FilledButton.icon(
             onPressed: _confirmResetTimer,
             icon: const Icon(Icons.refresh),
-            label: const Text('重設'),
+            label: Text(l10n.commonReset),
             style: FilledButton.styleFrom(
               minimumSize: const Size(0, DT.toolButtonHeight),
               shape: RoundedRectangleBorder(

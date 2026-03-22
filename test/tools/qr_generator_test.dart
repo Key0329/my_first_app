@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
 
 void main() {
@@ -8,7 +9,12 @@ void main() {
     testWidgets('displays QrImageView after generating QR Code',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(home: QrGeneratorPage()),
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const QrGeneratorPage(),
+        ),
       );
 
       // Enter text and generate
@@ -23,7 +29,12 @@ void main() {
     testWidgets('different input produces different QR Code widgets',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(home: QrGeneratorPage()),
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const QrGeneratorPage(),
+        ),
       );
 
       // Generate first QR Code

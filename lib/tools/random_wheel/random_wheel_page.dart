@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -40,7 +41,8 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   static const _maxOptions = 20;
 
   // ── 選項資料 ──────────────────────────────────────────────────
-  final List<String> _options = ['選項 1', '選項 2'];
+  final List<String> _options = [];
+  bool _optionsInitialized = false;
   String? _lastResult;
 
   // ── 動畫 ──────────────────────────────────────────────────────
@@ -77,6 +79,19 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     _animationController.addListener(_onAnimationTick);
     _animationController.addStatusListener(_onAnimationStatus);
     _textController.addListener(_onTextChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_optionsInitialized) {
+      _optionsInitialized = true;
+      final l10n = AppLocalizations.of(context)!;
+      _options.addAll([
+        '${l10n.randomWheelDefaultOption} 1',
+        '${l10n.randomWheelDefaultOption} 2',
+      ]);
+    }
   }
 
   @override
@@ -190,11 +205,12 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
   Future<void> _confirmRemoveOption(int index) async {
     if (_options.length <= _minOptions) return;
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showConfirmDialog(
       context: context,
-      title: '刪除選項',
-      message: '確定要刪除「${_options[index]}」嗎？',
-      confirmLabel: '刪除',
+      title: l10n.randomWheelDeleteTitle,
+      message: l10n.randomWheelDeleteMessage(_options[index]),
+      confirmLabel: l10n.commonDelete,
     );
     if (confirmed) {
       setState(() {
@@ -247,6 +263,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = toolGradients['random_wheel'] ?? [_toolColor, _toolColor];
 
     return Stack(
@@ -254,7 +271,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
         ImmersiveToolScaffold(
           toolId: 'random_wheel',
           toolColor: _toolColor,
-          title: '隨機轉盤',
+          title: l10n.randomWheelTitle,
           heroTag: _heroTag,
           headerFlex: 3,
           bodyFlex: 2,
@@ -276,7 +293,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
           child: RepaintBoundary(
             key: _shareCardKey,
             child: ShareCardTemplate(
-              toolName: '隨機轉盤',
+              toolName: l10n.randomWheelTitle,
               gradientColors: colors,
               resultChild: Text(
                 _lastResult ?? '',
@@ -295,6 +312,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   }
 
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -324,7 +342,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
             padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
             child: ToolGradientButton(
               gradientColors: toolGradients['random_wheel']!,
-              label: '旋轉！',
+              label: l10n.randomWheelSpin,
               icon: Icons.play_arrow_rounded,
               onPressed: _isSpinning ? null : _spin,
             ),
@@ -335,6 +353,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
     final colors = _wheelColors;
     final canDelete = _options.length > _minOptions;
     final canAdd = _options.length < _maxOptions;
@@ -353,7 +372,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
           // ── 新增選項控制區段 ─────────────────────────────────
           ToolSectionCard(
-            label: '新增選項',
+            label: l10n.randomWheelAddOption,
             child: Row(
               children: [
                 Expanded(
@@ -362,7 +381,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
                     focusNode: _textFocusNode,
                     enabled: canAdd,
                     decoration: InputDecoration(
-                      hintText: canAdd ? '輸入選項名稱…' : '已達上限（$_maxOptions 個）',
+                      hintText: canAdd ? l10n.randomWheelOptionHint : l10n.randomWheelMaxReached(_maxOptions),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(DT.radiusSm),
                         borderSide: BorderSide.none,
@@ -409,6 +428,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   }
 
   Widget _buildOptionListSection(List<Color> colors, bool canDelete) {
+    final l10n = AppLocalizations.of(context)!;
     final brightness = Theme.of(context).brightness;
     final bgColor = brightness == Brightness.dark
         ? DT.brandPrimaryBgDark
@@ -428,7 +448,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '選項清單',
+              l10n.randomWheelOptions,
               style: TextStyle(
                 fontSize: DT.fontToolLabel,
                 color: labelColor,
@@ -465,14 +485,15 @@ class _RandomWheelPageState extends State<RandomWheelPage>
   }) {
     final option = _options[index];
 
+    final l10n = AppLocalizations.of(context)!;
     return Dismissible(
       key: ValueKey('option_${option}_$index'),
       direction: canDelete ? DismissDirection.endToStart : DismissDirection.none,
       confirmDismiss: (_) => showConfirmDialog(
         context: context,
-        title: '刪除選項',
-        message: '確定要刪除「$option」嗎？',
-        confirmLabel: '刪除',
+        title: l10n.randomWheelDeleteTitle,
+        message: l10n.randomWheelDeleteMessage(option),
+        confirmLabel: l10n.commonDelete,
       ),
       onDismissed: (_) => _removeOption(index),
       background: Container(

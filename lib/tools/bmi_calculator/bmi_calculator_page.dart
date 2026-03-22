@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
@@ -44,15 +45,16 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
   }
 
   String _categoryLabel(BmiCategory category) {
+    final l10n = AppLocalizations.of(context)!;
     switch (category) {
       case BmiCategory.underweight:
-        return '體重過輕';
+        return l10n.bmiUnderweight;
       case BmiCategory.normal:
-        return '正常體重';
+        return l10n.bmiNormal;
       case BmiCategory.overweight:
-        return '體重過重';
+        return l10n.bmiOverweight;
       case BmiCategory.obese:
-        return '肥胖';
+        return l10n.bmiObese;
     }
   }
 
@@ -70,6 +72,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final result = _result;
     final (minWeight, maxWeight) = BmiLogic.healthyWeightRange(_heightCm);
 
@@ -78,7 +81,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
         ImmersiveToolScaffold(
           toolId: 'bmi_calculator',
           toolColor: _toolColor,
-          title: 'BMI 計算機',
+          title: l10n.toolBmiCalculator,
           heroTag: 'tool_hero_bmi_calculator',
           headerFlex: 2,
           bodyFlex: 3,
@@ -88,7 +91,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
               child: IconButton(
                 onPressed: _shareAsCard,
                 icon: const Icon(Icons.share),
-                tooltip: '分享',
+                tooltip: l10n.commonShare,
               ),
             ),
           ],
@@ -115,7 +118,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
           child: RepaintBoundary(
             key: _shareCardKey,
             child: ShareCardTemplate(
-              toolName: 'BMI 計算機',
+              toolName: l10n.toolBmiCalculator,
               gradientColors: toolGradients['bmi_calculator']!,
               resultChild: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -139,7 +142,7 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    '身高 ${_heightCm.round()} cm / 體重 ${_weightKg.round()} kg',
+                    '${l10n.bmiHeight} ${_heightCm.round()} cm / ${l10n.bmiWeight} ${_weightKg.round()} kg',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF999999),
@@ -166,6 +169,7 @@ class _BmiGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final onSurface = colorScheme.onSurface;
@@ -189,7 +193,7 @@ class _BmiGauge extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  _categoryLabel(result.category),
+                  _categoryLabel(l10n, result.category),
                   style: textTheme.bodyMedium?.copyWith(color: onSurface),
                 ),
               ],
@@ -200,16 +204,16 @@ class _BmiGauge extends StatelessWidget {
     );
   }
 
-  String _categoryLabel(BmiCategory category) {
+  String _categoryLabel(AppLocalizations l10n, BmiCategory category) {
     switch (category) {
       case BmiCategory.underweight:
-        return '體重過輕';
+        return l10n.bmiUnderweight;
       case BmiCategory.normal:
-        return '正常體重';
+        return l10n.bmiNormal;
       case BmiCategory.overweight:
-        return '體重過重';
+        return l10n.bmiOverweight;
       case BmiCategory.obese:
-        return '肥胖';
+        return l10n.bmiObese;
     }
   }
 }
@@ -362,6 +366,7 @@ class _BmiControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -372,7 +377,7 @@ class _BmiControls extends StatelessWidget {
             index: 0,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '身高',
+              label: l10n.bmiHeight,
               child: _SliderRow(
                 value: heightCm,
                 displayText: '${heightCm.round()} cm',
@@ -391,7 +396,7 @@ class _BmiControls extends StatelessWidget {
             index: 1,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '體重',
+              label: l10n.bmiWeight,
               child: _SliderRow(
                 value: weightKg,
                 displayText: '${weightKg.round()} kg',
@@ -410,7 +415,7 @@ class _BmiControls extends StatelessWidget {
             index: 2,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '分析結果',
+              label: l10n.bmiResult,
               child: _ResultContent(
                 result: result,
                 minWeight: minWeight,
@@ -502,21 +507,22 @@ class _ResultContent extends StatelessWidget {
   final double minWeight;
   final double maxWeight;
 
-  String _categoryLabel(BmiCategory category) {
+  String _categoryLabel(AppLocalizations l10n, BmiCategory category) {
     switch (category) {
       case BmiCategory.underweight:
-        return '體重過輕';
+        return l10n.bmiUnderweight;
       case BmiCategory.normal:
-        return '正常體重';
+        return l10n.bmiNormal;
       case BmiCategory.overweight:
-        return '體重過重';
+        return l10n.bmiOverweight;
       case BmiCategory.obese:
-        return '肥胖';
+        return l10n.bmiObese;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final brightness = Theme.of(context).brightness;
     final categoryColor = result.category.color;
@@ -544,7 +550,7 @@ class _ResultContent extends StatelessWidget {
         Row(
           children: [
             Text(
-              '分類：',
+              l10n.bmiCategory,
               style: textTheme.bodyMedium?.copyWith(
                 color: brandColor,
                 fontWeight: FontWeight.w600,
@@ -552,7 +558,7 @@ class _ResultContent extends StatelessWidget {
             ),
             Chip(
               label: Text(
-                _categoryLabel(result.category),
+                _categoryLabel(l10n, result.category),
                 style: TextStyle(
                   color: categoryColor,
                   fontWeight: FontWeight.w600,
@@ -571,7 +577,7 @@ class _ResultContent extends StatelessWidget {
 
         // 建議體重範圍
         Text(
-          '建議體重範圍：${minWeight.toStringAsFixed(1)} – ${maxWeight.toStringAsFixed(1)} kg',
+          l10n.bmiHealthyRange(minWeight.toStringAsFixed(1), maxWeight.toStringAsFixed(1)),
           style: textTheme.bodyMedium?.copyWith(
             color: brandColor,
             fontWeight: FontWeight.w500,

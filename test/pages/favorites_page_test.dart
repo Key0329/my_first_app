@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/pages/favorites_page.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/widgets/tool_card.dart';
@@ -8,6 +9,9 @@ import 'package:my_first_app/widgets/tool_card.dart';
 /// 將 FavoritesPage 包裝在最基本的 MaterialApp 中以提供 Theme / MediaQuery。
 Widget _wrap(AppSettings settings) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('zh'),
     home: Scaffold(
       body: FavoritesPage(settings: settings),
     ),

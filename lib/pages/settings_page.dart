@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -25,6 +26,8 @@ class _SettingsPageState extends State<SettingsPage> {
       });
     }
 
+    final l10n = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: ListenableBuilder(
         listenable: widget.settings,
@@ -38,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 totalItems: 3,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
-                  label: '外觀',
+                  label: l10n.settingsAppearance,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -57,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 totalItems: 3,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
-                  label: '資料',
+                  label: l10n.settingsData,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -76,21 +79,21 @@ class _SettingsPageState extends State<SettingsPage> {
                 totalItems: 3,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
-                  label: '關於',
+                  label: l10n.settingsAbout,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow(Icons.info_outline, '版本', '1.0.0'),
+                      _buildInfoRow(Icons.info_outline, l10n.settingsVersion, '1.0.0'),
                       const SizedBox(height: DT.spaceSm),
                       _buildTappableRow(
                         Icons.privacy_tip_outlined,
-                        '隱私政策',
+                        l10n.settingsPrivacyPolicy,
                         () {},
                       ),
                       const SizedBox(height: DT.spaceSm),
                       _buildTappableRow(
                         Icons.description_outlined,
-                        '使用條款',
+                        l10n.settingsTermsOfService,
                         () {},
                       ),
                     ],
@@ -107,11 +110,12 @@ class _SettingsPageState extends State<SettingsPage> {
   // ── 主題模式 SegmentedButton ──
   Widget _buildThemeModeSelector() {
     final b = Theme.of(context).brightness;
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '主題模式',
+          l10n.settingsThemeMode,
           style: TextStyle(
             fontSize: DT.fontToolLabel,
             fontWeight: FontWeight.w500,
@@ -122,10 +126,10 @@ class _SettingsPageState extends State<SettingsPage> {
         SizedBox(
           width: double.infinity,
           child: SegmentedButton<ThemeMode>(
-            segments: const [
-              ButtonSegment(value: ThemeMode.light, label: Text('亮色')),
-              ButtonSegment(value: ThemeMode.system, label: Text('系統')),
-              ButtonSegment(value: ThemeMode.dark, label: Text('暗色')),
+            segments: [
+              ButtonSegment(value: ThemeMode.light, label: Text(l10n.settingsThemeLight)),
+              ButtonSegment(value: ThemeMode.system, label: Text(l10n.settingsThemeSystem)),
+              ButtonSegment(value: ThemeMode.dark, label: Text(l10n.settingsThemeDark)),
             ],
             selected: {widget.settings.themeMode},
             onSelectionChanged: (selection) {
@@ -140,11 +144,12 @@ class _SettingsPageState extends State<SettingsPage> {
   // ── 語言 SegmentedButton ──
   Widget _buildLanguageSelector() {
     final b = Theme.of(context).brightness;
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '語言',
+          l10n.settingsLanguage,
           style: TextStyle(
             fontSize: DT.fontToolLabel,
             fontWeight: FontWeight.w500,
@@ -155,8 +160,8 @@ class _SettingsPageState extends State<SettingsPage> {
         SizedBox(
           width: double.infinity,
           child: SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(value: 'zh', label: Text('繁體中文')),
+            segments: [
+              ButtonSegment(value: 'zh', label: Text(l10n.settingsLanguageZh)),
               ButtonSegment(value: 'en', label: Text('English')),
             ],
             selected: {widget.settings.locale.languageCode},
@@ -174,12 +179,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // ── 清除收藏按鈕 ──
   Widget _buildClearFavoritesButton() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildActionButton(
       icon: Icons.favorite_border,
-      label: '清除所有收藏',
+      label: l10n.settingsClearFavorites,
       onTap: () => _showClearDialog(
-        title: '清除收藏',
-        message: '確定要清除所有收藏的工具嗎？此操作無法復原。',
+        title: l10n.settingsClearFavoritesTitle,
+        message: l10n.settingsClearFavoritesMessage,
         onConfirm: () {
           for (final toolId in widget.settings.favorites.toList()) {
             widget.settings.toggleFavorite(toolId);
@@ -191,12 +197,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // ── 清除最近使用按鈕 ──
   Widget _buildClearRecentToolsButton() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildActionButton(
       icon: Icons.history,
-      label: '清除最近使用',
+      label: l10n.settingsClearRecent,
       onTap: () => _showClearDialog(
-        title: '清除最近使用',
-        message: '確定要清除所有最近使用的工具紀錄嗎？',
+        title: l10n.settingsClearRecentTitle,
+        message: l10n.settingsClearRecentMessage,
         onConfirm: () {
           widget.settings.clearRecentTools();
         },
@@ -303,6 +310,7 @@ class _SettingsPageState extends State<SettingsPage> {
     required String message,
     required VoidCallback onConfirm,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -311,14 +319,14 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('取消'),
+            child: Text(l10n.commonCancel),
           ),
           TextButton(
             onPressed: () {
               onConfirm();
               Navigator.of(context).pop();
             },
-            child: const Text('確認'),
+            child: Text(l10n.commonConfirm),
           ),
         ],
       ),

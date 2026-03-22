@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
@@ -165,6 +166,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final result = calculateSplitBill(total: _total, count: _count);
     final enabled = _total > 0;
 
@@ -173,7 +175,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
         ImmersiveToolScaffold(
           toolId: 'split_bill',
           toolColor: _toolColor,
-          title: '分帳計算',
+          title: l10n.splitBillTitle,
           heroTag: 'tool_hero_split_bill',
           headerFlex: 2,
           bodyFlex: 3,
@@ -183,7 +185,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
               child: IconButton(
                 onPressed: enabled ? _shareAsCard : null,
                 icon: const Icon(Icons.share),
-                tooltip: '分享',
+                tooltip: l10n.commonShare,
               ),
             ),
           ],
@@ -203,14 +205,14 @@ class _SplitBillPageState extends State<SplitBillPage> {
           child: RepaintBoundary(
             key: _shareCardKey,
             child: ShareCardTemplate(
-              toolName: '分帳計算',
+              toolName: l10n.splitBillTitle,
               gradientColors: toolGradients['split_bill']!,
               resultChild: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    '每人應付',
-                    style: TextStyle(
+                  Text(
+                    l10n.splitBillPerPerson,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF666666),
@@ -227,7 +229,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    '總額 NT\$${formatWithThousands(_total)} ÷ $_count 人',
+                    l10n.splitBillSummary('NT\$${formatWithThousands(_total)}', _count),
                     style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF999999),
@@ -236,7 +238,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
                   if (!result.isEvenSplit) ...[
                     const SizedBox(height: 8),
                     Text(
-                      '第 1 人多付 ${result.remainder} 元',
+                      l10n.splitBillShareFirstPays(result.remainder),
                       style: const TextStyle(
                         fontSize: 13,
                         color: Color(0xFF26A69A),
@@ -268,8 +270,9 @@ class _SplitBillHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final totalStr = total > 0 ? formatWithThousands(total) : '0';
-    final summary = '\$$totalStr ÷ $count 人';
+    final summary = l10n.splitBillSummary('\$$totalStr', count);
 
     return SafeArea(
       bottom: false,
@@ -322,6 +325,7 @@ class _SplitBillBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -332,7 +336,7 @@ class _SplitBillBody extends StatelessWidget {
             index: 0,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '總金額',
+              label: l10n.splitBillTotalAmount,
               child: _buildAmountField(context),
             ),
           ),
@@ -342,7 +346,7 @@ class _SplitBillBody extends StatelessWidget {
             index: 1,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '人數',
+              label: l10n.splitBillPeople,
               child: _buildCountRow(context),
             ),
           ),
@@ -361,14 +365,15 @@ class _SplitBillBody extends StatelessWidget {
   // ---- 總金額輸入 ----
 
   Widget _buildAmountField(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return TextField(
       controller: amountController,
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.attach_money),
-        hintText: '請輸入總金額',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.attach_money),
+        hintText: l10n.splitBillTotalHint,
+        border: const OutlineInputBorder(),
       ),
     );
   }
@@ -376,6 +381,7 @@ class _SplitBillBody extends StatelessWidget {
   // ---- 人數控制 ----
 
   Widget _buildCountRow(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canDecrement = count > minCount;
     final canIncrement = count < maxCount;
     final colorScheme = Theme.of(context).colorScheme;
@@ -387,7 +393,7 @@ class _SplitBillBody extends StatelessWidget {
         BouncingButton(
           onTap: canDecrement ? onDecrement : null,
           child: Semantics(
-            label: '減少人數',
+            label: l10n.splitBillDecrease,
             child: IconButton.outlined(
               onPressed: canDecrement ? onDecrement : null,
               icon: const Icon(Icons.remove),
@@ -417,7 +423,7 @@ class _SplitBillBody extends StatelessWidget {
         BouncingButton(
           onTap: canIncrement ? onIncrement : null,
           child: Semantics(
-            label: '增加人數',
+            label: l10n.splitBillIncrease,
             child: IconButton.outlined(
               onPressed: canIncrement ? onIncrement : null,
               icon: const Icon(Icons.add),
@@ -438,6 +444,7 @@ class _SplitBillBody extends StatelessWidget {
   // ---- 結果卡片 ----
 
   Widget _buildResultCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final brightness = theme.brightness;
 
@@ -463,7 +470,7 @@ class _SplitBillBody extends StatelessWidget {
           children: [
             // 標籤
             Text(
-              '每人應付',
+              l10n.splitBillPerPerson,
               style: TextStyle(
                 fontSize: DT.fontToolLabel,
                 color: DT.brandPrimary,
@@ -473,7 +480,7 @@ class _SplitBillBody extends StatelessWidget {
             const SizedBox(height: DT.spaceSm),
             // 金額大字（使用 AnimatedValueText）
             Semantics(
-              label: '每人應付 $perPersonStr 元',
+              label: l10n.splitBillPerPersonSemantic(perPersonStr),
               child: AnimatedValueText(
                 value: '\$$perPersonStr',
                 style: theme.textTheme.displaySmall?.copyWith(
@@ -495,7 +502,7 @@ class _SplitBillBody extends StatelessWidget {
                   borderRadius: BorderRadius.circular(DT.spaceSm),
                 ),
                 child: Text(
-                  '第 1 人多付 ${result.remainder} 元（共付 \$${formatWithThousands(result.firstPersonAmount)}）',
+                  l10n.splitBillFirstPaysDetail(result.remainder, formatWithThousands(result.firstPersonAmount)),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: _toolColor,
                   ),

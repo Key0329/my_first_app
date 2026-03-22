@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
 /// 標準錯誤狀態元件，用於工具頁面的錯誤顯示。
@@ -19,8 +20,10 @@ class ErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return ToolSectionCard(
-      label: '錯誤',
+      label: l10n.commonError,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -43,7 +46,7 @@ class ErrorState extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('重試'),
+              label: Text(l10n.commonRetry),
             ),
           ],
         ],

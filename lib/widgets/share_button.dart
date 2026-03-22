@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 
@@ -49,7 +50,7 @@ class ShareButton extends StatelessWidget {
       child: IconButton(
         onPressed: enabled ? _share : null,
         icon: const Icon(Icons.share),
-        tooltip: '分享',
+        tooltip: AppLocalizations.of(context)!.commonShare,
       ),
     );
   }

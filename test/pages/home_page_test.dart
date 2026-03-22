@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/pages/home_page.dart';
 import 'package:my_first_app/services/settings_service.dart';
@@ -13,6 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 此處用 MaterialApp（帶 onGenerateRoute）模擬路由，不實際導航。
 Widget _wrapHomePage(AppSettings settings) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('zh'),
     home: Scaffold(
       body: HomePage(settings: settings),
     ),
@@ -29,7 +33,9 @@ Widget _wrapHomePage(AppSettings settings) {
 /// 使用 SharedPreferences.setMockInitialValues({}) 確保測試中不會 hang。
 Future<AppSettings> _makeSettings() async {
   SharedPreferences.setMockInitialValues({});
-  return AppSettings();
+  final settings = AppSettings();
+  await settings.init();
+  return settings;
 }
 
 void main() {

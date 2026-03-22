@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/pages/onboarding_page.dart';
 
 /// 包裝 OnboardingPage 的輔助函式，提供 MaterialApp 環境。
 Widget _wrapOnboardingPage({required VoidCallback onComplete}) {
   return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('zh'),
     home: OnboardingPage(onComplete: onComplete),
   );
 }

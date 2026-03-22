@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
@@ -77,7 +78,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   void _toggleType(bool current, void Function(bool) setter) {
     if (current && !_canToggleOff(current)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('至少需選擇一種字元類型')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.passwordMinOneType)),
       );
       return;
     }
@@ -89,8 +90,9 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
     if (_password.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: _password));
     if (mounted) {
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('已複製到剪貼簿')),
+        SnackBar(content: Text(l10n.copiedToClipboard)),
       );
     }
   }
@@ -100,7 +102,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
     return ImmersiveToolScaffold(
       toolId: 'password_generator',
       toolColor: _toolColor,
-      title: '密碼產生器',
+      title: AppLocalizations.of(context)!.toolPasswordGenerator,
       heroTag: 'tool_hero_password_generator',
       headerFlex: 2,
       bodyFlex: 3,
@@ -111,6 +113,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
 
   /// 密碼顯示區（上方漸層 header）
   Widget _buildPasswordDisplay(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final strength = _strength;
 
     return SafeArea(
@@ -145,7 +148,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.copy, color: Colors.white),
-                    tooltip: '複製',
+                    tooltip: l10n.commonCopy,
                     onPressed: _copyToClipboard,
                   ),
                 ],
@@ -162,6 +165,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
 
   /// 選項控制區（下方操作區）
   Widget _buildOptionsArea(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     const totalSections = 3; // 密碼長度、字元類型、按鈕
 
     return SingleChildScrollView(
@@ -174,14 +178,14 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
             index: 0,
             totalItems: totalSections,
             child: ToolSectionCard(
-              label: '密碼長度',
+              label: l10n.passwordLength,
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${_length.round()} 字元',
+                        '${_length.round()}',
                         style: const TextStyle(
                           fontSize: DT.fontToolLabel,
                           fontWeight: FontWeight.w500,
@@ -219,32 +223,32 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
             index: 1,
             totalItems: totalSections,
             child: ToolSectionCard(
-              label: '字元類型',
+              label: l10n.passwordCharTypes,
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: const Text('大寫字母 (A-Z)'),
+                    title: Text(l10n.passwordUppercase),
                     value: _uppercase,
                     contentPadding: EdgeInsets.zero,
                     onChanged: (_) =>
                         _toggleType(_uppercase, (v) => _uppercase = v),
                   ),
                   SwitchListTile(
-                    title: const Text('小寫字母 (a-z)'),
+                    title: Text(l10n.passwordLowercase),
                     value: _lowercase,
                     contentPadding: EdgeInsets.zero,
                     onChanged: (_) =>
                         _toggleType(_lowercase, (v) => _lowercase = v),
                   ),
                   SwitchListTile(
-                    title: const Text('數字 (0-9)'),
+                    title: Text(l10n.passwordDigits),
                     value: _numbers,
                     contentPadding: EdgeInsets.zero,
                     onChanged: (_) =>
                         _toggleType(_numbers, (v) => _numbers = v),
                   ),
                   SwitchListTile(
-                    title: const Text('特殊字元 (!@#\$...)'),
+                    title: Text(l10n.passwordSpecial),
                     value: _special,
                     contentPadding: EdgeInsets.zero,
                     onChanged: (_) =>
@@ -263,7 +267,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
             totalItems: totalSections,
             child: ToolGradientButton(
               gradientColors: toolGradients['password_generator']!,
-              label: '產生新密碼',
+              label: l10n.passwordGenerate,
               icon: Icons.refresh,
               onPressed: _generatePassword,
             ),
@@ -290,20 +294,34 @@ class _StrengthBar extends StatelessWidget {
   const _StrengthBar({required this.strength});
   final PasswordStrength strength;
 
+  String _strengthLabel(AppLocalizations l10n) {
+    switch (strength) {
+      case PasswordStrength.weak:
+        return l10n.passwordStrengthWeak;
+      case PasswordStrength.medium:
+        return l10n.passwordStrengthMedium;
+      case PasswordStrength.strong:
+        return l10n.passwordStrengthStrong;
+      case PasswordStrength.veryStrong:
+        return l10n.passwordStrengthVeryStrong;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              '密碼強度',
-              style: TextStyle(color: Colors.white),
+            Text(
+              l10n.passwordStrength,
+              style: const TextStyle(color: Colors.white),
             ),
             Text(
-              strength.label,
+              _strengthLabel(l10n),
               style: TextStyle(
                 color: strength.color,
                 fontWeight: FontWeight.bold,

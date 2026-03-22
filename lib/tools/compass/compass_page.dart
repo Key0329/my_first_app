@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/tools/compass/compass_logic.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -302,7 +303,7 @@ class _CompassPageState extends State<CompassPage>
                             ),
                             const SizedBox(width: DT.spaceSm),
                             Text(
-                              '校正方法',
+                              AppLocalizations.of(context)!.compassCalibration,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.w600,
@@ -317,8 +318,7 @@ class _CompassPageState extends State<CompassPage>
                         ),
                         const SizedBox(height: DT.spaceSm),
                         Text(
-                          '將裝置拿起，以 8 字形揮動數次，'
-                          '可以校正磁力計提升準確度。',
+                          AppLocalizations.of(context)!.compassCalibrationHint,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),

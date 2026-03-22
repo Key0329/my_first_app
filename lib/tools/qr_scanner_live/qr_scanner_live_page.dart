@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
@@ -110,8 +111,9 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
     if (_scanResult == null) return;
     await Clipboard.setData(ClipboardData(text: _scanResult!));
     if (mounted) {
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('已複製到剪貼簿')),
+        SnackBar(content: Text(l10n.tool_qr_scanner_live_copied)),
       );
     }
   }
@@ -218,6 +220,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
   }
 
   Widget _buildErrorView() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: Colors.black87,
       child: Center(
@@ -227,7 +230,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
             const Icon(Icons.error_outline, size: 64, color: Colors.white70),
             const SizedBox(height: DT.spaceLg),
             Text(
-              '相機啟動失敗',
+              l10n.tool_qr_scanner_live_error_title,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 18,
@@ -236,7 +239,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
             ),
             const SizedBox(height: DT.spaceSm),
             Text(
-              '請確認相機功能正常後重試',
+              l10n.tool_qr_scanner_live_error_message,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 14,
@@ -270,6 +273,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
   }
 
   Widget _buildScanHint() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: StaggeredFadeIn(
         index: 0,
@@ -284,7 +288,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
             ),
             const SizedBox(height: DT.spaceLg),
             Text(
-              '將 QR Code 對準掃描框',
+              l10n.tool_qr_scanner_live_scan_hint,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -297,6 +301,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
   }
 
   Widget _buildPermissionDeniedBody() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Center(
@@ -304,19 +309,19 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
           index: 0,
           totalItems: 1,
           child: ToolSectionCard(
-            label: '相機權限',
+            label: l10n.tool_qr_scanner_live_permission_section,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  '請前往系統設定開啟相機權限，才能使用掃描功能。',
-                  style: TextStyle(fontSize: 14),
+                Text(
+                  l10n.tool_qr_scanner_live_permission_guidance,
+                  style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: DT.spaceLg),
                 FilledButton.icon(
                   onPressed: _retryPermission,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('重新嘗試'),
+                  label: Text(l10n.tool_qr_scanner_live_permission_retry),
                 ),
               ],
             ),
@@ -347,6 +352,7 @@ class QrScanResultSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -356,7 +362,7 @@ class QrScanResultSheet extends StatelessWidget {
           index: 0,
           totalItems: 3,
           child: ToolSectionCard(
-            label: '掃描結果',
+            label: l10n.tool_qr_scanner_live_result,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -373,7 +379,7 @@ class QrScanResultSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(DT.radiusSm),
                   ),
                   child: Text(
-                    resultType == QrScanResultType.url ? 'URL' : '文字',
+                    resultType == QrScanResultType.url ? l10n.tool_qr_scanner_live_type_url : l10n.tool_qr_scanner_live_type_text,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -410,7 +416,7 @@ class QrScanResultSheet extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onCopy,
                   icon: const Icon(Icons.copy),
-                  label: const Text('複製'),
+                  label: Text(l10n.tool_qr_scanner_live_copy),
                   style: FilledButton.styleFrom(
                     backgroundColor: _toolColor,
                     foregroundColor: Colors.white,
@@ -428,7 +434,7 @@ class QrScanResultSheet extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onRescan,
                   icon: const Icon(Icons.qr_code_scanner),
-                  label: const Text('重新掃描'),
+                  label: Text(l10n.tool_qr_scanner_live_rescan),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: _toolColor,
                     side: const BorderSide(color: _toolColor),
@@ -450,7 +456,7 @@ class QrScanResultSheet extends StatelessWidget {
             index: 2,
             totalItems: 3,
             child: Text(
-              '複製網址後可在瀏覽器中開啟',
+              l10n.tool_qr_scanner_live_url_hint,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -475,6 +481,7 @@ class CameraPermissionDeniedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: Colors.black87,
       child: Center(
@@ -490,7 +497,7 @@ class CameraPermissionDeniedView extends StatelessWidget {
               ),
               const SizedBox(height: DT.spaceLg),
               Text(
-                '需要相機權限',
+                l10n.tool_qr_scanner_live_permission_title,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 18,
@@ -499,7 +506,7 @@ class CameraPermissionDeniedView extends StatelessWidget {
               ),
               const SizedBox(height: DT.spaceSm),
               Text(
-                '請在系統設定中允許此 App 使用相機',
+                l10n.tool_qr_scanner_live_permission_message,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.6),
@@ -510,7 +517,7 @@ class CameraPermissionDeniedView extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('重新嘗試'),
+                label: Text(l10n.tool_qr_scanner_live_permission_retry),
                 style: FilledButton.styleFrom(
                   backgroundColor: _toolColor,
                   foregroundColor: Colors.white,

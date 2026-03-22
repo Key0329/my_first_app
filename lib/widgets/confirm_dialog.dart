@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 
 /// 共用確認對話框，用於破壞性操作（清除、刪除、重設等）。
 ///
@@ -8,9 +9,10 @@ Future<bool> showConfirmDialog({
   required BuildContext context,
   required String title,
   required String message,
-  String confirmLabel = '確認',
-  String cancelLabel = '取消',
+  String? confirmLabel,
+  String? cancelLabel,
 }) async {
+  final l10n = AppLocalizations.of(context)!;
   final result = await showAdaptiveDialog<bool>(
     context: context,
     builder: (ctx) {
@@ -21,14 +23,14 @@ Future<bool> showConfirmDialog({
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(cancelLabel),
+            child: Text(cancelLabel ?? l10n.commonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
             style: TextButton.styleFrom(
               foregroundColor: colorScheme.error,
             ),
-            child: Text(confirmLabel),
+            child: Text(confirmLabel ?? l10n.commonConfirm),
           ),
         ],
       );

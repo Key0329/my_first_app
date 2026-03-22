@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -53,7 +54,8 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
     }
     final value = double.tryParse(text);
     if (value == null) {
-      setState(() => _result = '請輸入有效數字');
+      final l10n = AppLocalizations.of(context)!;
+      setState(() => _result = l10n.unitConverterInvalidNumber);
       return;
     }
     final converted = convert(_sourceUnit, _targetUnit, value);
@@ -95,10 +97,11 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ImmersiveToolScaffold(
       toolId: 'unit_converter',
       toolColor: _toolColor,
-      title: '單位換算',
+      title: l10n.toolUnitConverter,
       heroTag: 'tool_hero_unit_converter',
       headerFlex: 2,
       bodyFlex: 3,
@@ -110,6 +113,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
   /// 結果顯示區（上方漸層 header）
   Widget _buildResultDisplay(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return SafeArea(
       top: true,
@@ -121,7 +125,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '結果',
+                l10n.unitConverterResult,
                 style: theme.textTheme.labelLarge?.copyWith(
                   color: Colors.white.withValues(alpha: 0.8),
                 ),
@@ -134,7 +138,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              if (_result.isNotEmpty && _result != '請輸入有效數字')
+              if (_result.isNotEmpty && _result != l10n.unitConverterInvalidNumber)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
@@ -156,6 +160,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
 
   /// 輸入欄位與選擇器（下方操作區）
   Widget _buildInputArea(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -166,7 +171,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
             index: 0,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '類別',
+              label: l10n.unitConverterCategory,
               child: _buildDropdown<String>(
                 value: _selectedCategory.id,
                 items: allCategories
@@ -190,7 +195,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
             index: 1,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '來源',
+              label: l10n.unitConverterSource,
               child: Column(
                 children: [
                   _buildDropdown<String>(
@@ -221,9 +226,9 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                       signed: true,
                     ),
                     decoration: InputDecoration(
-                      labelText: '輸入數值',
+                      labelText: l10n.unitConverterInputValue,
                       border: const OutlineInputBorder(),
-                      hintText: '請輸入數字',
+                      hintText: l10n.unitConverterInputHint,
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: DT.brandPrimary,
@@ -266,7 +271,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
             index: 2,
             totalItems: _totalSections,
             child: ToolSectionCard(
-              label: '目標',
+              label: l10n.unitConverterTarget,
               child: _buildDropdown<String>(
                 value: _targetUnit.id,
                 items: _selectedCategory.units

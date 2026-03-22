@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
 /// 三頁式 Onboarding 引導頁面。
@@ -36,6 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -49,7 +51,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 child: TextButton(
                   onPressed: widget.onComplete,
                   child: Text(
-                    '跳過',
+                    l10n.onboardingSkip,
                     style: TextStyle(
                       color: DT.brandPrimary,
                       fontSize: DT.fontSubtitle,
@@ -65,9 +67,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 controller: _pageController,
                 onPageChanged: _onPageChanged,
                 children: [
-                  _buildWelcomePage(theme),
-                  _buildFeaturesPage(theme),
-                  _buildGetStartedPage(theme),
+                  _buildWelcomePage(theme, l10n),
+                  _buildFeaturesPage(theme, l10n),
+                  _buildGetStartedPage(theme, l10n),
                 ],
               ),
             ),
@@ -104,7 +106,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   // ── 第 1 頁：歡迎頁 ──
-  Widget _buildWelcomePage(ThemeData theme) {
+  Widget _buildWelcomePage(ThemeData theme, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
@@ -132,7 +134,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
           // 歡迎標題
           Text(
-            '歡迎使用工具箱 Pro',
+            l10n.onboardingWelcomeTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontSize: DT.fontTitle,
               fontWeight: FontWeight.bold,
@@ -143,7 +145,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
           // App 描述
           Text(
-            '您的隨身工具箱，集合多種實用工具，讓日常生活更便利。',
+            l10n.onboardingWelcomeDesc,
             style: theme.textTheme.bodyMedium?.copyWith(
               fontSize: DT.fontSubtitle,
               color: theme.colorScheme.onSurfaceVariant,
@@ -156,14 +158,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   // ── 第 2 頁：功能介紹頁 ──
-  Widget _buildFeaturesPage(ThemeData theme) {
+  Widget _buildFeaturesPage(ThemeData theme, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '強大功能',
+            l10n.onboardingFeaturesTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontSize: DT.fontTitle,
               fontWeight: FontWeight.bold,
@@ -175,8 +177,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           // 工具箱
           _FeatureRow(
             icon: Icons.handyman_rounded,
-            title: '豐富工具',
-            description: '計算機、單位轉換、密碼產生器等多種實用工具。',
+            title: l10n.onboardingFeatureTools,
+            description: l10n.onboardingFeatureToolsDesc,
             theme: theme,
           ),
           const SizedBox(height: DT.space2xl),
@@ -184,8 +186,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           // 收藏
           _FeatureRow(
             icon: Icons.favorite_rounded,
-            title: '收藏功能',
-            description: '將常用工具加入收藏，快速存取。',
+            title: l10n.onboardingFeatureFavorites,
+            description: l10n.onboardingFeatureFavoritesDesc,
             theme: theme,
           ),
           const SizedBox(height: DT.space2xl),
@@ -193,8 +195,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           // 設定
           _FeatureRow(
             icon: Icons.settings_rounded,
-            title: '個人化設定',
-            description: '自訂主題、語言等偏好設定。',
+            title: l10n.onboardingFeatureSettings,
+            description: l10n.onboardingFeatureSettingsDesc,
             theme: theme,
           ),
         ],
@@ -203,7 +205,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   // ── 第 3 頁：開始使用頁 ──
-  Widget _buildGetStartedPage(ThemeData theme) {
+  Widget _buildGetStartedPage(ThemeData theme, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
@@ -217,7 +219,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const SizedBox(height: DT.space3xl),
 
           Text(
-            '準備好了嗎？',
+            l10n.onboardingReadyTitle,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontSize: DT.fontTitle,
               fontWeight: FontWeight.bold,
@@ -227,7 +229,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           const SizedBox(height: DT.spaceLg),
 
           Text(
-            '立即開始探索所有功能吧！',
+            l10n.onboardingReadyDesc,
             style: theme.textTheme.bodyMedium?.copyWith(
               fontSize: DT.fontSubtitle,
               color: theme.colorScheme.onSurfaceVariant,
@@ -248,9 +250,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                 ),
               ),
-              child: const Text(
-                '開始使用',
-                style: TextStyle(
+              child: Text(
+                l10n.onboardingStart,
+                style: const TextStyle(
                   fontSize: DT.fontToolButton,
                   fontWeight: FontWeight.w600,
                 ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -192,6 +193,7 @@ class _FlashlightPageState extends State<FlashlightPage> {
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return ImmersiveToolScaffold(
       toolId: 'flashlight',
@@ -212,10 +214,10 @@ class _FlashlightPageState extends State<FlashlightPage> {
               // Status text
               Text(
                 _isSosActive
-                    ? 'SOS 模式啟動中'
+                    ? l10n.flashlightSosMode
                     : _isOn
-                        ? '已開啟'
-                        : '已關閉',
+                        ? l10n.flashlightOn
+                        : l10n.flashlightOff,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: _isOn || _isSosActive
                       ? colorScheme.primary

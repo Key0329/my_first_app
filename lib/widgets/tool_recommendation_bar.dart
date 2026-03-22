@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_relations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
@@ -29,7 +30,7 @@ class ToolRecommendationBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '你可能也需要',
+            AppLocalizations.of(context)!.recommendationTitle,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -213,7 +214,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                       ),
                     ),
                     Text(
-                      'dB',
+                      AppLocalizations.of(context)!.noiseMeterDb,
                       style: TextStyle(
                         fontSize: 24,
                         color: _isRecording
@@ -269,7 +270,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
               index: 1,
               totalItems: 3,
               child: ToolSectionCard(
-                label: '噪音等級參考',
+                label: AppLocalizations.of(context)!.noiseMeterReference,
                 child: _buildReferenceSection(),
               ),
             ),
@@ -405,9 +406,17 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
   }
 
   Widget _buildReferenceSection() {
+    final l10n = AppLocalizations.of(context)!;
     final activeIndex = _isRecording
         ? _getActiveReferenceIndex(_currentDb)
         : -2; // -2 表示未錄音，不高亮任何項目
+
+    final localizedLabels = [
+      l10n.noiseMeterWhisper,
+      l10n.noiseMeterConversation,
+      l10n.noiseMeterTraffic,
+      l10n.noiseMeterConcert,
+    ];
 
     return Row(
       children: List.generate(_references.length, (index) {
@@ -438,7 +447,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                 Text(ref.emoji, style: const TextStyle(fontSize: 20)),
                 const SizedBox(height: 2),
                 Text(
-                  ref.label,
+                  localizedLabels[index],
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight:

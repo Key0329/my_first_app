@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -146,7 +147,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                   index: 0,
                   totalItems: 3,
                   child: ToolSectionCard(
-                    label: '校準螢幕 PPI',
+                    label: AppLocalizations.of(context)!.rulerCalibrate,
                     child: Column(
                       children: [
                         Icon(
@@ -247,17 +248,17 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                           borderRadius:
                               BorderRadius.circular(DT.toolButtonRadius),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.check_circle_outline,
                               color: Colors.white,
                             ),
-                            SizedBox(width: DT.spaceSm),
+                            const SizedBox(width: DT.spaceSm),
                             Text(
-                              '完成校準',
-                              style: TextStyle(
+                              AppLocalizations.of(context)!.rulerCalibrateDone,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: DT.fontToolButton,
                                 fontWeight: FontWeight.w600,
@@ -328,7 +329,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                         ),
                         const SizedBox(width: DT.spaceSm),
                         Text(
-                          '重新校準 PPI',
+                          AppLocalizations.of(context)!.rulerRecalibrate,
                           style: TextStyle(
                             color: _toolColor,
                             fontSize: DT.fontToolButton,

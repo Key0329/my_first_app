@@ -8,71 +8,80 @@ TBD - created by archiving change 'mvp-v1-toolbox-app'. Update Purpose after arc
 
 ### Requirement: Multi-language support
 
-The app SHALL support two locales: Traditional Chinese (zh_TW) as the default and English (en). All user-facing strings SHALL be localized using Flutter's official internationalization mechanism (flutter_localizations + ARB files).
+The app SHALL support two locales: Traditional Chinese (zh_TW) as the default and English (en). All user-facing strings SHALL be localized using Flutter's official internationalization mechanism (flutter_localizations + ARB files). All user-visible text in pages, tool pages, and shared widgets SHALL be sourced from AppLocalizations. Hardcoded Chinese strings SHALL NOT exist in any UI-rendering code. Both zh and en ARB files SHALL contain entries for every localization key.
 
 #### Scenario: App displays in Traditional Chinese by default
 
 - **WHEN** the user's device locale is zh_TW or the user has not changed the language setting
-- **THEN** all UI strings SHALL be displayed in Traditional Chinese
+- **THEN** all UI text SHALL display in Traditional Chinese from AppLocalizations
 
-#### Scenario: App displays in English
+#### Scenario: App pages display localized strings
 
-- **WHEN** the user selects English in settings
-- **THEN** all UI strings SHALL be displayed in English
+- **WHEN** any page (home, settings, favorites, onboarding) is displayed
+- **THEN** all visible text SHALL come from AppLocalizations, not hardcoded strings
+
+#### Scenario: Tool pages display localized strings
+
+- **WHEN** any of the 18 tool pages is displayed
+- **THEN** all visible text (titles, labels, buttons, results, hints) SHALL come from AppLocalizations
+
+#### Scenario: Shared widgets display localized strings
+
+- **WHEN** shared widgets (error_state, confirm_dialog, share_button, etc.) are displayed
+- **THEN** all visible text SHALL come from AppLocalizations
+
+#### Scenario: Switching locale updates all text
+
+- **WHEN** the user switches locale from zh to en in settings
+- **THEN** all UI text across all pages and tools SHALL update to English
 
 
 <!-- @trace
-source: mvp-v1-toolbox-app
-updated: 2026-03-18
+source: i18n-completion
+updated: 2026-03-23
 code:
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - macos/Flutter/GeneratedPluginRegistrant.swift
-  - lib/tools/unit_converter/units_data.dart
-  - lib/pages/home_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - windows/flutter/generated_plugins.cmake
-  - pubspec.lock
-  - lib/l10n/l10n.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/services/settings_service.dart
-  - android/app/src/main/AndroidManifest.xml
   - lib/l10n/app_localizations.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - lib/l10n/app_en.arb
-  - lib/pages/settings_page.dart
-  - lib/tools/level/level_page.dart
-  - windows/flutter/generated_plugin_registrant.cc
-  - lib/tools/compass/compass_page.dart
-  - l10n.yaml
-  - lib/models/tool_item.dart
-  - lib/app.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/theme/app_theme.dart
-  - lib/main.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.yaml
-  - lib/tools/invoice_checker/invoice_api.dart
   - lib/l10n/app_localizations_en.dart
-  - lib/widgets/tool_card.dart
-  - lib/tools/calculator/calculator_logic.dart
+  - lib/tools/qr_scanner_live/qr_scanner_live_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/widgets/tool_recommendation_bar.dart
+  - lib/widgets/error_state.dart
+  - lib/pages/settings_page.dart
   - lib/tools/calculator/calculator_page.dart
-  - ios/Runner/Info.plist
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/date_calculator/date_calculator_page.dart
+  - lib/widgets/share_button.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/pages/home_page.dart
+  - lib/l10n/app_en.arb
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/pages/onboarding_page.dart
+  - lib/l10n/app_zh.arb
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/tools/password_generator/password_generator_page.dart
 tests:
-  - test/widget_test.dart
-  - test/tools/calculator_logic_test.dart
+  - test/pages/home_page_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/widgets/tool_recommendation_bar_test.dart
   - test/tools/password_generator_test.dart
-  - test/tools/invoice_checker_test.dart
-  - test/tools/unit_converter_test.dart
-  - test/tools/stopwatch_timer_test.dart
-  - test/services/settings_service_test.dart
+  - test/tools/qr_scanner_live_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+  - test/pages/favorites_page_test.dart
+  - test/tools/qr_generator_test.dart
 -->
 
 ---

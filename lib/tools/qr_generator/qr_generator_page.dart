@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -126,6 +127,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
 
   /// 輸入與按鈕控制區（下方操作區）
   Widget _buildInputArea(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // 計算 StaggeredFadeIn 的 totalItems
     final hasResult = _generatedText != null;
     final totalItems = hasResult ? 3 : 2;
@@ -140,14 +142,14 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
             index: 0,
             totalItems: totalItems,
             child: ToolSectionCard(
-              label: '輸入內容',
+              label: l10n.qrGeneratorInput,
               child: TextField(
                 controller: _textController,
-                decoration: const InputDecoration(
-                  labelText: '輸入文字或網址',
+                decoration: InputDecoration(
+                  labelText: l10n.qrGeneratorInputHint,
                   hintText: '例如：https://example.com',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.text_fields),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.text_fields),
                 ),
                 maxLines: 3,
                 minLines: 1,
@@ -164,7 +166,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
             totalItems: totalItems,
             child: ToolGradientButton(
               gradientColors: toolGradients['qr_generator']!,
-              label: '產生 QR Code',
+              label: l10n.qrGeneratorGenerate,
               icon: Icons.qr_code,
               onPressed: _generate,
             ),

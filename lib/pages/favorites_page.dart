@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
@@ -55,6 +56,7 @@ class FavoritesPage extends StatelessWidget {
 class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final outline = Theme.of(context).colorScheme.outline;
     return Center(
       child: Column(
@@ -63,7 +65,7 @@ class _EmptyState extends StatelessWidget {
           Icon(Icons.favorite_border, size: 64, color: outline),
           const SizedBox(height: 16),
           Text(
-            '尚未收藏任何工具',
+            l10n.favoritesEmpty,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -71,7 +73,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '長按工具卡片即可加入收藏',
+            l10n.favoritesEmptyHint,
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

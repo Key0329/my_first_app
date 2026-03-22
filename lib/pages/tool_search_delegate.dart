@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
@@ -17,9 +18,9 @@ List<ToolItem> filterTools(String query) {
 }
 
 class ToolSearchDelegate extends SearchDelegate<ToolItem?> {
-  ToolSearchDelegate()
+  ToolSearchDelegate({required String searchHint})
       : super(
-          searchFieldLabel: '搜尋工具...',
+          searchFieldLabel: searchHint,
           searchFieldStyle: const TextStyle(fontSize: 16),
         );
 
@@ -52,6 +53,7 @@ class ToolSearchDelegate extends SearchDelegate<ToolItem?> {
     final results = filterTools(query);
 
     if (results.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -63,7 +65,7 @@ class ToolSearchDelegate extends SearchDelegate<ToolItem?> {
             ),
             const SizedBox(height: 16),
             Text(
-              '找不到符合的工具',
+              l10n.searchNoResults,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).colorScheme.outline,

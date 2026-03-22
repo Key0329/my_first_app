@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
@@ -92,7 +93,7 @@ class _ProtractorPageState extends State<ProtractorPage> {
               label: '測量角度',
               value: '${_angleDegrees.toStringAsFixed(1)} 度',
               child: ToolSectionCard(
-                label: '角度',
+                label: AppLocalizations.of(context)!.protractorAngle,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -128,7 +129,7 @@ class _ProtractorPageState extends State<ProtractorPage> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            '重設',
+                            AppLocalizations.of(context)!.commonReset,
                             style: TextStyle(
                               fontSize: DT.fontToolButton,
                               fontWeight: FontWeight.w600,

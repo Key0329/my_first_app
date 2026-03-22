@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/tools/qr_scanner_live/qr_scanner_live_page.dart';
 
 void main() {
@@ -34,7 +35,12 @@ void main() {
       // On non-mobile platforms, it should show PlatformUnsupportedView.
       // We just verify it doesn't crash.
       await tester.pumpWidget(
-        const MaterialApp(home: QrScannerLivePage()),
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const QrScannerLivePage(),
+        ),
       );
       await tester.pump();
 
@@ -46,6 +52,9 @@ void main() {
         (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: QrScanResultSheet(
               result: 'https://example.com',
@@ -75,6 +84,9 @@ void main() {
         (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: QrScanResultSheet(
               result: 'Hello World',
@@ -96,6 +108,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: QrScanResultSheet(
               result: 'test text',
@@ -120,6 +135,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: QrScanResultSheet(
               result: 'test text',
@@ -141,6 +159,9 @@ void main() {
     testWidgets('CameraPermissionDeniedView shows guidance', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: CameraPermissionDeniedView(
               onRetry: () {},
@@ -163,6 +184,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: CameraPermissionDeniedView(
               onRetry: () => retried = true,
@@ -186,6 +210,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
           home: Scaffold(
             body: SizedBox(
               width: 300,

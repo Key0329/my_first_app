@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/tools/password_generator/password_generator_page.dart';
 
 Widget _buildApp() {
-  return const MaterialApp(
-    home: PasswordGeneratorPage(),
+  return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('zh'),
+    home: const PasswordGeneratorPage(),
   );
 }
 
@@ -28,7 +32,7 @@ void main() {
       expect(find.text('產生新密碼'), findsOneWidget);
 
       // Strength label
-      expect(find.text('密碼強度'), findsOneWidget);
+      expect(find.text('強度'), findsOneWidget);
 
       // Copy button
       expect(find.byIcon(Icons.copy), findsOneWidget);

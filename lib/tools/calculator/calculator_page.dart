@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
@@ -137,9 +138,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
         if (mounted) setState(() => _history = updated);
       });
     } on ArgumentError {
-      setState(() => _result = '錯誤：除以零');
+      final l10n = AppLocalizations.of(context)!;
+      setState(() => _result = l10n.calculatorDivideByZero);
     } on FormatException {
-      setState(() => _result = '格式錯誤');
+      final l10n = AppLocalizations.of(context)!;
+      setState(() => _result = l10n.calculatorFormatError);
     }
   }
 
@@ -154,11 +157,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return ImmersiveToolScaffold(
       toolId: 'calculator',
       toolColor: _toolColor,
-      title: '計算機',
+      title: l10n.toolCalculator,
       heroTag: 'tool_hero_calculator',
       headerFlex: 2,
       bodyFlex: 4,
@@ -177,7 +181,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     icon: const Icon(Icons.history),
-                    tooltip: '歷史紀錄',
+                    tooltip: l10n.calculatorHistory,
                     onPressed: () => _showHistory(context),
                   ),
                 ),
@@ -337,6 +341,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void _showHistory(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -346,9 +351,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
           onClear: () async {
             final confirmed = await showConfirmDialog(
               context: ctx,
-              title: '清除歷史紀錄',
-              message: '確定要清除所有計算歷史紀錄嗎？此操作無法復原。',
-              confirmLabel: '清除',
+              title: l10n.calculatorClearHistoryTitle,
+              message: l10n.calculatorClearHistoryMessage,
+              confirmLabel: l10n.calculatorClear,
             );
             if (!confirmed) return;
             _clearHistory();
@@ -399,6 +404,7 @@ class _HistorySheetState extends State<_HistorySheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final filtered = _filteredHistory;
     return DraggableScrollableSheet(
       expand: false,
@@ -416,14 +422,14 @@ class _HistorySheetState extends State<_HistorySheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '歷史紀錄',
+                    l10n.calculatorHistory,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   TextButton.icon(
                     key: const Key('btn_clear_history'),
                     onPressed: widget.onClear,
                     icon: const Icon(Icons.delete_outline, size: 18),
-                    label: const Text('清除'),
+                    label: Text(l10n.calculatorClear),
                   ),
                 ],
               ),
@@ -433,7 +439,7 @@ class _HistorySheetState extends State<_HistorySheet> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: '搜尋歷史紀錄...',
+                  hintText: l10n.calculatorSearchHistory,
                   prefixIcon: const Icon(Icons.search, size: 20),
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/widgets/tool_recommendation_bar.dart';
 
 void main() {
@@ -7,8 +8,11 @@ void main() {
     testWidgets('renders recommendation chips for known tool',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const Scaffold(
             body: ToolRecommendationBar(toolId: 'calculator'),
           ),
         ),
@@ -23,8 +27,11 @@ void main() {
 
     testWidgets('renders nothing for unknown tool', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const Scaffold(
             body: ToolRecommendationBar(toolId: 'nonexistent'),
           ),
         ),
@@ -39,8 +46,11 @@ void main() {
 
     testWidgets('shows correct recommended tool names', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          home: const Scaffold(
             body: ToolRecommendationBar(toolId: 'calculator'),
           ),
         ),

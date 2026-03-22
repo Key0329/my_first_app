@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/tools/calculator/calculator_page.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 
 Widget _buildApp() {
-  return const MaterialApp(
-    home: CalculatorPage(),
+  return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('zh'),
+    home: const CalculatorPage(),
   );
 }
 

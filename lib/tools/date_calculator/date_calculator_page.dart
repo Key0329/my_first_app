@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
@@ -98,6 +99,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
   // ── Header Display ──
   Widget _buildHeaderContent() {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final whiteStyle = theme.textTheme.displaySmall?.copyWith(
       color: Colors.white,
@@ -113,12 +115,12 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('日期區間', style: labelStyle),
+            Text(l10n.tool_date_calculator_interval_label, style: labelStyle),
             const SizedBox(height: 8),
-            Text('${r.totalDays} 天', style: whiteStyle),
+            Text(l10n.tool_date_calculator_result_days(r.totalDays), style: whiteStyle),
             const SizedBox(height: 4),
             Text(
-              '${r.weeks} 週 ${r.remainingDays} 天 / ${r.months} 個月 ${r.monthRemainingDays} 天',
+              '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: Colors.white.withValues(alpha: 0.9),
               ),
@@ -130,7 +132,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('目標日期', style: labelStyle),
+            Text(l10n.tool_date_calculator_target_date, style: labelStyle),
             const SizedBox(height: 8),
             Text(_formatDate(result), style: whiteStyle),
             const SizedBox(height: 4),
@@ -147,12 +149,12 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('工作日計算', style: labelStyle),
+            Text(l10n.tool_date_calculator_business_label, style: labelStyle),
             const SizedBox(height: 8),
-            Text('${r.businessDays} 工作日', style: whiteStyle),
+            Text(l10n.tool_date_calculator_result_business_days(r.businessDays), style: whiteStyle),
             const SizedBox(height: 4),
             Text(
-              '${r.calendarDays} 日曆天 / ${r.weekendDays} 天週末',
+              '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: Colors.white.withValues(alpha: 0.9),
               ),
@@ -166,6 +168,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
   // ── 分享卡片結果內容 ──
   Widget _buildShareCardResult() {
+    final l10n = AppLocalizations.of(context)!;
     const resultTextColor = Color(0xFF333333);
 
     switch (_tabController.index) {
@@ -184,7 +187,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             ),
             const SizedBox(height: 12),
             Text(
-              '${r.totalDays} 天',
+              l10n.tool_date_calculator_result_days(r.totalDays),
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
@@ -194,7 +197,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             ),
             const SizedBox(height: 8),
             Text(
-              '${r.weeks} 週 ${r.remainingDays} 天 / ${r.months} 個月 ${r.monthRemainingDays} 天',
+              '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
               style: const TextStyle(
                 fontSize: 13,
                 color: resultTextColor,
@@ -206,12 +209,12 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
       case 1:
         final result = _addSubResult;
         final days = int.tryParse(_daysController.text) ?? 0;
-        final op = _isSubtract ? '減' : '加';
+        final op = _isSubtract ? l10n.tool_date_calculator_subtract : l10n.tool_date_calculator_add;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${_formatDate(_addSubBase)} $op $days 天',
+              '${_formatDate(_addSubBase)} $op ${l10n.tool_date_calculator_result_days(days)}',
               style: const TextStyle(
                 fontSize: 14,
                 color: resultTextColor,
@@ -254,7 +257,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             ),
             const SizedBox(height: 12),
             Text(
-              '${r.businessDays} 工作日',
+              l10n.tool_date_calculator_result_business_days(r.businessDays),
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
@@ -264,7 +267,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             ),
             const SizedBox(height: 8),
             Text(
-              '${r.calendarDays} 日曆天 / ${r.weekendDays} 天週末',
+              '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
               style: const TextStyle(
                 fontSize: 13,
                 color: resultTextColor,
@@ -279,18 +282,19 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   }
 
   String get _shareText {
+    final l10n = AppLocalizations.of(context)!;
     switch (_tabController.index) {
       case 0:
         final r = _intervalResult;
-        return '📅 日期區間：${_formatDate(_intervalStart)} ~ ${_formatDate(_intervalEnd)}，共 ${r.totalDays} 天\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+        return '${l10n.tool_date_calculator_interval_label}: ${_formatDate(_intervalStart)} ~ ${_formatDate(_intervalEnd)}, ${l10n.tool_date_calculator_result_days(r.totalDays)}\n\nhttps://spectra.app/tools/date-calculator';
       case 1:
         final result = _addSubResult;
         final days = int.tryParse(_daysController.text) ?? 0;
-        final op = _isSubtract ? '減' : '加';
-        return '📅 ${_formatDate(_addSubBase)} $op $days 天 = ${_formatDate(result)}（${_weekdayName(result)}）\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+        final op = _isSubtract ? l10n.tool_date_calculator_subtract : l10n.tool_date_calculator_add;
+        return '${_formatDate(_addSubBase)} $op ${l10n.tool_date_calculator_result_days(days)} = ${_formatDate(result)} (${_weekdayName(result)})\n\nhttps://spectra.app/tools/date-calculator';
       case 2:
         final r = _bizResult;
-        return '📅 工作日計算：${_formatDate(_bizStart)} ~ ${_formatDate(_bizEnd)}，共 ${r.businessDays} 工作日\n\n用 Spectra 工具箱計算日期 👉 https://spectra.app/tools/date-calculator';
+        return '${l10n.tool_date_calculator_business_label}: ${_formatDate(_bizStart)} ~ ${_formatDate(_bizEnd)}, ${l10n.tool_date_calculator_result_business_days(r.businessDays)}\n\nhttps://spectra.app/tools/date-calculator';
       default:
         return '';
     }
@@ -313,6 +317,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = toolGradients['date_calculator'] ?? [_toolColor, _toolColor];
 
     return Stack(
@@ -320,7 +325,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
         ImmersiveToolScaffold(
           toolId: 'date_calculator',
           toolColor: _toolColor,
-          title: '日期計算機',
+          title: l10n.tool_date_calculator_title,
           heroTag: 'tool_hero_date_calculator',
           headerFlex: 2,
           bodyFlex: 3,
@@ -328,7 +333,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             IconButton(
               onPressed: _shareAsImage,
               icon: const Icon(Icons.share),
-              tooltip: '分享',
+              tooltip: l10n.commonShare,
             ),
           ],
           headerChild: SafeArea(
@@ -348,7 +353,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           child: RepaintBoundary(
             key: _shareCardKey,
             child: ShareCardTemplate(
-              toolName: '日期計算機',
+              toolName: l10n.tool_date_calculator_title,
               gradientColors: colors,
               resultChild: _buildShareCardResult(),
             ),
@@ -359,6 +364,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // ── Tab Bar ──
@@ -369,10 +375,10 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             labelColor: _toolColor,
             unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
             indicatorColor: _toolColor,
-            tabs: const [
-              Tab(text: '日期區間'),
-              Tab(text: '加減天數'),
-              Tab(text: '工作日'),
+            tabs: [
+              Tab(text: l10n.tool_date_calculator_tab_interval),
+              Tab(text: l10n.tool_date_calculator_tab_add_sub),
+              Tab(text: l10n.tool_date_calculator_tab_business),
             ],
           ),
         ),
@@ -395,6 +401,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   // Tab 1: Date Interval
   // ─────────────────────────────────────────────────────────────────────────
   Widget _buildIntervalTab() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -404,7 +411,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 0,
             totalItems: 2,
             child: ToolSectionCard(
-              label: '開始日期',
+              label: l10n.tool_date_calculator_start_date,
               child: _DatePickerTile(
                 date: _intervalStart,
                 onTap: () async {
@@ -421,7 +428,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 1,
             totalItems: 2,
             child: ToolSectionCard(
-              label: '結束日期',
+              label: l10n.tool_date_calculator_end_date,
               child: _DatePickerTile(
                 date: _intervalEnd,
                 onTap: () async {
@@ -442,6 +449,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   // Tab 2: Add/Subtract Days
   // ─────────────────────────────────────────────────────────────────────────
   Widget _buildAddSubTab() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -451,7 +459,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 0,
             totalItems: 3,
             child: ToolSectionCard(
-              label: '基準日期',
+              label: l10n.tool_date_calculator_base_date,
               child: _DatePickerTile(
                 date: _addSubBase,
                 onTap: () async {
@@ -468,7 +476,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 1,
             totalItems: 3,
             child: ToolSectionCard(
-              label: '天數',
+              label: l10n.tool_date_calculator_days,
               child: Column(
                 children: [
                   Row(
@@ -478,7 +486,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
                           controller: _daysController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            labelText: '輸入天數',
+                            labelText: l10n.tool_date_calculator_enter_days,
                             border: const OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -496,16 +504,16 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
                   const SizedBox(height: DT.toolSectionGap),
                   // 加 / 減 Toggle
                   SegmentedButton<bool>(
-                    segments: const [
+                    segments: [
                       ButtonSegment(
                         value: false,
-                        label: Text('加'),
-                        icon: Icon(Icons.add),
+                        label: Text(l10n.tool_date_calculator_add),
+                        icon: const Icon(Icons.add),
                       ),
                       ButtonSegment(
                         value: true,
-                        label: Text('減'),
-                        icon: Icon(Icons.remove),
+                        label: Text(l10n.tool_date_calculator_subtract),
+                        icon: const Icon(Icons.remove),
                       ),
                     ],
                     selected: {_isSubtract},
@@ -540,6 +548,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
   // Tab 3: Business Days
   // ─────────────────────────────────────────────────────────────────────────
   Widget _buildBusinessDaysTab() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -549,7 +558,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 0,
             totalItems: 2,
             child: ToolSectionCard(
-              label: '開始日期',
+              label: l10n.tool_date_calculator_start_date,
               child: _DatePickerTile(
                 date: _bizStart,
                 onTap: () async {
@@ -566,7 +575,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             index: 1,
             totalItems: 2,
             child: ToolSectionCard(
-              label: '結束日期',
+              label: l10n.tool_date_calculator_end_date,
               child: _DatePickerTile(
                 date: _bizEnd,
                 onTap: () async {

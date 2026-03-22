@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/utils/platform_check.dart';
 import 'package:my_first_app/widgets/error_state.dart';
@@ -192,8 +193,9 @@ class _LevelPageState extends State<LevelPage>
   }
 
   Widget _buildBody(ThemeData theme, bool isLevel) {
+    final l10n = AppLocalizations.of(context)!;
     final statusColor = isLevel ? Colors.green : theme.colorScheme.onSurface;
-    final statusText = isLevel ? '水平' : '未水平';
+    final statusText = isLevel ? l10n.levelNormal : '未水平';
     final statusIcon = isLevel ? Icons.check_circle : Icons.info_outline;
 
     const totalSections = 2;
@@ -208,7 +210,7 @@ class _LevelPageState extends State<LevelPage>
             index: 0,
             totalItems: totalSections,
             child: ToolSectionCard(
-              label: '狀態',
+              label: l10n.levelStatus,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -232,12 +234,12 @@ class _LevelPageState extends State<LevelPage>
             index: 1,
             totalItems: totalSections,
             child: ToolSectionCard(
-              label: '角度數值',
+              label: l10n.levelAngleValues,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildAngleChip('X 軸', _angleX, theme),
-                  _buildAngleChip('Y 軸', _angleY, theme),
+                  _buildAngleChip(l10n.levelXAxis, _angleX, theme),
+                  _buildAngleChip(l10n.levelYAxis, _angleY, theme),
                 ],
               ),
             ),

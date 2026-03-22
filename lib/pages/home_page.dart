@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/pages/tool_search_delegate.dart';
 import 'package:my_first_app/services/analytics_service.dart';
@@ -37,18 +38,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _toggleFavorite(BuildContext context, ToolItem tool) {
+    final l10n = AppLocalizations.of(context)!;
     final wasFavorite = widget.settings.isFavorite(tool.id);
     widget.settings.toggleFavorite(tool.id);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(wasFavorite ? '已移除收藏' : '已加入收藏'),
+        content: Text(wasFavorite ? l10n.homeFavoriteRemoved : l10n.homeFavoriteAdded),
         duration: const Duration(seconds: 2),
       ),
     );
   }
 
+  String _categoryLabel(AppLocalizations l10n, ToolCategory category) {
+    switch (category) {
+      case ToolCategory.calculate:
+        return l10n.categoryCalculate;
+      case ToolCategory.measure:
+        return l10n.categoryMeasure;
+      case ToolCategory.life:
+        return l10n.categoryLife;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final b = Theme.of(context).brightness;
     final shouldAnimate = !_hasAnimated;
     if (!_hasAnimated) {
@@ -73,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '工具箱',
+                        l10n.homeTitle,
                         style: TextStyle(
                           fontSize: DT.fontTitle,
                           fontWeight: FontWeight.w700,
@@ -83,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: DT.spaceXs),
                       Text(
-                        '15+ 實用工具，一個 App 搞定',
+                        l10n.homeSubtitle,
                         style: TextStyle(
                           fontSize: DT.fontSubtitle,
                           fontWeight: FontWeight.w400,
@@ -99,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     showSearch(
                       context: context,
-                      delegate: ToolSearchDelegate(),
+                      delegate: ToolSearchDelegate(searchHint: l10n.searchHint),
                     );
                   },
                   child: Container(
@@ -128,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _CategoryChip(
-                    label: '全部',
+                    label: l10n.categoryAll,
                     selected: _selectedCategory == null,
                     onSelected: () =>
                         setState(() => _selectedCategory = null),
@@ -136,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(width: DT.spaceSm),
                   for (final category in ToolCategory.values) ...[
                     _CategoryChip(
-                      label: category.label,
+                      label: _categoryLabel(l10n, category),
                       selected: _selectedCategory == category,
                       onSelected: () =>
                           setState(() => _selectedCategory = category),
@@ -173,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                             DT.spaceXl, 0, DT.spaceXl, DT.spaceSm,
                           ),
                           child: Text(
-                            '最近使用',
+                            l10n.homeRecentTools,
                             style: TextStyle(
                               fontSize: DT.fontSubtitle,
                               fontWeight: FontWeight.w600,

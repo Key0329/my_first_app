@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/utils/platform_check.dart';
@@ -206,10 +207,11 @@ class _ColorPickerPageState extends State<ColorPickerPage>
   }
 
   void _openAppSettings() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('需要相機權限'),
+        title: Text(l10n.colorPickerPermission),
         content: const Text('請前往系統設定，允許此應用程式使用相機。'),
         actions: [
           TextButton(
@@ -254,6 +256,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
   }
 
   Widget _buildPermissionDenied() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -266,9 +269,9 @@ class _ColorPickerPageState extends State<ColorPickerPage>
               color: Colors.white70,
             ),
             const SizedBox(height: 16),
-            const Text(
-              '需要相機權限',
-              style: TextStyle(
+            Text(
+              l10n.colorPickerPermission,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -344,6 +347,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
 
   /// 顏色資訊與歷史記錄區（下方操作區）— Bento 風格
   Widget _buildColorInfoArea(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final hasEntry = _selectedEntry != null;
     final hasHistory = _history.isNotEmpty;
     // totalItems: 色值顯示 + 歷史色板（各佔一個 stagger slot）
@@ -359,7 +363,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
             index: 0,
             totalItems: totalItems,
             child: ToolSectionCard(
-              label: '擷取色值',
+              label: l10n.colorPickerTitle,
               child: _buildColorDisplay(),
             ),
           ),
@@ -370,7 +374,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
             index: 1,
             totalItems: totalItems,
             child: ToolSectionCard(
-              label: '歷史記錄',
+              label: l10n.colorPickerHistory,
               child: _buildHistoryPalette(),
             ),
           ),

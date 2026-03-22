@@ -114,12 +114,12 @@
 - [x] 拆為 ThemeService / FavoritesService / UserPreferencesService
 - [x] 解決 MaterialApp.router 過度 rebuild 問題
 
-### Change #10: `i18n-completion`
+### ~~Change #10: `i18n-completion`~~ ✅ archived 2026-03-23
 
 > 預估：2-3 天 | 依賴：#1
 
-- [ ] 首頁、設定頁、所有工具頁面的 UI 文字接入 AppLocalizations
-- [ ] 移除所有硬編碼中文字串
+- [x] 首頁、設定頁、所有工具頁面的 UI 文字接入 AppLocalizations
+- [x] 移除所有硬編碼中文字串
 
 ---
 
@@ -338,7 +338,7 @@
 | ~~7~~ | ~~`tool-registry`~~ ✅ | 3 | 2d | #1 |
 | ~~8~~ | ~~`ci-cd-pipeline`~~ ✅ | 3 | 1.5d | — |
 | ~~9~~ | ~~`services-refactor`~~ ✅ | 3 | 2d | #1 |
-| 10 | `i18n-completion` | 3 | 2-3d | #1 |
+| ~~10~~ | ~~`i18n-completion`~~ ✅ | 3 | 2-3d | #1 |
 | 11 | `enhance-currency-converter` | 4 | 2d | #1 |
 | 12 | `enhance-split-bill` | 4 | 2d | #1 |
 | 13 | `enhance-color-picker` | 4 | 2d | #1 |
