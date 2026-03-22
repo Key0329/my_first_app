@@ -920,4 +920,90 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get wordCounterCopiedSummary => '已複製統計摘要';
+
+  @override
+  String get toolPomodoro => '番茄鐘';
+
+  @override
+  String get pomodoroTitle => '番茄鐘';
+
+  @override
+  String get pomodoroWork => '工作';
+
+  @override
+  String get pomodoroShortBreak => '短休息';
+
+  @override
+  String get pomodoroLongBreak => '長休息';
+
+  @override
+  String get pomodoroStart => '開始';
+
+  @override
+  String get pomodoroPause => '暫停';
+
+  @override
+  String get pomodoroResume => '繼續';
+
+  @override
+  String get pomodoroReset => '重設';
+
+  @override
+  String get pomodoroSkip => '跳過';
+
+  @override
+  String pomodoroSession(int current, int total) {
+    return '第 $current / $total 個番茄';
+  }
+
+  @override
+  String get pomodoroWorkDuration => '工作時長';
+
+  @override
+  String get pomodoroShortBreakDuration => '短休息時長';
+
+  @override
+  String get pomodoroLongBreakDuration => '長休息時長';
+
+  @override
+  String pomodoroMinutes(int minutes) {
+    return '$minutes 分鐘';
+  }
+
+  @override
+  String get pomodoroWhiteNoise => '白噪音';
+
+  @override
+  String get pomodoroNoiseRain => '雨聲';
+
+  @override
+  String get pomodoroNoiseCafe => '咖啡廳';
+
+  @override
+  String get pomodoroNoiseForest => '森林';
+
+  @override
+  String get pomodoroTodayStats => '今日專注';
+
+  @override
+  String pomodoroTodayCount(int count) {
+    return '$count 個番茄';
+  }
+
+  @override
+  String pomodoroTodayMinutes(int minutes) {
+    return '$minutes 分鐘';
+  }
+
+  @override
+  String get pomodoroSettings => '設定';
+
+  @override
+  String get pomodoroPhaseComplete => '階段完成';
+
+  @override
+  String get pomodoroWorkComplete => '工作時間結束，休息一下吧！';
+
+  @override
+  String get pomodoroBreakComplete => '休息結束，繼續加油！';
 }

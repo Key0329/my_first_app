@@ -177,13 +177,13 @@
 
 - [x] 文字計數器（字數、字元數、段落數、預估閱讀時間）
 
-### Change #16: `tool-pomodoro`
+### ~~Change #16: `tool-pomodoro`~~ ✅ archived 2026-03-23
 
 > 預估：3 天 | 依賴：#7 tool-registry
 
-- [ ] 番茄鐘計時（25/5 循環，可自訂）
-- [ ] 白噪音播放（結合現有 audioplayers）
-- [ ] 專注統計
+- [x] 番茄鐘計時（25/5 循環，可自訂）
+- [x] 白噪音播放（結合現有 audioplayers）
+- [x] 專注統計
 
 ### Change #17: `tool-quick-notes`
 
@@ -344,7 +344,7 @@
 | ~~13~~ | ~~`enhance-color-picker`~~ ✅ | 4 | 2d | #1 |
 | ~~14~~ | ~~`enhance-life-tools`~~ ✅ | 4 | 2d | #1 |
 | ~~15~~ | ~~`tool-word-counter`~~ ✅ | 5 | 1d | #7 |
-| 16 | `tool-pomodoro` | 5 | 3d | #7 |
+| ~~16~~ | ~~`tool-pomodoro`~~ ✅ | 5 | 3d | #7 |
 | 17 | `tool-quick-notes` | 5 | 2d | #7 |
 | 18 | `tool-invoice-checker` | 5 | 2d | #7 |
 | 19 | `tool-translator` | 5 | 2d | #7 |

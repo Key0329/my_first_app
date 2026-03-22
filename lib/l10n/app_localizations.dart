@@ -1849,6 +1849,162 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'已複製統計摘要'**
   String get wordCounterCopiedSummary;
+
+  /// Tool name: Pomodoro Timer
+  ///
+  /// In zh, this message translates to:
+  /// **'番茄鐘'**
+  String get toolPomodoro;
+
+  /// Pomodoro page title
+  ///
+  /// In zh, this message translates to:
+  /// **'番茄鐘'**
+  String get pomodoroTitle;
+
+  /// Work phase label
+  ///
+  /// In zh, this message translates to:
+  /// **'工作'**
+  String get pomodoroWork;
+
+  /// Short break label
+  ///
+  /// In zh, this message translates to:
+  /// **'短休息'**
+  String get pomodoroShortBreak;
+
+  /// Long break label
+  ///
+  /// In zh, this message translates to:
+  /// **'長休息'**
+  String get pomodoroLongBreak;
+
+  /// Start button
+  ///
+  /// In zh, this message translates to:
+  /// **'開始'**
+  String get pomodoroStart;
+
+  /// Pause button
+  ///
+  /// In zh, this message translates to:
+  /// **'暫停'**
+  String get pomodoroPause;
+
+  /// Resume button
+  ///
+  /// In zh, this message translates to:
+  /// **'繼續'**
+  String get pomodoroResume;
+
+  /// Reset button
+  ///
+  /// In zh, this message translates to:
+  /// **'重設'**
+  String get pomodoroReset;
+
+  /// Skip phase button
+  ///
+  /// In zh, this message translates to:
+  /// **'跳過'**
+  String get pomodoroSkip;
+
+  /// Session counter
+  ///
+  /// In zh, this message translates to:
+  /// **'第 {current} / {total} 個番茄'**
+  String pomodoroSession(int current, int total);
+
+  /// Work duration setting
+  ///
+  /// In zh, this message translates to:
+  /// **'工作時長'**
+  String get pomodoroWorkDuration;
+
+  /// Short break duration setting
+  ///
+  /// In zh, this message translates to:
+  /// **'短休息時長'**
+  String get pomodoroShortBreakDuration;
+
+  /// Long break duration setting
+  ///
+  /// In zh, this message translates to:
+  /// **'長休息時長'**
+  String get pomodoroLongBreakDuration;
+
+  /// Duration in minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'{minutes} 分鐘'**
+  String pomodoroMinutes(int minutes);
+
+  /// White noise section title
+  ///
+  /// In zh, this message translates to:
+  /// **'白噪音'**
+  String get pomodoroWhiteNoise;
+
+  /// Rain noise option
+  ///
+  /// In zh, this message translates to:
+  /// **'雨聲'**
+  String get pomodoroNoiseRain;
+
+  /// Cafe noise option
+  ///
+  /// In zh, this message translates to:
+  /// **'咖啡廳'**
+  String get pomodoroNoiseCafe;
+
+  /// Forest noise option
+  ///
+  /// In zh, this message translates to:
+  /// **'森林'**
+  String get pomodoroNoiseForest;
+
+  /// Today stats section title
+  ///
+  /// In zh, this message translates to:
+  /// **'今日專注'**
+  String get pomodoroTodayStats;
+
+  /// Today completed count
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 個番茄'**
+  String pomodoroTodayCount(int count);
+
+  /// Today focus minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'{minutes} 分鐘'**
+  String pomodoroTodayMinutes(int minutes);
+
+  /// Settings section title
+  ///
+  /// In zh, this message translates to:
+  /// **'設定'**
+  String get pomodoroSettings;
+
+  /// Phase complete notification title
+  ///
+  /// In zh, this message translates to:
+  /// **'階段完成'**
+  String get pomodoroPhaseComplete;
+
+  /// Work phase complete message
+  ///
+  /// In zh, this message translates to:
+  /// **'工作時間結束，休息一下吧！'**
+  String get pomodoroWorkComplete;
+
+  /// Break phase complete message
+  ///
+  /// In zh, this message translates to:
+  /// **'休息結束，繼續加油！'**
+  String get pomodoroBreakComplete;
 }
 
 class _AppLocalizationsDelegate

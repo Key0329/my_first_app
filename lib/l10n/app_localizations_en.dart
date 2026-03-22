@@ -936,4 +936,90 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wordCounterCopiedSummary => 'Statistics copied';
+
+  @override
+  String get toolPomodoro => 'Pomodoro';
+
+  @override
+  String get pomodoroTitle => 'Pomodoro Timer';
+
+  @override
+  String get pomodoroWork => 'Work';
+
+  @override
+  String get pomodoroShortBreak => 'Short Break';
+
+  @override
+  String get pomodoroLongBreak => 'Long Break';
+
+  @override
+  String get pomodoroStart => 'Start';
+
+  @override
+  String get pomodoroPause => 'Pause';
+
+  @override
+  String get pomodoroResume => 'Resume';
+
+  @override
+  String get pomodoroReset => 'Reset';
+
+  @override
+  String get pomodoroSkip => 'Skip';
+
+  @override
+  String pomodoroSession(int current, int total) {
+    return 'Pomodoro $current / $total';
+  }
+
+  @override
+  String get pomodoroWorkDuration => 'Work Duration';
+
+  @override
+  String get pomodoroShortBreakDuration => 'Short Break Duration';
+
+  @override
+  String get pomodoroLongBreakDuration => 'Long Break Duration';
+
+  @override
+  String pomodoroMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get pomodoroWhiteNoise => 'White Noise';
+
+  @override
+  String get pomodoroNoiseRain => 'Rain';
+
+  @override
+  String get pomodoroNoiseCafe => 'Cafe';
+
+  @override
+  String get pomodoroNoiseForest => 'Forest';
+
+  @override
+  String get pomodoroTodayStats => 'Today\'s Focus';
+
+  @override
+  String pomodoroTodayCount(int count) {
+    return '$count pomodoros';
+  }
+
+  @override
+  String pomodoroTodayMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get pomodoroSettings => 'Settings';
+
+  @override
+  String get pomodoroPhaseComplete => 'Phase Complete';
+
+  @override
+  String get pomodoroWorkComplete => 'Work session done. Take a break!';
+
+  @override
+  String get pomodoroBreakComplete => 'Break over. Let\'s get back to work!';
 }

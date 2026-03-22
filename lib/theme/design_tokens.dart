@@ -150,4 +150,5 @@ const Map<String, List<Color>> toolGradients = {
   'qr_scanner_live': [Color(0xFF00BCD4), Color(0xFF4DD0E1)],
   'currency_converter': [Color(0xFF26A69A), Color(0xFF4DB6AC)],
   'word_counter': [Color(0xFF3B82F6), Color(0xFF60A5FA)],
+  'pomodoro': [Color(0xFFE74C3C), Color(0xFFEF5350)],
 };
