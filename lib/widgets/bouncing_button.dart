@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/services/haptic_service.dart';
 
 /// 通用微動效按鈕包裝元件。
 ///
@@ -101,7 +102,10 @@ class _BouncingButtonState extends State<BouncingButton>
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
-      onTap: widget.onTap,
+      onTap: () {
+        HapticService.light();
+        widget.onTap?.call();
+      },
       onLongPress: widget.onLongPress,
       child: ScaleTransition(
         scale: _scaleAnimation,

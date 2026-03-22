@@ -9,7 +9,6 @@ const _testTool = ToolItem(
   nameKey: 'tool_test',
   fallbackName: '測試工具',
   icon: Icons.build,
-  color: Color(0xFF4CAF50),
   routePath: '/tools/test',
   category: ToolCategory.life,
 );
@@ -42,6 +41,7 @@ void main() {
               isFavorite: false,
               onTap: () {},
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
@@ -57,6 +57,7 @@ void main() {
               isFavorite: false,
               onTap: () {},
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
@@ -77,6 +78,7 @@ void main() {
               isFavorite: false,
               onTap: () {},
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
@@ -90,10 +92,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // 3. 收藏圖示
+    // 3. 收藏愛心按鈕
     // -------------------------------------------------------------------------
-    group('favorite icon', () {
-      testWidgets('isFavorite=true 時顯示愛心圖示', (tester) async {
+    group('favorite heart button', () {
+      testWidgets('isFavorite=true 時顯示實心愛心', (tester) async {
         await tester.pumpWidget(
           _wrap(
             ToolCard(
@@ -101,6 +103,7 @@ void main() {
               isFavorite: true,
               onTap: () {},
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
@@ -108,7 +111,7 @@ void main() {
         expect(find.byIcon(Icons.favorite), findsOneWidget);
       });
 
-      testWidgets('isFavorite=false 時不顯示愛心圖示', (tester) async {
+      testWidgets('isFavorite=false 時顯示空心愛心', (tester) async {
         await tester.pumpWidget(
           _wrap(
             ToolCard(
@@ -116,11 +119,30 @@ void main() {
               isFavorite: false,
               onTap: () {},
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
 
-        expect(find.byIcon(Icons.favorite), findsNothing);
+        expect(find.byIcon(Icons.favorite_border), findsOneWidget);
+      });
+
+      testWidgets('點擊愛心按鈕觸發 onFavoriteToggle', (tester) async {
+        var toggled = false;
+        await tester.pumpWidget(
+          _wrap(
+            ToolCard(
+              tool: _testTool,
+              isFavorite: false,
+              onTap: () {},
+              onLongPress: () {},
+              onFavoriteToggle: () => toggled = true,
+            ),
+          ),
+        );
+
+        await tester.tap(find.byIcon(Icons.favorite_border));
+        expect(toggled, isTrue);
       });
     });
 
@@ -138,6 +160,7 @@ void main() {
               isFavorite: false,
               onTap: () => tapped = true,
               onLongPress: () {},
+              onFavoriteToggle: () {},
             ),
           ),
         );
@@ -156,6 +179,7 @@ void main() {
               isFavorite: false,
               onTap: () {},
               onLongPress: () => longPressed = true,
+              onFavoriteToggle: () {},
             ),
           ),
         );

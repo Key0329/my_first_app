@@ -75,5 +75,31 @@ void main() {
       expect(settings2.themeMode, ThemeMode.dark);
       expect(settings2.favorites, contains('compass'));
     });
+
+    test('hasCompletedOnboarding defaults to false', () async {
+      final settings = AppSettings();
+      await settings.init();
+      expect(settings.hasCompletedOnboarding, isFalse);
+    });
+
+    test('completeOnboarding sets value to true and notifies', () async {
+      final settings = AppSettings();
+      await settings.init();
+      var notified = false;
+      settings.addListener(() => notified = true);
+      await settings.completeOnboarding();
+      expect(settings.hasCompletedOnboarding, isTrue);
+      expect(notified, isTrue);
+    });
+
+    test('hasCompletedOnboarding persists across instances', () async {
+      final settings1 = AppSettings();
+      await settings1.init();
+      await settings1.completeOnboarding();
+
+      final settings2 = AppSettings();
+      await settings2.init();
+      expect(settings2.hasCompletedOnboarding, isTrue);
+    });
   });
 }

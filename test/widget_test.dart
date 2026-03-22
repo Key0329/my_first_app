@@ -5,7 +5,8 @@ import 'package:my_first_app/services/settings_service.dart';
 
 void main() {
   testWidgets('App renders with tool grid', (WidgetTester tester) async {
-    SharedPreferences.setMockInitialValues({});
+    // 設定 hasCompletedOnboarding = true 讓 App 直接進入工具首頁，略過 onboarding
+    SharedPreferences.setMockInitialValues({'hasCompletedOnboarding': true});
     final settings = AppSettings();
     await settings.init();
     await tester.pumpWidget(ToolboxApp(settings: settings));

@@ -5,14 +5,20 @@ class AppSettings extends ChangeNotifier {
   static const _keyThemeMode = 'theme_mode';
   static const _keyLocale = 'locale';
   static const _keyFavorites = 'favorites';
+  static const _keyOnboarding = 'hasCompletedOnboarding';
+  static const _keyRecentTools = 'recent_tools';
 
   ThemeMode _themeMode = ThemeMode.system;
   Locale _locale = const Locale('zh', 'TW');
   Set<String> _favorites = {};
+  bool _hasCompletedOnboarding = false;
+  List<String> _recentTools = [];
 
   ThemeMode get themeMode => _themeMode;
   Locale get locale => _locale;
   Set<String> get favorites => Set.unmodifiable(_favorites);
+  bool get hasCompletedOnboarding => _hasCompletedOnboarding;
+  List<String> get recentTools => List.unmodifiable(_recentTools);
 
   bool isFavorite(String toolId) => _favorites.contains(toolId);
 
@@ -37,6 +43,13 @@ class AppSettings extends ChangeNotifier {
     if (favList != null) {
       _favorites = favList.toSet();
     }
+
+    _hasCompletedOnboarding = prefs.getBool(_keyOnboarding) ?? false;
+
+    final recentList = prefs.getStringList(_keyRecentTools);
+    if (recentList != null) {
+      _recentTools = recentList;
+    }
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
@@ -51,6 +64,33 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyLocale, locale.toLanguageTag().replaceAll('-', '_'));
+  }
+
+  Future<void> completeOnboarding() async {
+    _hasCompletedOnboarding = true;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyOnboarding, true);
+  }
+
+  static const _maxRecentTools = 5;
+
+  Future<void> addRecentTool(String toolId) async {
+    _recentTools.remove(toolId);
+    _recentTools.insert(0, toolId);
+    if (_recentTools.length > _maxRecentTools) {
+      _recentTools = _recentTools.sublist(0, _maxRecentTools);
+    }
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_keyRecentTools, _recentTools);
+  }
+
+  Future<void> clearRecentTools() async {
+    _recentTools.clear();
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyRecentTools);
   }
 
   Future<void> toggleFavorite(String toolId) async {

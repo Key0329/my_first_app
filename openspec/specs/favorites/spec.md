@@ -8,138 +8,85 @@ TBD - created by archiving change 'mvp-v1-toolbox-app'. Update Purpose after arc
 
 ### Requirement: Add and remove favorites
 
-Users SHALL be able to add a tool to favorites by long-pressing its card on the home page. A long press on a favorited tool SHALL remove it from favorites. The favorites list SHALL persist across app restarts using shared_preferences. When a tool is added to favorites, it SHALL be promoted to a large card in the Bento Grid layout on the home page. When removed from favorites, it SHALL return to medium or small size.
+Users SHALL be able to add a tool to favorites by tapping the visible heart icon button on its card on the home page. A tap on the heart icon of a favorited tool SHALL remove it from favorites. Additionally, a long press on a tool card SHALL toggle the favorite status as a secondary interaction method. The favorites list SHALL persist across app restarts using shared_preferences. When a tool is added to favorites, it SHALL be promoted to a large card in the Bento Grid layout on the home page. When removed from favorites, it SHALL return to medium or small size. When the favorite status changes, a SnackBar SHALL be displayed with the message "Added to favorites" or "Removed from favorites" respectively.
 
-#### Scenario: User adds a tool to favorites
+#### Scenario: User adds a tool to favorites via heart button
 
-- **WHEN** user long-presses a tool card that is not in favorites
-- **THEN** the tool SHALL be added to favorites and its card SHALL be promoted to large size in the Bento Grid
+- **WHEN** user taps the heart icon button on a tool card that is not in favorites
+- **THEN** the tool SHALL be added to favorites, the heart icon SHALL change to a filled heart with brand color, a SnackBar SHALL display "Added to favorites", and the card SHALL be promoted to large size in the Bento Grid
 
-#### Scenario: User removes a tool from favorites
+#### Scenario: User removes a tool from favorites via heart button
 
-- **WHEN** user long-presses a tool card that is in favorites
-- **THEN** the tool SHALL be removed from favorites and its card SHALL return to medium or small size in the Bento Grid
+- **WHEN** user taps the heart icon button on a tool card that is in favorites
+- **THEN** the tool SHALL be removed from favorites, the heart icon SHALL change to an outline heart, a SnackBar SHALL display "Removed from favorites", and the card SHALL return to medium or small size in the Bento Grid
+
+#### Scenario: User toggles favorites via long press
+
+- **WHEN** user long-presses a tool card
+- **THEN** the favorite status SHALL be toggled with the same behavior as tapping the heart button
 
 
 <!-- @trace
-source: design-overhaul-bento
-updated: 2026-03-19
+source: ux-polish
+updated: 2026-03-22
 code:
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-  - patches/audio_streamer/lib/audio_streamer.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - patches/audio_streamer/example/android/settings.gradle
-  - patches/audio_streamer/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-  - lib/widgets/bento_grid.dart
-  - lib/widgets/staggered_fade_in.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
-  - patches/audio_streamer/README.md
-  - lib/l10n/app_localizations.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.lock
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/l10n/app_en.arb
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
-  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
-  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
-  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - lib/widgets/bouncing_button.dart
-  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
-  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-  - patches/audio_streamer/ios/audio_streamer.podspec
-  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-  - ios/Runner/Info.plist
-  - lib/tools/compass/compass_page.dart
-  - patches/audio_streamer/example/android/app/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+  - lib/tools/random_wheel/random_wheel_page.dart
   - lib/models/tool_item.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
+  - lib/widgets/error_state.dart
   - lib/widgets/tool_card.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
-  - patches/audio_streamer/example/README.md
-  - pubspec.yaml
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
-  - lib/tools/protractor/protractor_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-  - patches/audio_streamer/example/ios/Podfile
-  - patches/audio_streamer/analysis_options.yaml
-  - patches/audio_streamer/example/ios/Runner/Info.plist
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-  - lib/tools/flashlight/flashlight_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-  - lib/tools/password_generator/password_generator_page.dart
-  - patches/audio_streamer/android/src/main/AndroidManifest.xml
-  - lib/pages/favorites_page.dart
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
-  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
-  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/services/haptic_service.dart
   - lib/pages/home_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/l10n/app_localizations_en.dart
-  - patches/audio_streamer/android/gradle.properties
-  - lib/tools/calculator/calculator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-  - lib/widgets/immersive_tool_scaffold.dart
-  - patches/audio_streamer/example/pubspec.yaml
-  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
-  - lib/theme/app_theme.dart
-  - patches/audio_streamer/example/android/gradle.properties
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-  - android/app/src/main/AndroidManifest.xml
-  - lib/tools/level/level_page.dart
   - lib/tools/color_picker/color_picker_page.dart
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
-  - patches/audio_streamer/LICENSE
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
-  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/bouncing_button.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/compass/compass_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/settings_page.dart
+  - lib/tools/color_picker/color_picker_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - .mcp.json
+  - lib/tools/flashlight/flashlight_logic.dart
+  - CLAUDE.md
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/widgets/app_scaffold.dart
   - lib/app.dart
-  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
-  - patches/audio_streamer/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
-  - patches/audio_streamer/example/lib/main.dart
-  - patches/audio_streamer/CHANGELOG.md
-  - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - patches/audio_streamer/example/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
-  - patches/audio_streamer/android/settings.gradle
-  - lib/l10n/app_localizations_zh.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+  - lib/tools/level/level_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/services/settings_service.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/pages/onboarding_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
 tests:
-  - test/theme/app_theme_test.dart
-  - patches/audio_streamer/test/audio_streamer_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/models/tool_item_test.dart
-  - test/widgets/bouncing_button_test.dart
-  - test/pages/favorites_page_test.dart
+  - test/tools/screen_ruler_logic_test.dart
+  - test/services/recent_tools_test.dart
+  - test/services/settings_service_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/utils/platform_check_test.dart
+  - test/tools/flashlight_logic_test.dart
+  - test/widget_test.dart
   - test/widgets/tool_card_test.dart
-  - test/widgets/immersive_tool_scaffold_test.dart
   - test/pages/home_page_test.dart
-  - test/tools/password_generator_test.dart
-  - test/widgets/staggered_fade_in_test.dart
-  - test/tools/qr_generator_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/level_logic_test.dart
+  - test/models/tool_item_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/pages/tool_search_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/compass_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
 -->
 
 ---
@@ -274,4 +221,87 @@ tests:
   - test/tools/unit_converter_test.dart
   - test/tools/stopwatch_timer_test.dart
   - test/services/settings_service_test.dart
+-->
+
+---
+### Requirement: Visible favorite heart button on tool cards
+
+Each tool card on the home page and favorites page SHALL display a heart icon button in the top-right corner. The heart icon SHALL be `Icons.favorite` (filled) when the tool is favorited and `Icons.favorite_border` (outline) when not favorited. The favorited heart icon SHALL use the brand color. The heart button SHALL have an AnimatedScale animation on tap (scale to 1.2 then back to 1.0).
+
+#### Scenario: Heart button is visible on all tool cards
+
+- **WHEN** the home page displays tool cards
+- **THEN** each tool card SHALL have a visible heart icon button in the top-right corner
+
+#### Scenario: Heart button reflects favorite status
+
+- **WHEN** a tool is in the favorites list
+- **THEN** the heart icon on its card SHALL be displayed as a filled heart with brand color
+
+#### Scenario: Heart button animates on tap
+
+- **WHEN** user taps the heart icon button
+- **THEN** the heart icon SHALL animate with a scale-up to 1.2 and spring back to 1.0
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-22
+code:
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/models/tool_item.dart
+  - lib/widgets/error_state.dart
+  - lib/widgets/tool_card.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/services/haptic_service.dart
+  - lib/pages/home_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/bouncing_button.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/compass/compass_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/settings_page.dart
+  - lib/tools/color_picker/color_picker_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - .mcp.json
+  - lib/tools/flashlight/flashlight_logic.dart
+  - CLAUDE.md
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/app.dart
+  - lib/tools/level/level_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/services/settings_service.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/pages/onboarding_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+tests:
+  - test/tools/screen_ruler_logic_test.dart
+  - test/services/recent_tools_test.dart
+  - test/services/settings_service_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/utils/platform_check_test.dart
+  - test/tools/flashlight_logic_test.dart
+  - test/widget_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/pages/home_page_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/level_logic_test.dart
+  - test/models/tool_item_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/pages/tool_search_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/compass_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
 -->

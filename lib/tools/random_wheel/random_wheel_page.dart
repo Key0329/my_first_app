@@ -9,6 +9,7 @@ import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
 import 'wheel_painter.dart';
+import 'wheel_result_overlay.dart';
 
 /// 隨機轉盤工具頁面。
 ///
@@ -94,7 +95,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
       setState(() {
         _isSpinning = false;
       });
-      _showResultDialog();
+      _showResultOverlay();
     }
   }
 
@@ -138,31 +139,25 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     return index;
   }
 
-  void _showResultDialog() {
+  OverlayEntry? _overlayEntry;
+
+  void _showResultOverlay() {
     final index = _calculateResultIndex();
     final result = _options[index];
+    final colors = toolGradients['random_wheel'] ?? [_toolColor, _toolColor];
 
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('結果'),
-          content: Text(
-            result,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('確定'),
-            ),
-          ],
-        );
-      },
+    _overlayEntry = OverlayEntry(
+      builder: (context) => WheelResultOverlay(
+        result: result,
+        gradientColors: colors,
+        onDismiss: () {
+          _overlayEntry?.remove();
+          _overlayEntry = null;
+        },
+      ),
     );
+
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   // ── 選項管理 ─────────────────────────────────────────────────

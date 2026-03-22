@@ -22,6 +22,7 @@ import 'package:my_first_app/tools/bmi_calculator/bmi_calculator_page.dart';
 import 'package:my_first_app/tools/split_bill/split_bill_page.dart';
 import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
 import 'package:my_first_app/tools/screen_ruler/screen_ruler_page.dart';
+import 'package:my_first_app/pages/onboarding_page.dart';
 import 'package:my_first_app/widgets/app_scaffold.dart';
 
 class ToolboxApp extends StatefulWidget {
@@ -49,9 +50,22 @@ class _ToolboxAppState extends State<ToolboxApp> {
   }
 
   GoRouter _buildRouter() {
+    final initialLocation = widget.settings.hasCompletedOnboarding
+        ? '/tools'
+        : '/onboarding';
+
     return GoRouter(
-      initialLocation: '/tools',
+      initialLocation: initialLocation,
       routes: [
+        GoRoute(
+          path: '/onboarding',
+          builder: (context, state) => OnboardingPage(
+            onComplete: () {
+              widget.settings.completeOnboarding();
+              _router.go('/tools');
+            },
+          ),
+        ),
         ShellRoute(
           builder: (context, state, child) {
             return AppScaffold(child: child);

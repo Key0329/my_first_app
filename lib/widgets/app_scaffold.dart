@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_first_app/services/haptic_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
 class AppScaffold extends StatelessWidget {
@@ -35,6 +36,7 @@ class AppScaffold extends StatelessWidget {
           NavigationBar(
             selectedIndex: currentIndex,
             onDestinationSelected: (index) {
+              HapticService.selection();
               context.go(_tabs[index].$1);
             },
             destinations: _tabs

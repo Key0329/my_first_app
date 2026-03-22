@@ -485,3 +485,244 @@ tests:
   - test/tools/screen_ruler_logic_test.dart
   - test/tools/flashlight_logic_test.dart
 -->
+
+---
+### Requirement: Global haptic feedback
+
+The app SHALL provide haptic feedback for interactive actions using the Flutter HapticFeedback API. Light impact feedback SHALL be triggered on general button taps and tab switches. Medium impact feedback SHALL be triggered on favorite toggles and onboarding page swipes. Heavy impact feedback SHALL be triggered on wheel result reveals and important confirmations. Selection click feedback SHALL be triggered on slider drags and option switches. The BouncingButton widget SHALL integrate light impact haptic feedback so that all wrapped buttons automatically provide tactile feedback.
+
+#### Scenario: Button tap triggers light haptic feedback
+
+- **WHEN** user taps any button wrapped in BouncingButton
+- **THEN** a light impact haptic feedback SHALL be triggered
+
+#### Scenario: Favorite toggle triggers medium haptic feedback
+
+- **WHEN** user toggles a tool's favorite status
+- **THEN** a medium impact haptic feedback SHALL be triggered
+
+#### Scenario: Wheel result triggers heavy haptic feedback
+
+- **WHEN** the random wheel stops and reveals a result
+- **THEN** a heavy impact haptic feedback SHALL be triggered
+
+#### Scenario: Tab switch triggers selection click haptic
+
+- **WHEN** user switches between navigation tabs
+- **THEN** a selection click haptic feedback SHALL be triggered
+
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-22
+code:
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/models/tool_item.dart
+  - lib/widgets/error_state.dart
+  - lib/widgets/tool_card.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/services/haptic_service.dart
+  - lib/pages/home_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/bouncing_button.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/compass/compass_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/settings_page.dart
+  - lib/tools/color_picker/color_picker_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - .mcp.json
+  - lib/tools/flashlight/flashlight_logic.dart
+  - CLAUDE.md
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/app.dart
+  - lib/tools/level/level_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/services/settings_service.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/pages/onboarding_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+tests:
+  - test/tools/screen_ruler_logic_test.dart
+  - test/services/recent_tools_test.dart
+  - test/services/settings_service_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/utils/platform_check_test.dart
+  - test/tools/flashlight_logic_test.dart
+  - test/widget_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/pages/home_page_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/level_logic_test.dart
+  - test/models/tool_item_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/pages/tool_search_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/compass_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+-->
+
+---
+### Requirement: Wheel result overlay animation
+
+The random wheel result SHALL be displayed using a custom overlay animation instead of a standard AlertDialog. When the wheel stops, a semi-transparent dark background SHALL fade in, followed by a result card that scales in from center with an elastic bounce effect (Curves.elasticOut). The result card SHALL display the result text in large font on a gradient background matching the tool's color scheme. Tapping the background or a dismiss button SHALL close the overlay with a scale-out fade animation. The overlay SHALL trigger heavy haptic feedback on appearance.
+
+#### Scenario: Wheel result displays with overlay animation
+
+- **WHEN** the random wheel stops spinning
+- **THEN** a semi-transparent overlay SHALL fade in and the result card SHALL scale in with an elastic bounce animation
+
+#### Scenario: User dismisses wheel result overlay
+
+- **WHEN** user taps the overlay background or the dismiss button
+- **THEN** the result card SHALL scale out and the overlay SHALL fade out
+
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-22
+code:
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/models/tool_item.dart
+  - lib/widgets/error_state.dart
+  - lib/widgets/tool_card.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/services/haptic_service.dart
+  - lib/pages/home_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/bouncing_button.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/compass/compass_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/settings_page.dart
+  - lib/tools/color_picker/color_picker_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - .mcp.json
+  - lib/tools/flashlight/flashlight_logic.dart
+  - CLAUDE.md
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/app.dart
+  - lib/tools/level/level_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/services/settings_service.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/pages/onboarding_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+tests:
+  - test/tools/screen_ruler_logic_test.dart
+  - test/services/recent_tools_test.dart
+  - test/services/settings_service_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/utils/platform_check_test.dart
+  - test/tools/flashlight_logic_test.dart
+  - test/widget_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/pages/home_page_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/level_logic_test.dart
+  - test/models/tool_item_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/pages/tool_search_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/compass_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+-->
+
+---
+### Requirement: Favorite heart button animation
+
+When the user taps the favorite heart icon button, the heart SHALL animate with an AnimatedScale effect. The heart SHALL scale up to 1.2x its normal size and then spring back to 1.0x. The animation duration SHALL be 200ms with a spring curve.
+
+#### Scenario: Heart icon animates on favorite toggle
+
+- **WHEN** user taps the heart icon button on a tool card
+- **THEN** the heart icon SHALL scale up to 1.2x and spring back to 1.0x over 200ms
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-22
+code:
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/models/tool_item.dart
+  - lib/widgets/error_state.dart
+  - lib/widgets/tool_card.dart
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/services/haptic_service.dart
+  - lib/pages/home_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/widgets/bouncing_button.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/widgets/confirm_dialog.dart
+  - lib/tools/compass/compass_logic.dart
+  - lib/tools/level/level_logic.dart
+  - lib/pages/tool_search_delegate.dart
+  - lib/pages/settings_page.dart
+  - lib/tools/color_picker/color_picker_logic.dart
+  - lib/tools/screen_ruler/screen_ruler_logic.dart
+  - .mcp.json
+  - lib/tools/flashlight/flashlight_logic.dart
+  - CLAUDE.md
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/app.dart
+  - lib/tools/level/level_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/tools/noise_meter/noise_meter_logic.dart
+  - lib/services/settings_service.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/protractor/protractor_logic.dart
+  - lib/pages/onboarding_page.dart
+  - lib/utils/platform_check.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/tools/protractor/protractor_page.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+tests:
+  - test/tools/screen_ruler_logic_test.dart
+  - test/services/recent_tools_test.dart
+  - test/services/settings_service_test.dart
+  - test/pages/onboarding_page_test.dart
+  - test/utils/platform_check_test.dart
+  - test/tools/flashlight_logic_test.dart
+  - test/widget_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/pages/home_page_test.dart
+  - test/tools/color_picker_logic_test.dart
+  - test/tools/protractor_logic_test.dart
+  - test/theme/design_tokens_test.dart
+  - test/tools/level_logic_test.dart
+  - test/models/tool_item_test.dart
+  - test/tools/noise_meter_logic_test.dart
+  - test/pages/tool_search_test.dart
+  - test/tools/calculator_page_test.dart
+  - test/tools/compass_logic_test.dart
+  - test/tools/stopwatch_timer_widget_test.dart
+-->

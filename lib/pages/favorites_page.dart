@@ -38,6 +38,7 @@ class FavoritesPage extends StatelessWidget {
               isFavorite: true,
               onTap: () => context.push(tool.routePath),
               onLongPress: () => settings.toggleFavorite(tool.id),
+              onFavoriteToggle: () => settings.toggleFavorite(tool.id),
             );
           },
         );

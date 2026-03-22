@@ -28,7 +28,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openTool(BuildContext context, ToolItem tool) {
+    widget.settings.addRecentTool(tool.id);
     context.push(tool.routePath);
+  }
+
+  void _toggleFavorite(BuildContext context, ToolItem tool) {
+    final wasFavorite = widget.settings.isFavorite(tool.id);
+    widget.settings.toggleFavorite(tool.id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(wasFavorite ? '已移除收藏' : '已加入收藏'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -132,40 +144,138 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: DT.spaceLg),
-          // ── 工具 Grid ──
+          // ── 內容區（最近使用 + 工具 Grid）──
           Expanded(
             child: ListenableBuilder(
               listenable: widget.settings,
               builder: (context, _) {
                 final tools = _filteredTools;
+                final recentToolIds = widget.settings.recentTools;
+                final recentTools = recentToolIds
+                    .map((id) => allTools.cast<ToolItem?>().firstWhere(
+                          (t) => t!.id == id,
+                          orElse: () => null,
+                        ))
+                    .whereType<ToolItem>()
+                    .toList();
 
-                return GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(
-                    DT.spaceXl, 0, DT.spaceXl, DT.spaceLg,
-                  ),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: DT.gridSpacing,
-                    crossAxisSpacing: DT.gridSpacing,
-                    childAspectRatio: 1.2,
-                  ),
-                  itemCount: tools.length,
-                  itemBuilder: (context, index) {
-                    final tool = tools[index];
-                    return StaggeredFadeIn(
-                      index: index,
-                      totalItems: tools.length,
-                      animate: shouldAnimate,
-                      child: ToolCard(
-                        tool: tool,
-                        isFavorite: widget.settings.isFavorite(tool.id),
-                        onTap: () => _openTool(context, tool),
-                        onLongPress: () =>
-                            widget.settings.toggleFavorite(tool.id),
+                return CustomScrollView(
+                  slivers: [
+                    // ── 最近使用區段 ──
+                    if (recentTools.isNotEmpty) ...[
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            DT.spaceXl, 0, DT.spaceXl, DT.spaceSm,
+                          ),
+                          child: Text(
+                            '最近使用',
+                            style: TextStyle(
+                              fontSize: DT.fontSubtitle,
+                              fontWeight: FontWeight.w600,
+                              color: DT.subtitle(b),
+                            ),
+                          ),
+                        ),
                       ),
-                    );
-                  },
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 80,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: DT.spaceXl,
+                            ),
+                            itemCount: recentTools.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(width: DT.spaceMd),
+                            itemBuilder: (context, index) {
+                              final tool = recentTools[index];
+                              final gradient = toolGradients[tool.id];
+                              return GestureDetector(
+                                onTap: () => _openTool(context, tool),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 52,
+                                      height: 52,
+                                      decoration: BoxDecoration(
+                                        gradient: gradient != null
+                                            ? LinearGradient(
+                                                colors: gradient,
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              )
+                                            : null,
+                                        color: gradient == null
+                                            ? tool.color
+                                            : null,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        tool.icon,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(height: DT.spaceXs),
+                                    Text(
+                                      tool.fallbackName,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: DT.subtitle(b),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: DT.spaceMd),
+                      ),
+                    ],
+                    // ── 工具 Grid ──
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(
+                        DT.spaceXl, 0, DT.spaceXl, DT.spaceLg,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: DT.gridSpacing,
+                          crossAxisSpacing: DT.gridSpacing,
+                          childAspectRatio: 1.2,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final tool = tools[index];
+                            return StaggeredFadeIn(
+                              index: index,
+                              totalItems: tools.length,
+                              animate: shouldAnimate,
+                              child: ToolCard(
+                                tool: tool,
+                                isFavorite:
+                                    widget.settings.isFavorite(tool.id),
+                                onTap: () => _openTool(context, tool),
+                                onLongPress: () =>
+                                    _toggleFavorite(context, tool),
+                                onFavoriteToggle: () =>
+                                    _toggleFavorite(context, tool),
+                              ),
+                            );
+                          },
+                          childCount: tools.length,
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

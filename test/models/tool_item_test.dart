@@ -27,7 +27,6 @@ void main() {
         nameKey: 'tool_test',
         fallbackName: '測試',
         icon: Icons.star,
-        color: Color(0xFF000000),
         routePath: '/tools/test',
         category: ToolCategory.life,
       );

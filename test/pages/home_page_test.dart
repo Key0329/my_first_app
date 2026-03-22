@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/pages/home_page.dart';
@@ -51,23 +52,26 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // 2. GridView 渲染所有工具
+    // 2. SliverGrid 渲染所有工具（HomePage 使用 CustomScrollView + SliverGrid）
     // -------------------------------------------------------------------------
     group('GridView display', () {
-      testWidgets('應使用 GridView widget', (tester) async {
+      testWidgets('應使用 SliverGrid widget（Bento 重構後改用 CustomScrollView + SliverGrid）',
+          (tester) async {
         final settings = await _makeSettings();
         await tester.pumpWidget(_wrapHomePage(settings));
         await tester.pump();
 
-        expect(find.byType(GridView), findsOneWidget);
+        // HomePage 已重構為 CustomScrollView + SliverGrid，不再使用 GridView
+        expect(find.byType(CustomScrollView), findsOneWidget);
+        expect(find.byWidgetPredicate((w) => w is SliverGrid), findsOneWidget);
       });
 
-      testWidgets('無篩選時 GridView 應包含全部工具', (tester) async {
+      testWidgets('無篩選時 SliverGrid 應包含全部工具', (tester) async {
         final settings = await _makeSettings();
         await tester.pumpWidget(_wrapHomePage(settings));
         await tester.pumpAndSettle();
 
-        // GridView.builder 為 lazy rendering，只渲染可見的卡片
+        // SliverGrid 為 lazy rendering，只渲染可見的卡片
         // 驗證至少有部分 ToolCard 被渲染
         expect(find.byType(ToolCard), findsWidgets);
       });
