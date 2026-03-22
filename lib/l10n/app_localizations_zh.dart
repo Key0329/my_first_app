@@ -312,6 +312,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get splitBillIncrease => '增加人數';
 
   @override
+  String get splitBillModeEqual => '等分';
+
+  @override
+  String get splitBillModeRatio => '比例';
+
+  @override
+  String get splitBillModeMulti => '多項目';
+
+  @override
+  String get splitBillTip => '小費';
+
+  @override
+  String splitBillTipPercent(int percent) {
+    return '小費 $percent%';
+  }
+
+  @override
+  String get splitBillTipAmount => '小費金額';
+
+  @override
+  String get splitBillFinalTotal => '含小費總額';
+
+  @override
+  String get splitBillRatioLabel => '比例';
+
+  @override
+  String splitBillRatioPerson(int index) {
+    return '第 $index 人';
+  }
+
+  @override
+  String splitBillRatioResult(int index) {
+    return '第 $index 人應付';
+  }
+
+  @override
+  String get splitBillItemName => '項目名稱';
+
+  @override
+  String get splitBillItemAmount => '項目金額';
+
+  @override
+  String get splitBillItemPeople => '參與人數';
+
+  @override
+  String get splitBillAddItem => '新增項目';
+
+  @override
+  String get splitBillItemPerPerson => '每人';
+
+  @override
+  String get splitBillMultiSummary => '各人總計';
+
+  @override
   String get levelStatus => '狀態';
 
   @override

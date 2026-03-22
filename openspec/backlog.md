@@ -134,13 +134,13 @@
 - [x] API timeout 設定
 - [x] 快取過期機制（24h 顯示警告）
 
-### Change #12: `enhance-split-bill`
+### ~~Change #12: `enhance-split-bill`~~ ✅ archived 2026-03-23
 
 > 預估：2 天 | 依賴：#1
 
-- [ ] 不等分模式（按比例分）
-- [ ] 小費百分比選項（5/10/15/20%）
-- [ ] 多項目拆分
+- [x] 不等分模式（按比例分）
+- [x] 小費百分比選項（0/5/10/15/20%）
+- [x] 多項目拆分
 
 ### Change #13: `enhance-color-picker`
 
@@ -340,7 +340,7 @@
 | ~~9~~ | ~~`services-refactor`~~ ✅ | 3 | 2d | #1 |
 | ~~10~~ | ~~`i18n-completion`~~ ✅ | 3 | 2-3d | #1 |
 | ~~11~~ | ~~`enhance-currency-converter`~~ ✅ | 4 | 2d | #1 |
-| 12 | `enhance-split-bill` | 4 | 2d | #1 |
+| ~~12~~ | ~~`enhance-split-bill`~~ ✅ | 4 | 2d | #1 |
 | 13 | `enhance-color-picker` | 4 | 2d | #1 |
 | 14 | `enhance-life-tools` | 4 | 2d | #1 |
 | 15 | `tool-word-counter` | 5 | 1d | #7 |

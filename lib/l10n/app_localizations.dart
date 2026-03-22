@@ -704,6 +704,102 @@ abstract class AppLocalizations {
   /// **'增加人數'**
   String get splitBillIncrease;
 
+  /// Split bill: Equal mode
+  ///
+  /// In zh, this message translates to:
+  /// **'等分'**
+  String get splitBillModeEqual;
+
+  /// Split bill: Ratio mode
+  ///
+  /// In zh, this message translates to:
+  /// **'比例'**
+  String get splitBillModeRatio;
+
+  /// Split bill: Multi-item mode
+  ///
+  /// In zh, this message translates to:
+  /// **'多項目'**
+  String get splitBillModeMulti;
+
+  /// Split bill: Tip label
+  ///
+  /// In zh, this message translates to:
+  /// **'小費'**
+  String get splitBillTip;
+
+  /// Split bill: Tip percentage display
+  ///
+  /// In zh, this message translates to:
+  /// **'小費 {percent}%'**
+  String splitBillTipPercent(int percent);
+
+  /// Split bill: Tip amount label
+  ///
+  /// In zh, this message translates to:
+  /// **'小費金額'**
+  String get splitBillTipAmount;
+
+  /// Split bill: Final total with tip
+  ///
+  /// In zh, this message translates to:
+  /// **'含小費總額'**
+  String get splitBillFinalTotal;
+
+  /// Split bill: Ratio label
+  ///
+  /// In zh, this message translates to:
+  /// **'比例'**
+  String get splitBillRatioLabel;
+
+  /// Split bill: Person index in ratio mode
+  ///
+  /// In zh, this message translates to:
+  /// **'第 {index} 人'**
+  String splitBillRatioPerson(int index);
+
+  /// Split bill: Person payment result in ratio mode
+  ///
+  /// In zh, this message translates to:
+  /// **'第 {index} 人應付'**
+  String splitBillRatioResult(int index);
+
+  /// Split bill: Item name label
+  ///
+  /// In zh, this message translates to:
+  /// **'項目名稱'**
+  String get splitBillItemName;
+
+  /// Split bill: Item amount label
+  ///
+  /// In zh, this message translates to:
+  /// **'項目金額'**
+  String get splitBillItemAmount;
+
+  /// Split bill: Item participants label
+  ///
+  /// In zh, this message translates to:
+  /// **'參與人數'**
+  String get splitBillItemPeople;
+
+  /// Split bill: Add item button
+  ///
+  /// In zh, this message translates to:
+  /// **'新增項目'**
+  String get splitBillAddItem;
+
+  /// Split bill: Per person in multi-item mode
+  ///
+  /// In zh, this message translates to:
+  /// **'每人'**
+  String get splitBillItemPerPerson;
+
+  /// Split bill: Multi-item summary
+  ///
+  /// In zh, this message translates to:
+  /// **'各人總計'**
+  String get splitBillMultiSummary;
+
   /// Level: Status label
   ///
   /// In zh, this message translates to:

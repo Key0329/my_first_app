@@ -319,6 +319,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splitBillIncrease => 'Increase';
 
   @override
+  String get splitBillModeEqual => 'Equal';
+
+  @override
+  String get splitBillModeRatio => 'Ratio';
+
+  @override
+  String get splitBillModeMulti => 'Multi-Item';
+
+  @override
+  String get splitBillTip => 'Tip';
+
+  @override
+  String splitBillTipPercent(int percent) {
+    return 'Tip $percent%';
+  }
+
+  @override
+  String get splitBillTipAmount => 'Tip Amount';
+
+  @override
+  String get splitBillFinalTotal => 'Total with Tip';
+
+  @override
+  String get splitBillRatioLabel => 'Ratio';
+
+  @override
+  String splitBillRatioPerson(int index) {
+    return 'Person $index';
+  }
+
+  @override
+  String splitBillRatioResult(int index) {
+    return 'Person $index pays';
+  }
+
+  @override
+  String get splitBillItemName => 'Item Name';
+
+  @override
+  String get splitBillItemAmount => 'Item Amount';
+
+  @override
+  String get splitBillItemPeople => 'Participants';
+
+  @override
+  String get splitBillAddItem => 'Add Item';
+
+  @override
+  String get splitBillItemPerPerson => 'Per person';
+
+  @override
+  String get splitBillMultiSummary => 'Summary';
+
+  @override
   String get levelStatus => 'Status';
 
   @override
