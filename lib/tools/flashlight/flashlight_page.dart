@@ -9,6 +9,9 @@ import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:torch_light/torch_light.dart';
 
+final Color _toolColor =
+    toolGradients['flashlight']?.first ?? const Color(0xFFFFC107);
+
 /// 手電筒工具頁面
 ///
 /// 提供開關手電筒與 SOS 模式功能。
@@ -191,7 +194,7 @@ class _FlashlightPageState extends State<FlashlightPage> {
     final colorScheme = theme.colorScheme;
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFFFFC107),
+      toolColor: _toolColor,
       title: '手電筒',
       heroTag: 'tool_hero_flashlight',
       headerFlex: 3,

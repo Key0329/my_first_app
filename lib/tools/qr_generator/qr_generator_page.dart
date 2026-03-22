@@ -10,6 +10,9 @@ import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+final Color _toolColor =
+    toolGradients['qr_generator']?.first ?? const Color(0xFF9C27B0);
+
 class QrGeneratorPage extends StatefulWidget {
   const QrGeneratorPage({super.key});
 
@@ -55,7 +58,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF9C27B0),
+      toolColor: _toolColor,
       title: 'QR Code 產生器',
       heroTag: 'tool_hero_qr_generator',
       headerFlex: 2,

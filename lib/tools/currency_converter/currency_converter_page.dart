@@ -148,16 +148,24 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
       setState(() => _result = '');
       return;
     }
-    final converted = CurrencyApi.convert(
-      amount,
-      _fromCurrency,
-      _toCurrency,
-      _rates,
-      _ratesBase,
-    );
-    setState(() {
-      _result = _formatNumber(converted);
-    });
+    try {
+      final converted = CurrencyApi.convert(
+        amount,
+        _fromCurrency,
+        _toCurrency,
+        _rates,
+        _ratesBase,
+      );
+      setState(() {
+        _result = _formatNumber(converted);
+        _errorMessage = null;
+      });
+    } on ArgumentError catch (e) {
+      setState(() {
+        _result = '';
+        _errorMessage = e.message as String?;
+      });
+    }
   }
 
   String _formatNumber(double value) {

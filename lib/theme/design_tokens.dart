@@ -85,13 +85,13 @@ abstract final class DT {
   static const darkCardBg = Color(0xFF16213E);
   static const darkCardBorder = Color(0xFF2A2A4E);
   static const darkTitle = Color(0xFFEEEEFF);
-  static const darkSubtitle = Color(0xFF7777A0);
+  static const darkSubtitle = Color(0xFF9999BB);
   static const darkTagActiveBg = Color(0xFF6C5CE7);
   static const darkTagActiveText = Color(0xFFFFFFFF);
   static const darkTagInactiveBg = Color(0xFF2A2A4E);
   static const darkTagInactiveText = Color(0xFFA78BFA);
   static const darkNavActive = Color(0xFFA78BFA);
-  static const darkNavInactive = Color(0xFF555577);
+  static const darkNavInactive = Color(0xFF8888AA);
   static const darkNavBg = Color(0xFF16213E);
   static const darkNavBorder = Color(0xFF2A2A4E);
 

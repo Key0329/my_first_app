@@ -133,6 +133,30 @@ void main() {
       final rates = {'EUR': 0.92};
       expect(CurrencyApi.convert(0, 'USD', 'EUR', rates, 'USD'), equals(0));
     });
+
+    test('convert throws ArgumentError for unknown fromCurrency', () {
+      final rates = {'EUR': 0.92};
+      expect(
+        () => CurrencyApi.convert(100, 'XYZ', 'EUR', rates, 'USD'),
+        throwsA(isA<ArgumentError>().having(
+          (e) => e.message,
+          'message',
+          contains('XYZ'),
+        )),
+      );
+    });
+
+    test('convert throws ArgumentError for unknown toCurrency', () {
+      final rates = {'EUR': 0.92};
+      expect(
+        () => CurrencyApi.convert(100, 'EUR', 'XYZ', rates, 'USD'),
+        throwsA(isA<ArgumentError>().having(
+          (e) => e.message,
+          'message',
+          contains('XYZ'),
+        )),
+      );
+    });
   });
 
   // --------------------------------------------------------------------------

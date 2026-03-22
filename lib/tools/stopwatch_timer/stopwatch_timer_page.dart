@@ -9,6 +9,9 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['stopwatch_timer']?.first ?? const Color(0xFF607D8B);
+
 /// 碼錶/計時器的漸層色
 final List<Color> _stopwatchGradient =
     toolGradients['stopwatch_timer'] ?? [const Color(0xFFF59E0B), const Color(0xFFFBBF24)];
@@ -47,7 +50,7 @@ class StopwatchTimerPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: ImmersiveToolScaffold(
-        toolColor: const Color(0xFF607D8B),
+        toolColor: _toolColor,
         title: '碼錶 / 計時器',
         heroTag: 'tool_hero_stopwatch_timer',
         headerFlex: 1,

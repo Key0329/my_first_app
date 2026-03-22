@@ -136,10 +136,16 @@ class CurrencyApi {
     // Convert fromCurrency -> base -> toCurrency
     final fromRate = fromCurrency == ratesBase
         ? 1.0
-        : rates[fromCurrency] ?? 1.0;
+        : rates[fromCurrency];
+    if (fromRate == null) {
+      throw ArgumentError('Unsupported currency: $fromCurrency');
+    }
     final toRate = toCurrency == ratesBase
         ? 1.0
-        : rates[toCurrency] ?? 1.0;
+        : rates[toCurrency];
+    if (toRate == null) {
+      throw ArgumentError('Unsupported currency: $toCurrency');
+    }
 
     return amount / fromRate * toRate;
   }

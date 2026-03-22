@@ -12,6 +12,9 @@ import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+final Color _toolColor =
+    toolGradients['compass']?.first ?? const Color(0xFFFF5722);
+
 /// Compass tool page.
 ///
 /// Uses the device magnetometer via `sensors_plus` to calculate heading and
@@ -137,7 +140,7 @@ class _CompassPageState extends State<CompassPage>
 
     if (_unsupported) {
       return ImmersiveToolScaffold(
-        toolColor: const Color(0xFFFF5722),
+        toolColor: _toolColor,
         title: '指南針',
         heroTag: 'tool_hero_compass',
         headerFlex: 3,

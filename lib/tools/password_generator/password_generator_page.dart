@@ -8,6 +8,9 @@ import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_gradient_button.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['password_generator']?.first ?? const Color(0xFF3F51B5);
+
 class PasswordGeneratorPage extends StatefulWidget {
   const PasswordGeneratorPage({super.key});
 
@@ -95,7 +98,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF3F51B5),
+      toolColor: _toolColor,
       title: '密碼產生器',
       heroTag: 'tool_hero_password_generator',
       headerFlex: 2,

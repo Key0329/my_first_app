@@ -7,6 +7,9 @@ import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['protractor']?.first ?? const Color(0xFF795548);
+
 /// Protractor (量角器) tool page.
 ///
 /// A full-screen protractor with two draggable arms extending from a center
@@ -43,7 +46,7 @@ class _ProtractorPageState extends State<ProtractorPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF795548),
+      toolColor: _toolColor,
       title: '量角器',
       heroTag: 'tool_hero_protractor',
       headerFlex: 3,

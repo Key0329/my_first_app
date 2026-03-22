@@ -11,6 +11,9 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['noise_meter']?.first ?? const Color(0xFFE91E63);
+
 /// 噪音計工具頁面
 ///
 /// 使用裝置麥克風即時測量環境噪音分貝值，提供即時折線圖與
@@ -177,7 +180,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
     final dbColor = _getDbColor(_currentDb);
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFFE91E63),
+      toolColor: _toolColor,
       title: '噪音計',
       heroTag: 'tool_hero_noise_meter',
       headerFlex: 2,

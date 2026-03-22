@@ -62,7 +62,7 @@ tests:
 ---
 ### Requirement: Dark mode deep indigo surface colors
 
-In dark mode, the scaffold background color SHALL be #1A1A2E (deep indigo blue). Card and surface container colors SHALL be #16213E. These values SHALL override the default Material 3 dark surface colors using `ColorScheme.copyWith()`.
+In dark mode, the scaffold background color SHALL be #1A1A2E (deep indigo blue). Card and surface container colors SHALL be #16213E. These values SHALL override the default Material 3 dark surface colors using `ColorScheme.copyWith()`. The `darkSubtitle` text color SHALL be #9999BB to achieve a contrast ratio of at least 4.5:1 against the scaffold background (#1A1A2E), meeting WCAG AA requirements. The `darkNavInactive` icon/text color SHALL be #8888AA to achieve a contrast ratio of at least 4.5:1 against the navigation background (#16213E), meeting WCAG AA requirements.
 
 #### Scenario: Dark mode uses deep indigo background
 
@@ -74,48 +74,39 @@ In dark mode, the scaffold background color SHALL be #1A1A2E (deep indigo blue).
 - **WHEN** the app is in dark mode
 - **THEN** card backgrounds SHALL be #16213E
 
+#### Scenario: Dark mode subtitle text meets WCAG AA contrast
+
+- **WHEN** the app is in dark mode
+- **THEN** the subtitle text color SHALL be #9999BB and the contrast ratio against the scaffold background (#1A1A2E) SHALL be at least 4.5:1
+
+#### Scenario: Dark mode navigation inactive color meets WCAG AA contrast
+
+- **WHEN** the app is in dark mode
+- **THEN** the navigation inactive icon/text color SHALL be #8888AA and the contrast ratio against the navigation background (#16213E) SHALL be at least 4.5:1
+
 
 <!-- @trace
-source: homepage-redesign-indigo
-updated: 2026-03-21
+source: fix-quality-baseline
+updated: 2026-03-22
 code:
-  - lib/tools/random_wheel/wheel_painter.dart
+  - lib/tools/noise_meter/noise_meter_page.dart
+  - lib/tools/currency_converter/currency_api.dart
+  - lib/tools/protractor/protractor_page.dart
   - lib/tools/random_wheel/random_wheel_page.dart
-  - lib/widgets/tool_card.dart
-  - pubspec.yaml
-  - lib/l10n/app_localizations.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/split_bill/split_bill_page.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_en.arb
-  - lib/widgets/bento_grid.dart
-  - android/app/src/main/AndroidManifest.xml
-  - pubspec.lock
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - lib/l10n/app_localizations_en.dart
-  - lib/tools/screen_ruler/screen_ruler_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/app.dart
-  - lib/pages/home_page.dart
-  - lib/models/tool_item.dart
-  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/tools/currency_converter/currency_converter_page.dart
+  - lib/tools/compass/compass_page.dart
+  - lib/tools/password_generator/password_generator_page.dart
+  - lib/tools/qr_generator/qr_generator_page.dart
+  - lib/tools/calculator/calculator_page.dart
+  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
+  - lib/tools/unit_converter/unit_converter_page.dart
+  - lib/tools/color_picker/color_picker_page.dart
   - lib/theme/design_tokens.dart
-  - lib/tools/bmi_calculator/bmi_logic.dart
-  - lib/theme/app_theme.dart
-  - lib/tools/screen_ruler/ruler_painter.dart
-  - lib/tools/invoice_checker/invoice_api.dart
+  - lib/services/timer_notification_service.dart
+  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/level/level_page.dart
 tests:
-  - test/tools/bmi_calculator_logic_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/tools/split_bill_test.dart
-  - test/tools/invoice_checker_test.dart
-  - test/models/tool_item_test.dart
-  - test/widgets/tool_card_test.dart
-  - test/pages/home_page_test.dart
-  - test/widget_test.dart
-  - test/pages/favorites_page_test.dart
+  - test/tools/currency_converter_test.dart
 -->
 
 ---

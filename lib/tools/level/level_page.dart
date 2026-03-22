@@ -12,6 +12,9 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['level']?.first ?? const Color(0xFF00BCD4);
+
 /// Bubble Level (水平儀) tool page.
 ///
 /// Uses device accelerometer to detect tilt and displays a bubble level
@@ -150,7 +153,7 @@ class _LevelPageState extends State<LevelPage>
     final isLevel = _isLevel;
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF00BCD4),
+      toolColor: _toolColor,
       title: '水平儀',
       heroTag: 'tool_hero_level',
       headerFlex: 3,

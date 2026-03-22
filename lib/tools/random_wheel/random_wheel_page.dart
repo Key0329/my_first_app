@@ -76,6 +76,8 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     _animationController.removeListener(_onAnimationTick);
     _animationController.removeStatusListener(_onAnimationStatus);
     _animationController.dispose();

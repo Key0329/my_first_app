@@ -7,6 +7,9 @@ import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'units_data.dart';
 
+final Color _toolColor =
+    toolGradients['unit_converter']?.first ?? const Color(0xFF2196F3);
+
 /// Full-screen page for the unit converter tool.
 class UnitConverterPage extends StatefulWidget {
   const UnitConverterPage({super.key});
@@ -93,7 +96,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
   @override
   Widget build(BuildContext context) {
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF2196F3),
+      toolColor: _toolColor,
       title: '單位換算',
       heroTag: 'tool_hero_unit_converter',
       headerFlex: 2,

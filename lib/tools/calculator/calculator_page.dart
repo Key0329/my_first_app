@@ -7,6 +7,9 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'calculator_logic.dart';
 
+final Color _toolColor =
+    toolGradients['calculator']?.first ?? const Color(0xFF4CAF50);
+
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
 
@@ -138,7 +141,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     final colorScheme = theme.colorScheme;
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFF4CAF50),
+      toolColor: _toolColor,
       title: '計算機',
       heroTag: 'tool_hero_calculator',
       headerFlex: 2,

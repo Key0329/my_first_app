@@ -11,6 +11,9 @@ import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
 
+final Color _toolColor =
+    toolGradients['color_picker']?.first ?? const Color(0xFFFF9800);
+
 /// Helper to extract an 8-bit channel value from the new [Color] API
 /// (where r/g/b are 0.0–1.0 doubles).
 int _to8bit(double v) => (v * 255.0).round().clamp(0, 255);
@@ -229,7 +232,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     }
 
     return ImmersiveToolScaffold(
-      toolColor: const Color(0xFFFF9800),
+      toolColor: _toolColor,
       title: '色彩擷取',
       // 不使用 Hero 動畫 — 相機需要穩定的 widget tree，
       // Hero 飛行期間的 reparent 會導致 camera surface 崩潰
