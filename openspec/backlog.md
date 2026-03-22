@@ -97,13 +97,13 @@
 - [x] `app.dart` 路由從 `allTools` 自動生成（消除 4 處手動維護）
 - [x] 新增工具只需改 1 處
 
-### Change #8: `ci-cd-pipeline`
+### ~~Change #8: `ci-cd-pipeline`~~ ✅ archived 2026-03-22
 
 > 預估：1.5 天 | 依賴：無
 
-- [ ] GitHub Actions：`flutter analyze` + `flutter test` + 格式化
-- [ ] 測試覆蓋率報告（lcov）+ 覆蓋率門檻
-- [ ] 自動建構 APK/IPA（Fastlane）
+- [x] GitHub Actions：`flutter analyze` + `flutter test` + 格式化
+- [x] 測試覆蓋率報告（lcov）+ 覆蓋率門檻
+- [ ] 自動建構 APK/IPA（Fastlane）— 留待後續獨立 change
 
 ### Change #9: `services-refactor`
 
@@ -336,7 +336,7 @@
 | ~~5~~ | ~~`tool-recommendations`~~ ✅ | 2 | 1.5d | #1 |
 | ~~6~~ | ~~`share-result-cards`~~ ✅ | 2 | 2d | #1 |
 | ~~7~~ | ~~`tool-registry`~~ ✅ | 3 | 2d | #1 |
-| 8 | `ci-cd-pipeline` | 3 | 1.5d | — |
+| ~~8~~ | ~~`ci-cd-pipeline`~~ ✅ | 3 | 1.5d | — |
 | 9 | `services-refactor` | 3 | 2d | #1 |
 | 10 | `i18n-completion` | 3 | 2-3d | #1 |
 | 11 | `enhance-currency-converter` | 4 | 2d | #1 |

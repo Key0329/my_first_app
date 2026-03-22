@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+
+  format:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: dart format --set-exit-if-changed .
+
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter test --coverage
+
+      - name: Check coverage threshold
+        run: |
+          if [ ! -f coverage/lcov.info ]; then
+            echo "::error::No coverage file found"
+            exit 1
+          fi
+
+          TOTAL_LINES=$(grep -c "^DA:" coverage/lcov.info || true)
+          HIT_LINES=$(grep "^DA:" coverage/lcov.info | grep -cv ",0$" || true)
+
+          if [ "$TOTAL_LINES" -eq 0 ]; then
+            echo "::error::No coverage data found"
+            exit 1
+          fi
+
+          COVERAGE=$(( HIT_LINES * 100 / TOTAL_LINES ))
+          THRESHOLD=30
+
+          echo "Line coverage: ${COVERAGE}% (${HIT_LINES}/${TOTAL_LINES})"
+
+          if [ "$COVERAGE" -lt "$THRESHOLD" ]; then
+            echo "::error::Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+
+          echo "Coverage ${COVERAGE}% meets threshold ${THRESHOLD}%"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+          retention-days: 30
