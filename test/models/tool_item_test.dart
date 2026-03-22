@@ -22,13 +22,14 @@ void main() {
 
   group('ToolItem', () {
     test('requires category parameter', () {
-      const item = ToolItem(
+      final item = ToolItem(
         id: 'test',
         nameKey: 'tool_test',
         fallbackName: '測試',
         icon: Icons.star,
         routePath: '/tools/test',
         category: ToolCategory.life,
+        pageBuilder: () => const SizedBox(),
       );
 
       expect(item.category, ToolCategory.life);
@@ -74,6 +75,9 @@ void main() {
         'split_bill',
         'random_wheel',
         'screen_ruler',
+        'date_calculator',
+        'qr_scanner_live',
+        'currency_converter',
       ]));
     });
   });

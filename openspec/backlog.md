@@ -89,13 +89,13 @@
 
 ## Phase 3 — 工程基礎設施（第 3-6 週，與 Phase 2 平行）
 
-### Change #7: `tool-registry`
+### ~~Change #7: `tool-registry`~~ ✅ archived 2026-03-22
 
 > 預估：2 天 | 依賴：#1 | 備註：Phase 5 新工具的前置條件
 
-- [ ] `ToolItem` 加入 `pageBuilder` 欄位
-- [ ] `app.dart` 路由從 `allTools` 自動生成（消除 4 處手動維護）
-- [ ] 新增工具只需改 1 處
+- [x] `ToolItem` 加入 `pageBuilder` 欄位
+- [x] `app.dart` 路由從 `allTools` 自動生成（消除 4 處手動維護）
+- [x] 新增工具只需改 1 處
 
 ### Change #8: `ci-cd-pipeline`
 
@@ -335,7 +335,7 @@
 | ~~4~~ | ~~`calculator-history`~~ ✅ | 2 | 1d | #1 |
 | ~~5~~ | ~~`tool-recommendations`~~ ✅ | 2 | 1.5d | #1 |
 | ~~6~~ | ~~`share-result-cards`~~ ✅ | 2 | 2d | #1 |
-| 7 | `tool-registry` | 3 | 2d | #1 |
+| ~~7~~ | ~~`tool-registry`~~ ✅ | 3 | 2d | #1 |
 | 8 | `ci-cd-pipeline` | 3 | 1.5d | — |
 | 9 | `services-refactor` | 3 | 2d | #1 |
 | 10 | `i18n-completion` | 3 | 2-3d | #1 |

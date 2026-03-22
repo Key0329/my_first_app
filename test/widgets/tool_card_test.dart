@@ -4,13 +4,14 @@ import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/widgets/tool_card.dart';
 
 // 測試用的固定 ToolItem
-const _testTool = ToolItem(
+final _testTool = ToolItem(
   id: 'test_tool',
   nameKey: 'tool_test',
   fallbackName: '測試工具',
   icon: Icons.build,
   routePath: '/tools/test',
   category: ToolCategory.life,
+  pageBuilder: () => const SizedBox(),
 );
 
 /// 將待測 widget 包裝在 MaterialApp + Scaffold 以確保 MediaQuery / Theme 可用

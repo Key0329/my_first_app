@@ -1,5 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/tools/calculator/calculator_page.dart';
+import 'package:my_first_app/tools/unit_converter/unit_converter_page.dart';
+import 'package:my_first_app/tools/bmi_calculator/bmi_calculator_page.dart';
+import 'package:my_first_app/tools/split_bill/split_bill_page.dart';
+import 'package:my_first_app/tools/date_calculator/date_calculator_page.dart';
+import 'package:my_first_app/tools/level/level_page.dart';
+import 'package:my_first_app/tools/compass/compass_page.dart';
+import 'package:my_first_app/tools/protractor/protractor_page.dart';
+import 'package:my_first_app/tools/screen_ruler/screen_ruler_page.dart';
+import 'package:my_first_app/tools/noise_meter/noise_meter_page.dart';
+import 'package:my_first_app/tools/flashlight/flashlight_page.dart';
+import 'package:my_first_app/tools/stopwatch_timer/stopwatch_timer_page.dart';
+import 'package:my_first_app/tools/password_generator/password_generator_page.dart';
+import 'package:my_first_app/tools/color_picker/color_picker_page.dart';
+import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
+import 'package:my_first_app/tools/qr_scanner_live/qr_scanner_live_page.dart';
+import 'package:my_first_app/tools/currency_converter/currency_converter_page.dart';
+import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
 
 /// 工具分類，用於首頁 Tab 篩選。
 enum ToolCategory {
@@ -18,17 +36,19 @@ class ToolItem {
   final IconData icon;
   final String routePath;
   final ToolCategory category;
+  final Widget Function() pageBuilder;
 
   /// 工具色彩，自動從 [toolGradients] 的第一色取得，確保色彩一致性。
   Color get color => toolGradients[id]?.first ?? DT.brandPrimary;
 
-  const ToolItem({
+  ToolItem({
     required this.id,
     required this.nameKey,
     required this.fallbackName,
     required this.icon,
     required this.routePath,
     required this.category,
+    required this.pageBuilder,
   });
 }
 
@@ -41,6 +61,7 @@ final List<ToolItem> allTools = [
     icon: Icons.calculate,
     routePath: '/tools/calculator',
     category: ToolCategory.calculate,
+    pageBuilder: () => const CalculatorPage(),
   ),
   ToolItem(
     id: 'unit_converter',
@@ -49,6 +70,7 @@ final List<ToolItem> allTools = [
     icon: Icons.swap_horiz,
     routePath: '/tools/unit-converter',
     category: ToolCategory.calculate,
+    pageBuilder: () => const UnitConverterPage(),
   ),
   ToolItem(
     id: 'bmi_calculator',
@@ -57,6 +79,7 @@ final List<ToolItem> allTools = [
     icon: Icons.monitor_heart,
     routePath: '/tools/bmi-calculator',
     category: ToolCategory.calculate,
+    pageBuilder: () => const BmiCalculatorPage(),
   ),
   ToolItem(
     id: 'split_bill',
@@ -65,6 +88,7 @@ final List<ToolItem> allTools = [
     icon: Icons.groups,
     routePath: '/tools/split-bill',
     category: ToolCategory.calculate,
+    pageBuilder: () => const SplitBillPage(),
   ),
   ToolItem(
     id: 'date_calculator',
@@ -73,6 +97,7 @@ final List<ToolItem> allTools = [
     icon: Icons.date_range,
     routePath: '/tools/date-calculator',
     category: ToolCategory.calculate,
+    pageBuilder: () => const DateCalculatorPage(),
   ),
   // ── 測量 ──
   ToolItem(
@@ -82,6 +107,7 @@ final List<ToolItem> allTools = [
     icon: Icons.straighten,
     routePath: '/tools/level',
     category: ToolCategory.measure,
+    pageBuilder: () => const LevelPage(),
   ),
   ToolItem(
     id: 'compass',
@@ -90,6 +116,7 @@ final List<ToolItem> allTools = [
     icon: Icons.explore,
     routePath: '/tools/compass',
     category: ToolCategory.measure,
+    pageBuilder: () => const CompassPage(),
   ),
   ToolItem(
     id: 'protractor',
@@ -98,6 +125,7 @@ final List<ToolItem> allTools = [
     icon: Icons.architecture,
     routePath: '/tools/protractor',
     category: ToolCategory.measure,
+    pageBuilder: () => const ProtractorPage(),
   ),
   ToolItem(
     id: 'screen_ruler',
@@ -106,6 +134,7 @@ final List<ToolItem> allTools = [
     icon: Icons.square_foot,
     routePath: '/tools/screen-ruler',
     category: ToolCategory.measure,
+    pageBuilder: () => const ScreenRulerPage(),
   ),
   ToolItem(
     id: 'noise_meter',
@@ -114,6 +143,7 @@ final List<ToolItem> allTools = [
     icon: Icons.mic,
     routePath: '/tools/noise-meter',
     category: ToolCategory.measure,
+    pageBuilder: () => const NoiseMeterPage(),
   ),
   // ── 生活 ──
   ToolItem(
@@ -123,6 +153,7 @@ final List<ToolItem> allTools = [
     icon: Icons.flashlight_on,
     routePath: '/tools/flashlight',
     category: ToolCategory.life,
+    pageBuilder: () => const FlashlightPage(),
   ),
   ToolItem(
     id: 'stopwatch_timer',
@@ -131,6 +162,7 @@ final List<ToolItem> allTools = [
     icon: Icons.timer,
     routePath: '/tools/stopwatch-timer',
     category: ToolCategory.life,
+    pageBuilder: () => const StopwatchTimerPage(),
   ),
   ToolItem(
     id: 'password_generator',
@@ -139,6 +171,7 @@ final List<ToolItem> allTools = [
     icon: Icons.lock,
     routePath: '/tools/password-generator',
     category: ToolCategory.life,
+    pageBuilder: () => const PasswordGeneratorPage(),
   ),
   ToolItem(
     id: 'color_picker',
@@ -147,6 +180,7 @@ final List<ToolItem> allTools = [
     icon: Icons.colorize,
     routePath: '/tools/color-picker',
     category: ToolCategory.life,
+    pageBuilder: () => const ColorPickerPage(),
   ),
   ToolItem(
     id: 'qr_generator',
@@ -155,6 +189,7 @@ final List<ToolItem> allTools = [
     icon: Icons.qr_code,
     routePath: '/tools/qr-generator',
     category: ToolCategory.life,
+    pageBuilder: () => const QrGeneratorPage(),
   ),
   ToolItem(
     id: 'qr_scanner_live',
@@ -163,6 +198,7 @@ final List<ToolItem> allTools = [
     icon: Icons.qr_code_scanner,
     routePath: '/tools/qr-scanner-live',
     category: ToolCategory.life,
+    pageBuilder: () => const QrScannerLivePage(),
   ),
   ToolItem(
     id: 'currency_converter',
@@ -171,6 +207,7 @@ final List<ToolItem> allTools = [
     icon: Icons.currency_exchange,
     routePath: '/tools/currency-converter',
     category: ToolCategory.calculate,
+    pageBuilder: () => const CurrencyConverterPage(),
   ),
   ToolItem(
     id: 'random_wheel',
@@ -179,5 +216,6 @@ final List<ToolItem> allTools = [
     icon: Icons.casino,
     routePath: '/tools/random-wheel',
     category: ToolCategory.life,
+    pageBuilder: () => const RandomWheelPage(),
   ),
 ];
