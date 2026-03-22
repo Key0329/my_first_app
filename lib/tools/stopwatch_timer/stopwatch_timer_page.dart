@@ -197,6 +197,13 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     onPressed: _lap,
                     icon: const Icon(Icons.flag),
                     label: const Text('分圈'),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, DT.toolButtonHeight),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(DT.toolButtonRadius),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: DT.spaceLg),
@@ -205,6 +212,13 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     onPressed: _stop,
                     icon: const Icon(Icons.pause),
                     label: const Text('暫停'),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(0, DT.toolButtonHeight),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(DT.toolButtonRadius),
+                      ),
+                    ),
                   ),
                 ),
               ] else ...[
@@ -213,6 +227,13 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     onPressed: _confirmReset,
                     icon: const Icon(Icons.refresh),
                     label: const Text('重設'),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, DT.toolButtonHeight),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(DT.toolButtonRadius),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: DT.spaceLg),
@@ -585,6 +606,13 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
                 label: const Text('重設'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, DT.toolButtonHeight),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DT.toolButtonRadius),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: DT.spaceLg),
@@ -593,6 +621,13 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 onPressed: _pauseTimer,
                 icon: const Icon(Icons.pause),
                 label: const Text('暫停'),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(0, DT.toolButtonHeight),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DT.toolButtonRadius),
+                  ),
+                ),
               ),
             ),
           ],
@@ -606,6 +641,13 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 onPressed: _confirmResetTimer,
                 icon: const Icon(Icons.stop),
                 label: const Text('重設'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, DT.toolButtonHeight),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DT.toolButtonRadius),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: DT.spaceLg),
@@ -623,6 +665,13 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
             onPressed: _confirmResetTimer,
             icon: const Icon(Icons.refresh),
             label: const Text('重設'),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, DT.toolButtonHeight),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(DT.toolButtonRadius),
+              ),
+            ),
           ),
         );
     }

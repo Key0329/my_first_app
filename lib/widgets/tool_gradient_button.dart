@@ -47,7 +47,8 @@ class ToolGradientButton extends StatelessWidget {
           ),
           child: SizedBox(
             height: DT.toolButtonHeight,
-            child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

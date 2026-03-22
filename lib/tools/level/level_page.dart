@@ -194,7 +194,7 @@ class _LevelPageState extends State<LevelPage>
 
     const totalSections = 2;
 
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
