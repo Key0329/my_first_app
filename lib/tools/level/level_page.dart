@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 /// Bubble Level (水平儀) tool page.
 ///
@@ -144,44 +147,60 @@ class _LevelPageState extends State<LevelPage>
         ),
       ),
       // Angle readouts
-      bodyChild: _buildAngleReadout(theme, isLevel),
+      bodyChild: _buildBody(theme, isLevel),
     );
   }
 
-  Widget _buildAngleReadout(ThemeData theme, bool isLevel) {
+  Widget _buildBody(ThemeData theme, bool isLevel) {
     final statusColor = isLevel ? Colors.green : theme.colorScheme.onSurface;
     final statusText = isLevel ? '水平' : '未水平';
     final statusIcon = isLevel ? Icons.check_circle : Icons.info_outline;
 
+    const totalSections = 2;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Status indicator
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(statusIcon, color: statusColor, size: 28),
-              const SizedBox(width: 8),
-              Text(
-                statusText,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: statusColor,
-                ),
+          // Section 1: Status indicator
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: totalSections,
+            child: ToolSectionCard(
+              label: '狀態',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(statusIcon, color: statusColor, size: 28),
+                  const SizedBox(width: 8),
+                  Text(
+                    statusText,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: statusColor,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-          const SizedBox(height: 16),
-          // Angle values
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildAngleChip('X 軸', _angleX, theme),
-              _buildAngleChip('Y 軸', _angleY, theme),
-            ],
+          const SizedBox(height: DT.toolSectionGap),
+          // Section 2: Angle values
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: totalSections,
+            child: ToolSectionCard(
+              label: '角度數值',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildAngleChip('X 軸', _angleX, theme),
+                  _buildAngleChip('Y 軸', _angleY, theme),
+                ],
+              ),
+            ),
           ),
         ],
       ),

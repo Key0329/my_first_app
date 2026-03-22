@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 /// 噪音計工具頁面
 ///
@@ -212,13 +216,101 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
         ),
       ),
       // 即時折線圖 + 噪音等級參考 + 開始/停止按鈕
-      bodyChild: Column(
-        children: [
-          // 即時折線圖
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+      bodyChild: Padding(
+        padding: const EdgeInsets.all(DT.toolBodyPadding),
+        child: Column(
+          children: [
+            // 即時折線圖
+            Expanded(
+              flex: 2,
+              child: StaggeredFadeIn(
+                index: 0,
+                totalItems: 3,
+                child: _buildChartSection(colorScheme, dbColor),
+              ),
+            ),
+
+            const SizedBox(height: DT.toolSectionGap),
+
+            // 噪音等級參考
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: 3,
+              child: ToolSectionCard(
+                label: '噪音等級參考',
+                child: _buildReferenceSection(),
+              ),
+            ),
+
+            const SizedBox(height: DT.toolSectionGap),
+
+            // 開始 / 停止按鈕
+            StaggeredFadeIn(
+              index: 2,
+              totalItems: 3,
+              child: BouncingButton(
+                onTap: _toggleRecording,
+                child: FilledButton.icon(
+                  onPressed: _toggleRecording,
+                  icon: Icon(_isRecording ? Icons.stop : Icons.mic),
+                  label: Text(_isRecording ? '停止測量' : '開始測量'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _isRecording
+                        ? colorScheme.error
+                        : colorScheme.primary,
+                    foregroundColor: _isRecording
+                        ? colorScheme.onError
+                        : colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: DT.toolBodyPadding,
+                    ),
+                    textStyle: const TextStyle(fontSize: DT.fontToolButton),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: DT.toolSectionGap),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // 即時波形卡片（需要特殊處理以填滿 Expanded 空間）
+  // ---------------------------------------------------------------------------
+
+  Widget _buildChartSection(ColorScheme colorScheme, Color dbColor) {
+    final brightness = Theme.of(context).brightness;
+    final bgColor = brightness == Brightness.dark
+        ? DT.brandPrimaryBgDark
+        : DT.brandPrimaryBgLight;
+    final labelColor = brightness == Brightness.dark
+        ? DT.brandPrimarySoft
+        : DT.brandPrimary;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(DT.toolSectionRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(DT.toolSectionPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '即時波形',
+              style: TextStyle(
+                fontSize: DT.fontToolLabel,
+                color: labelColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: DT.spaceSm),
+            Expanded(
               child: _dbHistory.isEmpty
                   ? Center(
                       child: Text(
@@ -239,41 +331,8 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                       ),
                     ),
             ),
-          ),
-
-          const SizedBox(height: 8),
-
-          // 噪音等級參考
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildReferenceSection(),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 開始 / 停止按鈕
-          Padding(
-            padding: const EdgeInsets.only(bottom: 32),
-            child: FilledButton.icon(
-              onPressed: _toggleRecording,
-              icon: Icon(_isRecording ? Icons.stop : Icons.mic),
-              label: Text(_isRecording ? '停止測量' : '開始測量'),
-              style: FilledButton.styleFrom(
-                backgroundColor: _isRecording
-                    ? colorScheme.error
-                    : colorScheme.primary,
-                foregroundColor: _isRecording
-                    ? colorScheme.onError
-                    : colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

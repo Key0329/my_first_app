@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 /// Helper to extract an 8-bit channel value from the new [Color] API
 /// (where r/g/b are 0.0–1.0 doubles).
@@ -329,65 +333,36 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     );
   }
 
-  /// 顏色資訊與歷史記錄區（下方操作區）
+  /// 顏色資訊與歷史記錄區（下方操作區）— Bento 風格
   Widget _buildColorInfoArea(BuildContext context) {
-    return Column(
-      children: [
-        // Picked-colour display & copy actions
-        _buildColorDisplay(),
-        // History palette
-        Expanded(child: _buildHistoryPalette()),
-      ],
-    );
-  }
+    final hasEntry = _selectedEntry != null;
+    final hasHistory = _history.isNotEmpty;
+    // totalItems: 色值顯示 + 歷史色板（各佔一個 stagger slot）
+    final totalItems = (hasEntry ? 1 : 1) + (hasHistory ? 1 : 1);
 
-  Widget _buildColorDisplay() {
-    final entry = _selectedEntry;
-
-    if (entry == null) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        child: const Text(
-          '點擊「擷取顏色」按鈕來擷取相機畫面中心的顏色',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14),
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Colour swatch
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: entry.color,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outlineVariant,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: entry.color.withValues(alpha: 0.4),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+          // ── 色值顯示區段 ──
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: totalItems,
+            child: ToolSectionCard(
+              label: '擷取色值',
+              child: _buildColorDisplay(),
             ),
           ),
-          const SizedBox(width: 16),
-          // HEX & RGB values
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildValueRow('HEX', entry.hex),
-                _buildValueRow('RGB', entry.rgb),
-              ],
+          const SizedBox(height: DT.toolSectionGap),
+
+          // ── 歷史色板區段 ──
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: totalItems,
+            child: ToolSectionCard(
+              label: '歷史記錄',
+              child: _buildHistoryPalette(),
             ),
           ),
         ],
@@ -395,12 +370,68 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     );
   }
 
+  Widget _buildColorDisplay() {
+    final entry = _selectedEntry;
+
+    if (entry == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: DT.spaceSm),
+        child: Text(
+          '點擊「擷取顏色」按鈕來擷取相機畫面中心的顏色',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: DT.fontToolLabel,
+            color: Theme.of(context).colorScheme.outline,
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        // Colour swatch
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: entry.color,
+            borderRadius: BorderRadius.circular(DT.radiusSm),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: entry.color.withValues(alpha: 0.4),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: DT.spaceLg),
+        // HEX & RGB values with copy buttons
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildValueRow('HEX', entry.hex),
+              _buildValueRow('RGB', entry.rgb),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildValueRow(String label, String value) {
-    return InkWell(
+    return BouncingButton(
       onTap: () => _copyToClipboard(value, label),
-      borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        padding: const EdgeInsets.symmetric(
+          vertical: DT.spaceXs,
+          horizontal: DT.spaceSm,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -412,7 +443,7 @@ class _ColorPickerPageState extends State<ColorPickerPage>
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: DT.spaceSm),
             Icon(
               Icons.copy,
               size: 16,
@@ -426,62 +457,49 @@ class _ColorPickerPageState extends State<ColorPickerPage>
 
   Widget _buildHistoryPalette() {
     if (_history.isEmpty) {
-      return Center(
-        child: Text(
-          '尚無擷取記錄',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontSize: 14,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: DT.spaceSm),
+        child: Center(
+          child: Text(
+            '尚無擷取記錄',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.outline,
+              fontSize: DT.fontToolLabel,
+            ),
           ),
         ),
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: Text(
-            '歷史記錄',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.outline,
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            itemCount: _history.length,
-            itemBuilder: (context, index) {
-              final entry = _history[index];
-              final isSelected = entry == _selectedEntry;
+    return SizedBox(
+      height: 48,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _history.length,
+        separatorBuilder: (_, _) => const SizedBox(width: DT.spaceSm),
+        itemBuilder: (context, index) {
+          final entry = _history[index];
+          final isSelected = entry == _selectedEntry;
 
-              return GestureDetector(
-                onTap: () => _selectHistoryEntry(entry),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: entry.color,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.outlineVariant,
-                      width: isSelected ? 3 : 1,
-                    ),
-                  ),
+          return BouncingButton(
+            onTap: () => _selectHistoryEntry(entry),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: entry.color,
+                borderRadius: BorderRadius.circular(DT.radiusSm),
+                border: Border.all(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.outlineVariant,
+                  width: isSelected ? 3 : 1,
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

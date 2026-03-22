@@ -1,7 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/tool_gradient_button.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 import 'wheel_painter.dart';
 
@@ -234,27 +238,14 @@ class _RandomWheelPageState extends State<RandomWheelPage>
         ),
         // 旋轉按鈕
         Padding(
-          padding: const EdgeInsets.only(bottom: 24),
-          child: ElevatedButton(
-            onPressed: _isSpinning ? null : _spin,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _toolColor,
-              foregroundColor: Colors.white,
-              disabledBackgroundColor: _toolColor.withValues(alpha: 0.5),
-              disabledForegroundColor: Colors.white70,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-              elevation: 4,
-            ),
-            child: const Text(
-              '旋轉！',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
+          padding: const EdgeInsets.only(bottom: DT.space2xl),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
+            child: ToolGradientButton(
+              gradientColors: toolGradients['random_wheel']!,
+              label: '旋轉！',
+              icon: Icons.play_arrow_rounded,
+              onPressed: _isSpinning ? null : _spin,
             ),
           ),
         ),
@@ -268,67 +259,121 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     final canAdd = _options.length < _maxOptions;
     final hasText = _textController.text.trim().isNotEmpty;
 
-    return Column(
-      children: [
-        // ── 選項清單 ─────────────────────────────────────────
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 8),
-            itemCount: _options.length,
-            itemBuilder: (context, index) {
-              return _buildOptionItem(
-                index: index,
-                color: colors[index],
-                canDelete: canDelete,
-              );
-            },
+    return Padding(
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
+      child: Column(
+        children: [
+          // ── 選項清單區段 ─────────────────────────────────────
+          Expanded(
+            child: _buildOptionListSection(colors, canDelete),
           ),
-        ),
 
-        // ── 分隔線 ───────────────────────────────────────────
-        const Divider(height: 1),
+          const SizedBox(height: DT.toolSectionGap),
 
-        // ── 新增選項輸入列 ────────────────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _textController,
-                  focusNode: _textFocusNode,
-                  enabled: canAdd,
-                  decoration: InputDecoration(
-                    hintText: canAdd ? '新增選項…' : '已達上限（$_maxOptions 個）',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
+          // ── 新增選項控制區段 ─────────────────────────────────
+          ToolSectionCard(
+            label: '新增選項',
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    focusNode: _textFocusNode,
+                    enabled: canAdd,
+                    decoration: InputDecoration(
+                      hintText: canAdd ? '輸入選項名稱…' : '已達上限（$_maxOptions 個）',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(DT.radiusSm),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: DT.toolBodyPadding,
+                        vertical: DT.spaceMd,
+                      ),
+                      isDense: true,
                     ),
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    isDense: true,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => (canAdd && hasText) ? _addOption() : null,
                   ),
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (_) => (canAdd && hasText) ? _addOption() : null,
+                ),
+                const SizedBox(width: DT.spaceSm),
+                BouncingButton(
+                  onTap: (canAdd && hasText) ? _addOption : null,
+                  child: Container(
+                    width: DT.iconContainerSize,
+                    height: DT.iconContainerSize,
+                    decoration: BoxDecoration(
+                      color: (canAdd && hasText)
+                          ? toolGradients['random_wheel']![0]
+                          : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(DT.radiusSm),
+                    ),
+                    child: const Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
+                      size: DT.iconSize,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 底部安全區間距
+          SizedBox(height: MediaQuery.of(context).padding.bottom),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOptionListSection(List<Color> colors, bool canDelete) {
+    final brightness = Theme.of(context).brightness;
+    final bgColor = brightness == Brightness.dark
+        ? DT.brandPrimaryBgDark
+        : DT.brandPrimaryBgLight;
+    final labelColor = brightness == Brightness.dark
+        ? DT.brandPrimarySoft
+        : DT.brandPrimary;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(DT.toolSectionRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(DT.toolSectionPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '選項清單',
+              style: TextStyle(
+                fontSize: DT.fontToolLabel,
+                color: labelColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: DT.spaceSm),
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(DT.radiusSm),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: _options.length,
+                  itemBuilder: (context, index) {
+                    return _buildOptionItem(
+                      index: index,
+                      color: colors[index],
+                      canDelete: canDelete,
+                    );
+                  },
                 ),
               ),
-              const SizedBox(width: 4),
-              IconButton(
-                onPressed: (canAdd && hasText) ? _addOption : null,
-                icon: const Icon(Icons.add),
-                tooltip: '新增選項',
-                color: _toolColor,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-
-        // 底部安全區間距
-        SizedBox(height: MediaQuery.of(context).padding.bottom),
-      ],
+      ),
     );
   }
 
@@ -346,7 +391,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
       background: Container(
         alignment: Alignment.centerRight,
         color: Colors.red.shade100,
-        padding: const EdgeInsets.only(right: 16),
+        padding: const EdgeInsets.only(right: DT.toolBodyPadding),
         child: Icon(Icons.delete_outline, color: Colors.red.shade700),
       ),
       child: ListTile(
@@ -364,12 +409,16 @@ class _RandomWheelPageState extends State<RandomWheelPage>
           style: const TextStyle(fontSize: 15),
         ),
         trailing: canDelete
-            ? IconButton(
-                icon: const Icon(Icons.close, size: 18),
-                onPressed: () => _removeOption(index),
-                tooltip: '刪除選項',
-                splashRadius: 20,
-                color: Colors.grey,
+            ? BouncingButton(
+                onTap: () => _removeOption(index),
+                child: Padding(
+                  padding: const EdgeInsets.all(DT.spaceSm),
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: 18,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
               )
             : null,
       ),

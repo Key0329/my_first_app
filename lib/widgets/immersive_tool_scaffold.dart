@@ -18,6 +18,10 @@ import 'package:flutter/material.dart';
 /// └────────────────────────┘
 /// ```
 ///
+/// 所有 15 個工具頁面均使用此 Scaffold 作為基礎佈局。
+/// body 區域內部應使用 [ToolSectionCard] 分組控件，
+/// 並以 [DT.toolBodyPadding] 設定外層邊距。
+///
 /// 範例：
 /// ```dart
 /// ImmersiveToolScaffold(

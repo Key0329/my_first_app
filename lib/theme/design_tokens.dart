@@ -32,6 +32,21 @@ abstract final class DT {
   static const fontProBadge = 10.0;
   static const fontNavLabel = 12.0;
 
+  // ── 工具頁面 Body ──
+  static const toolBodyPadding = 16.0;
+  static const toolSectionGap = 12.0;
+  static const toolSectionRadius = 16.0;
+  static const toolSectionPadding = 16.0;
+
+  // ── 工具頁面按鈕 ──
+  static const toolButtonRadius = 14.0;
+  static const toolButtonHeight = 52.0;
+
+  // ── 工具頁面字體 ──
+  static const fontToolResult = 36.0;
+  static const fontToolLabel = 14.0;
+  static const fontToolButton = 16.0;
+
   // ── 元件尺寸 ──
   static const iconContainerSize = 48.0;
   static const iconSize = 24.0;

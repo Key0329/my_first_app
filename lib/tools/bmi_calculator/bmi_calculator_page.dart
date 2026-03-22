@@ -1,7 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'bmi_logic.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -75,8 +79,8 @@ class _BmiGauge extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  result.bmi.toStringAsFixed(1),
+                AnimatedValueText(
+                  value: result.bmi.toStringAsFixed(1),
                   style: textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: result.category.color,
@@ -228,7 +232,7 @@ class _GaugePainter extends CustomPainter {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Body：Slider 控制區
+// Body：Slider 控制區（Bento 風格）
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _BmiControls extends StatelessWidget {
@@ -252,44 +256,65 @@ class _BmiControls extends StatelessWidget {
   final ValueChanged<double> onHeightChanged;
   final ValueChanged<double> onWeightChanged;
 
+  static const int _totalSections = 3;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 身高 Slider
-          _SliderRow(
-            label: '身高',
-            value: heightCm,
-            displayText: '${heightCm.round()} cm',
-            min: 140,
-            max: 220,
-            divisions: 80,
-            activeColor: toolColor,
-            onChanged: onHeightChanged,
+          // 身高 Slider — ToolSectionCard
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '身高',
+              child: _SliderRow(
+                value: heightCm,
+                displayText: '${heightCm.round()} cm',
+                min: 140,
+                max: 220,
+                divisions: 80,
+                activeColor: toolColor,
+                onChanged: onHeightChanged,
+              ),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: DT.toolSectionGap),
 
-          // 體重 Slider
-          _SliderRow(
-            label: '體重',
-            value: weightKg,
-            displayText: '${weightKg.round()} kg',
-            min: 30,
-            max: 200,
-            divisions: 170,
-            activeColor: toolColor,
-            onChanged: onWeightChanged,
+          // 體重 Slider — ToolSectionCard
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '體重',
+              child: _SliderRow(
+                value: weightKg,
+                displayText: '${weightKg.round()} kg',
+                min: 30,
+                max: 200,
+                divisions: 170,
+                activeColor: toolColor,
+                onChanged: onWeightChanged,
+              ),
+            ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: DT.toolSectionGap),
 
-          // 結果卡片
-          _ResultCard(
-            result: result,
-            minWeight: minWeight,
-            maxWeight: maxWeight,
+          // 結果卡片 — ToolSectionCard
+          StaggeredFadeIn(
+            index: 2,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '分析結果',
+              child: _ResultContent(
+                result: result,
+                minWeight: minWeight,
+                maxWeight: maxWeight,
+              ),
+            ),
           ),
         ],
       ),
@@ -298,12 +323,11 @@ class _BmiControls extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Slider 列（標籤 + 數值 + Slider）
+// Slider 列（數值 + Slider，不含外層標題，標題由 ToolSectionCard label 提供）
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _SliderRow extends StatelessWidget {
   const _SliderRow({
-    required this.label,
     required this.value,
     required this.displayText,
     required this.min,
@@ -313,7 +337,6 @@ class _SliderRow extends StatelessWidget {
     required this.onChanged,
   });
 
-  final String label;
   final double value;
   final String displayText;
   final double min;
@@ -324,34 +347,29 @@ class _SliderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
+    final brandColor = brightness == Brightness.dark
+        ? DT.brandPrimarySoft
+        : DT.brandPrimary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // 標籤列
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: textTheme.titleSmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+        // 數值顯示（品牌色）
+        Align(
+          alignment: Alignment.centerRight,
+          child: AnimatedValueText(
+            value: displayText,
+            style: TextStyle(
+              fontSize: DT.fontToolResult * 0.5,
+              fontWeight: FontWeight.bold,
+              color: brandColor,
             ),
-            Text(
-              displayText,
-              style: textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: activeColor,
-              ),
-            ),
-          ],
+          ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: DT.spaceXs),
         Semantics(
-          label: '$label $displayText',
+          label: displayText,
           slider: true,
           child: Slider(
             value: value,
@@ -368,11 +386,11 @@ class _SliderRow extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 結果卡片
+// 結果內容（放在 ToolSectionCard 內）
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _ResultCard extends StatelessWidget {
-  const _ResultCard({
+class _ResultContent extends StatelessWidget {
+  const _ResultContent({
     required this.result,
     required this.minWeight,
     required this.maxWeight,
@@ -398,57 +416,66 @@ class _ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
     final categoryColor = result.category.color;
+    final brandColor = brightness == Brightness.dark
+        ? DT.brandPrimarySoft
+        : DT.brandPrimary;
 
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 分類 Chip
-            Row(
-              children: [
-                Text(
-                  '分類：',
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                Chip(
-                  label: Text(
-                    _categoryLabel(result.category),
-                    style: TextStyle(
-                      color: categoryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  backgroundColor: categoryColor.withValues(alpha: 0.12),
-                  side: BorderSide(
-                    color: categoryColor.withValues(alpha: 0.4),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // BMI 數值（動畫過渡）
+        Center(
+          child: AnimatedValueText(
+            value: result.bmi.toStringAsFixed(1),
+            style: TextStyle(
+              fontSize: DT.fontToolResult,
+              fontWeight: FontWeight.bold,
+              color: categoryColor,
             ),
-            const SizedBox(height: 12),
+          ),
+        ),
+        const SizedBox(height: DT.spaceSm),
 
-            // 建議體重範圍
+        // 分類 Chip
+        Row(
+          children: [
             Text(
-              '建議體重範圍：${minWeight.toStringAsFixed(1)} – ${maxWeight.toStringAsFixed(1)} kg',
+              '分類：',
               style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurface,
+                color: brandColor,
+                fontWeight: FontWeight.w600,
               ),
+            ),
+            Chip(
+              label: Text(
+                _categoryLabel(result.category),
+                style: TextStyle(
+                  color: categoryColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              backgroundColor: categoryColor.withValues(alpha: 0.12),
+              side: BorderSide(
+                color: categoryColor.withValues(alpha: 0.4),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: DT.spaceXs),
+              visualDensity: VisualDensity.compact,
             ),
           ],
         ),
-      ),
+        const SizedBox(height: DT.spaceSm),
+
+        // 建議體重範圍
+        Text(
+          '建議體重範圍：${minWeight.toStringAsFixed(1)} – ${maxWeight.toStringAsFixed(1)} kg',
+          style: textTheme.bodyMedium?.copyWith(
+            color: brandColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

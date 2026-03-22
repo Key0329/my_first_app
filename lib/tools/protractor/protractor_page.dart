@@ -2,7 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 /// Protractor (量角器) tool page.
 ///
@@ -76,43 +79,59 @@ class _ProtractorPageState extends State<ProtractorPage> {
       ),
       // 角度顯示與重設按鈕
       bodyChild: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: const EdgeInsets.all(DT.toolBodyPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 角度數值顯示
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '角度',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.outline,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${_angleDegrees.toStringAsFixed(1)}°',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-            // 重設按鈕
-            FilledButton.tonal(
-              onPressed: _reset,
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
+            // 角度數值顯示區段
+            ToolSectionCard(
+              label: '角度',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.refresh, size: 18),
-                  SizedBox(width: 6),
-                  Text('重設'),
+                  Text(
+                    '${_angleDegrees.toStringAsFixed(1)}°',
+                    style: TextStyle(
+                      fontSize: DT.fontToolResult,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  // 重設按鈕
+                  BouncingButton(
+                    onTap: _reset,
+                    child: Container(
+                      height: DT.toolButtonHeight,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: DT.toolBodyPadding,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(
+                          DT.toolButtonRadius,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.refresh,
+                            size: 18,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '重設',
+                            style: TextStyle(
+                              fontSize: DT.fontToolButton,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

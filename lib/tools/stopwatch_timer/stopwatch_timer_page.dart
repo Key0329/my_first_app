@@ -1,7 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/tool_gradient_button.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
+
+/// 碼錶/計時器的漸層色
+final List<Color> _stopwatchGradient =
+    toolGradients['stopwatch_timer'] ?? [const Color(0xFFF59E0B), const Color(0xFFFBBF24)];
 
 /// Formats a [Duration] as HH:MM:SS.mm (centiseconds).
 String formatDuration(Duration d) {
@@ -143,79 +151,140 @@ class _StopwatchTabState extends State<_StopwatchTab> {
     final isRunning = _stopwatch.isRunning;
     final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        const SizedBox(height: 40),
-        // Display
-        Text(
-          formatDuration(_elapsed),
-          style: theme.textTheme.displayMedium?.copyWith(
-            fontFeatures: const [FontFeature.tabularFigures()],
-          ),
-        ),
-        const SizedBox(height: 32),
-        // Buttons
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!isRunning && _elapsed == Duration.zero)
-              FilledButton.icon(
-                onPressed: _start,
-                icon: const Icon(Icons.play_arrow),
-                label: const Text('開始'),
-              )
-            else if (isRunning) ...[
-              OutlinedButton.icon(
-                onPressed: _lap,
-                icon: const Icon(Icons.flag),
-                label: const Text('分圈'),
-              ),
-              const SizedBox(width: 16),
-              FilledButton.icon(
-                onPressed: _stop,
-                icon: const Icon(Icons.pause),
-                label: const Text('暫停'),
-              ),
-            ] else ...[
-              OutlinedButton.icon(
-                onPressed: _reset,
-                icon: const Icon(Icons.refresh),
-                label: const Text('重設'),
-              ),
-              const SizedBox(width: 16),
-              FilledButton.icon(
-                onPressed: _start,
-                icon: const Icon(Icons.play_arrow),
-                label: const Text('繼續'),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 24),
-        // Lap list
-        if (_laps.isNotEmpty) ...[
-          const Divider(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _laps.length,
-              itemBuilder: (context, index) {
-                final lap = _laps[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    child: Text('${lap.number}'),
-                  ),
-                  title: Text('分圈 ${formatDuration(lap.lapTime)}'),
-                  trailing: Text(
-                    '總計 ${formatDuration(lap.totalTime)}',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                );
-              },
+    return Padding(
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
+      child: Column(
+        children: [
+          const SizedBox(height: DT.space2xl),
+          // Display — 高頻更新，不加 AnimatedSwitcher
+          Text(
+            formatDuration(_elapsed),
+            style: theme.textTheme.displayMedium?.copyWith(
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
-        ] else
-          const Expanded(child: SizedBox.shrink()),
-      ],
+          const SizedBox(height: DT.space3xl),
+          // Buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (!isRunning && _elapsed == Duration.zero)
+                ToolGradientButton(
+                  gradientColors: _stopwatchGradient,
+                  label: '開始',
+                  icon: Icons.play_arrow,
+                  onPressed: _start,
+                )
+              else if (isRunning) ...[
+                BouncingButton(
+                  child: OutlinedButton.icon(
+                    onPressed: _lap,
+                    icon: const Icon(Icons.flag),
+                    label: const Text('分圈'),
+                  ),
+                ),
+                const SizedBox(width: DT.spaceLg),
+                BouncingButton(
+                  child: FilledButton.icon(
+                    onPressed: _stop,
+                    icon: const Icon(Icons.pause),
+                    label: const Text('暫停'),
+                  ),
+                ),
+              ] else ...[
+                BouncingButton(
+                  child: OutlinedButton.icon(
+                    onPressed: _reset,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('重設'),
+                  ),
+                ),
+                const SizedBox(width: DT.spaceLg),
+                ToolGradientButton(
+                  gradientColors: _stopwatchGradient,
+                  label: '繼續',
+                  icon: Icons.play_arrow,
+                  onPressed: _start,
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: DT.space2xl),
+          // Lap list
+          if (_laps.isNotEmpty)
+            Expanded(
+              child: _LapListSection(laps: _laps),
+            )
+          else
+            const Expanded(child: SizedBox.shrink()),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Lap List Section (ToolSectionCard 風格 + 可捲動列表)
+// ---------------------------------------------------------------------------
+
+class _LapListSection extends StatelessWidget {
+  const _LapListSection({required this.laps});
+
+  final List<LapRecord> laps;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final bgColor = brightness == Brightness.dark
+        ? DT.brandPrimaryBgDark
+        : DT.brandPrimaryBgLight;
+    final labelColor = brightness == Brightness.dark
+        ? DT.brandPrimarySoft
+        : DT.brandPrimary;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(DT.toolSectionRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(DT.toolSectionPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '分圈記錄',
+              style: TextStyle(
+                fontSize: DT.fontToolLabel,
+                color: labelColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: DT.spaceSm),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: laps.length,
+                itemBuilder: (context, index) {
+                  final lap = laps[index];
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      child: Text('${lap.number}'),
+                    ),
+                    title: Text('分圈 ${formatDuration(lap.lapTime)}'),
+                    trailing: Text(
+                      '總計 ${formatDuration(lap.totalTime)}',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -301,58 +370,61 @@ class _TimerTabState extends State<_TimerTab> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        const SizedBox(height: 24),
-        if (_state == _TimerState.idle) ...[
-          // Duration picker
-          _buildDurationPicker(theme),
-        ] else ...[
-          // Countdown display
-          _buildCountdownDisplay(theme),
+    return Padding(
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
+      child: Column(
+        children: [
+          const SizedBox(height: DT.space2xl),
+          if (_state == _TimerState.idle) ...[
+            // Duration picker wrapped in ToolSectionCard
+            ToolSectionCard(
+              label: '設定時間',
+              child: _buildDurationPicker(theme),
+            ),
+          ] else ...[
+            // Countdown display
+            _buildCountdownDisplay(theme),
+          ],
+          const SizedBox(height: DT.space3xl),
+          // Controls
+          _buildControls(),
+          const Spacer(),
         ],
-        const SizedBox(height: 32),
-        // Controls
-        _buildControls(),
-        const Spacer(),
-      ],
+      ),
     );
   }
 
   Widget _buildDurationPicker(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _NumberPicker(
-            label: '時',
-            value: _hours,
-            maxValue: 23,
-            onChanged: (v) => setState(() => _hours = v),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(':', style: theme.textTheme.headlineMedium),
-          ),
-          _NumberPicker(
-            label: '分',
-            value: _minutes,
-            maxValue: 59,
-            onChanged: (v) => setState(() => _minutes = v),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(':', style: theme.textTheme.headlineMedium),
-          ),
-          _NumberPicker(
-            label: '秒',
-            value: _seconds,
-            maxValue: 59,
-            onChanged: (v) => setState(() => _seconds = v),
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _NumberPicker(
+          label: '時',
+          value: _hours,
+          maxValue: 23,
+          onChanged: (v) => setState(() => _hours = v),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: DT.spaceSm),
+          child: Text(':', style: theme.textTheme.headlineMedium),
+        ),
+        _NumberPicker(
+          label: '分',
+          value: _minutes,
+          maxValue: 59,
+          onChanged: (v) => setState(() => _minutes = v),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: DT.spaceSm),
+          child: Text(':', style: theme.textTheme.headlineMedium),
+        ),
+        _NumberPicker(
+          label: '秒',
+          value: _seconds,
+          maxValue: 59,
+          onChanged: (v) => setState(() => _seconds = v),
+        ),
+      ],
     );
   }
 
@@ -361,7 +433,7 @@ class _TimerTabState extends State<_TimerTab> {
 
     return Column(
       children: [
-        // Progress ring
+        // Progress ring — 保持不變
         SizedBox(
           width: 200,
           height: 200,
@@ -395,12 +467,12 @@ class _TimerTabState extends State<_TimerTab> {
           ),
         ),
         if (isFinished) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: DT.spaceLg),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.alarm, color: theme.colorScheme.error),
-              const SizedBox(width: 8),
+              const SizedBox(width: DT.spaceSm),
               Text(
                 '時間到！',
                 style: theme.textTheme.titleLarge?.copyWith(
@@ -417,25 +489,30 @@ class _TimerTabState extends State<_TimerTab> {
   Widget _buildControls() {
     switch (_state) {
       case _TimerState.idle:
-        return FilledButton.icon(
+        return ToolGradientButton(
+          gradientColors: _stopwatchGradient,
+          label: '開始',
+          icon: Icons.play_arrow,
           onPressed: _pickerDuration > Duration.zero ? _startTimer : null,
-          icon: const Icon(Icons.play_arrow),
-          label: const Text('開始'),
         );
       case _TimerState.running:
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            OutlinedButton.icon(
-              onPressed: _resetTimer,
-              icon: const Icon(Icons.stop),
-              label: const Text('重設'),
+            BouncingButton(
+              child: OutlinedButton.icon(
+                onPressed: _resetTimer,
+                icon: const Icon(Icons.stop),
+                label: const Text('重設'),
+              ),
             ),
-            const SizedBox(width: 16),
-            FilledButton.icon(
-              onPressed: _pauseTimer,
-              icon: const Icon(Icons.pause),
-              label: const Text('暫停'),
+            const SizedBox(width: DT.spaceLg),
+            BouncingButton(
+              child: FilledButton.icon(
+                onPressed: _pauseTimer,
+                icon: const Icon(Icons.pause),
+                label: const Text('暫停'),
+              ),
             ),
           ],
         );
@@ -443,24 +520,29 @@ class _TimerTabState extends State<_TimerTab> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            OutlinedButton.icon(
-              onPressed: _resetTimer,
-              icon: const Icon(Icons.stop),
-              label: const Text('重設'),
+            BouncingButton(
+              child: OutlinedButton.icon(
+                onPressed: _resetTimer,
+                icon: const Icon(Icons.stop),
+                label: const Text('重設'),
+              ),
             ),
-            const SizedBox(width: 16),
-            FilledButton.icon(
+            const SizedBox(width: DT.spaceLg),
+            ToolGradientButton(
+              gradientColors: _stopwatchGradient,
+              label: '繼續',
+              icon: Icons.play_arrow,
               onPressed: _startTimer,
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('繼續'),
             ),
           ],
         );
       case _TimerState.finished:
-        return FilledButton.icon(
-          onPressed: _resetTimer,
-          icon: const Icon(Icons.refresh),
-          label: const Text('重設'),
+        return BouncingButton(
+          child: FilledButton.icon(
+            onPressed: _resetTimer,
+            icon: const Icon(Icons.refresh),
+            label: const Text('重設'),
+          ),
         );
     }
   }
@@ -490,7 +572,7 @@ class _NumberPicker extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(label, style: theme.textTheme.labelSmall),
-        const SizedBox(height: 4),
+        const SizedBox(height: DT.spaceXs),
         SizedBox(
           width: 72,
           height: 140,

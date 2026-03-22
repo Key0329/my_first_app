@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_gradient_button.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrGeneratorPage extends StatefulWidget {
@@ -68,7 +73,7 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
                 height: 180,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(DT.radiusLg),
                   border: Border.all(
                     color: colorScheme.outlineVariant,
                   ),
@@ -88,12 +93,12 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
                     size: 80,
                     color: Colors.white.withValues(alpha: 0.7),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: DT.spaceSm),
                   Text(
                     '輸入文字後產生 QR Code',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 14,
+                      fontSize: DT.fontSubtitle,
                     ),
                   ),
                 ],
@@ -104,54 +109,76 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
 
   /// 輸入與按鈕控制區（下方操作區）
   Widget _buildInputArea(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // 計算 StaggeredFadeIn 的 totalItems
+    final hasResult = _generatedText != null;
+    final totalItems = hasResult ? 3 : 2;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            controller: _textController,
-            decoration: const InputDecoration(
-              labelText: '輸入文字或網址',
-              hintText: '例如：https://example.com',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.text_fields),
-            ),
-            maxLines: 3,
-            minLines: 1,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _generate(),
-          ),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: _generate,
-            icon: const Icon(Icons.qr_code),
-            label: const Text('產生 QR Code'),
-          ),
-          if (_generatedText != null) ...[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12),
+          // 輸入欄位區段
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: totalItems,
+            child: ToolSectionCard(
+              label: '輸入內容',
+              child: TextField(
+                controller: _textController,
+                decoration: const InputDecoration(
+                  labelText: '輸入文字或網址',
+                  hintText: '例如：https://example.com',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.text_fields),
+                ),
+                maxLines: 3,
+                minLines: 1,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _generate(),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _generatedText!,
-                      style: const TextStyle(fontSize: 14),
+            ),
+          ),
+          const SizedBox(height: DT.toolSectionGap),
+
+          // 產生按鈕
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: totalItems,
+            child: ToolGradientButton(
+              gradientColors: toolGradients['qr_generator']!,
+              label: '產生 QR Code',
+              icon: Icons.qr_code,
+              onPressed: _generate,
+            ),
+          ),
+
+          // 已產生的文字顯示區
+          if (hasResult) ...[
+            const SizedBox(height: DT.toolSectionGap),
+            StaggeredFadeIn(
+              index: 2,
+              totalItems: totalItems,
+              child: ToolSectionCard(
+                label: '編碼內容',
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _generatedText!,
+                        style: const TextStyle(fontSize: DT.fontToolLabel),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.copy),
-                    tooltip: '複製',
-                    onPressed: _copyToClipboard,
-                  ),
-                ],
+                    BouncingButton(
+                      onTap: _copyToClipboard,
+                      child: IconButton(
+                        icon: const Icon(Icons.copy),
+                        tooltip: '複製',
+                        onPressed: _copyToClipboard,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

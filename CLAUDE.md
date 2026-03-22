@@ -26,6 +26,13 @@ Changes can be parked（暫存）— temporarily moved out of `openspec/changes/
 
 <!-- SPECTRA:END -->
 
+## Code Review 規則
+
+當執行 `/spectra:apply` 時，每完成一個 task 後，必須對本次變更的檔案執行 code review：
+- 使用 Agent tool 啟動 subagent（subagent_type: `feature-dev:code-reviewer`）進行 code review，避免佔用主 context
+- 若 review 發現問題 → 先修正 → 再次啟動 subagent review，重複直到無重大問題
+- 若 review 無問題 → 繼續下一個 task
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.

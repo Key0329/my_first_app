@@ -2,7 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_gradient_button.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 class PasswordGeneratorPage extends StatefulWidget {
   const PasswordGeneratorPage({super.key});
@@ -154,54 +158,111 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
 
   /// 選項控制區（下方操作區）
   Widget _buildOptionsArea(BuildContext context) {
+    const totalSections = 3; // 密碼長度、字元類型、按鈕
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Length slider
-          Text('密碼長度：${_length.round()}'),
-          Slider(
-            value: _length,
-            min: 8,
-            max: 64,
-            divisions: 56,
-            label: _length.round().toString(),
-            onChanged: (v) {
-              setState(() => _length = v);
-              _generatePassword();
-            },
+          // 密碼長度滑桿卡片
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: totalSections,
+            child: ToolSectionCard(
+              label: '密碼長度',
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${_length.round()} 字元',
+                        style: const TextStyle(
+                          fontSize: DT.fontToolLabel,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '8 - 64',
+                        style: TextStyle(
+                          fontSize: DT.fontToolLabel,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Slider(
+                    value: _length,
+                    min: 8,
+                    max: 64,
+                    divisions: 56,
+                    label: _length.round().toString(),
+                    onChanged: (v) {
+                      setState(() => _length = v);
+                      _generatePassword();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 16),
 
-          // Character type toggles
-          SwitchListTile(
-            title: const Text('大寫字母 (A-Z)'),
-            value: _uppercase,
-            onChanged: (_) => _toggleType(_uppercase, (v) => _uppercase = v),
-          ),
-          SwitchListTile(
-            title: const Text('小寫字母 (a-z)'),
-            value: _lowercase,
-            onChanged: (_) => _toggleType(_lowercase, (v) => _lowercase = v),
-          ),
-          SwitchListTile(
-            title: const Text('數字 (0-9)'),
-            value: _numbers,
-            onChanged: (_) => _toggleType(_numbers, (v) => _numbers = v),
-          ),
-          SwitchListTile(
-            title: const Text('特殊字元 (!@#\$...)'),
-            value: _special,
-            onChanged: (_) => _toggleType(_special, (v) => _special = v),
-          ),
-          const SizedBox(height: 24),
+          const SizedBox(height: DT.toolSectionGap),
 
-          // Generate button
-          FilledButton.icon(
-            onPressed: _generatePassword,
-            icon: const Icon(Icons.refresh),
-            label: const Text('產生新密碼'),
+          // 字元類型開關卡片
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: totalSections,
+            child: ToolSectionCard(
+              label: '字元類型',
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text('大寫字母 (A-Z)'),
+                    value: _uppercase,
+                    contentPadding: EdgeInsets.zero,
+                    onChanged: (_) =>
+                        _toggleType(_uppercase, (v) => _uppercase = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('小寫字母 (a-z)'),
+                    value: _lowercase,
+                    contentPadding: EdgeInsets.zero,
+                    onChanged: (_) =>
+                        _toggleType(_lowercase, (v) => _lowercase = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('數字 (0-9)'),
+                    value: _numbers,
+                    contentPadding: EdgeInsets.zero,
+                    onChanged: (_) =>
+                        _toggleType(_numbers, (v) => _numbers = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('特殊字元 (!@#\$...)'),
+                    value: _special,
+                    contentPadding: EdgeInsets.zero,
+                    onChanged: (_) =>
+                        _toggleType(_special, (v) => _special = v),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: DT.toolSectionGap),
+
+          // 產生新密碼按鈕
+          StaggeredFadeIn(
+            index: 2,
+            totalItems: totalSections,
+            child: ToolGradientButton(
+              gradientColors: toolGradients['password_generator']!,
+              label: '產生新密碼',
+              icon: Icons.refresh,
+              onPressed: _generatePassword,
+            ),
           ),
         ],
       ),

@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:torch_light/torch_light.dart';
 
 /// 手電筒工具頁面
@@ -213,26 +217,39 @@ class _FlashlightPageState extends State<FlashlightPage> {
           ),
         ),
       ),
-      bodyChild: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // SOS button
-          _buildSosButton(theme, colorScheme),
-          // Error message
-          if (_errorMessage != null) ...[
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                _errorMessage!,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.error,
+      bodyChild: Padding(
+        padding: const EdgeInsets.all(DT.toolBodyPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StaggeredFadeIn(
+              index: 0,
+              totalItems: 1,
+              child: ToolSectionCard(
+                label: 'SOS 模式',
+                child: Column(
+                  children: [
+                    // SOS button
+                    BouncingButton(
+                      child: _buildSosButtonContent(theme, colorScheme),
+                    ),
+                    // Error message
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: DT.toolSectionGap),
+                      Text(
+                        _errorMessage!,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.error,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -278,7 +295,7 @@ class _FlashlightPageState extends State<FlashlightPage> {
     );
   }
 
-  Widget _buildSosButton(ThemeData theme, ColorScheme colorScheme) {
+  Widget _buildSosButtonContent(ThemeData theme, ColorScheme colorScheme) {
     return FilledButton.tonalIcon(
       onPressed: _isTorchAvailable ? _toggleSos : null,
       icon: Icon(

@@ -8,139 +8,61 @@ TBD - created by archiving change 'mvp-v1-toolbox-app'. Update Purpose after arc
 
 ### Requirement: App entry point and root widget
 
-The app SHALL use `MaterialApp.router` with GoRouter as the routing engine. The app SHALL apply Material 3 theming with `ColorScheme.fromSeed(seedColor: Colors.teal)`. The theme SHALL include extended configuration for transparent AppBar styles, surface container colors for the immersive tool scaffold body sections, and card themes supporting gradient backgrounds.
+The app SHALL use `MaterialApp.router` with GoRouter as the routing engine. The app SHALL apply Material 3 theming with `ColorScheme.fromSeed(seedColor: Color(0xFF6C5CE7))`. In dark mode, the surface colors SHALL be overridden to use deep indigo blue (#1A1A2E for background, #16213E for containers).
 
 #### Scenario: App launches with correct theme
 
 - **WHEN** the app starts
-- **THEN** the Material 3 theme with teal seed color SHALL be applied, including transparent AppBar support and extended card styling
+- **THEN** the Material 3 theme with indigo seed color #6C5CE7 SHALL be applied
 
 
 <!-- @trace
-source: design-overhaul-bento
-updated: 2026-03-19
+source: homepage-redesign-indigo
+updated: 2026-03-21
 code:
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-  - patches/audio_streamer/lib/audio_streamer.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - patches/audio_streamer/example/android/settings.gradle
-  - patches/audio_streamer/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-  - lib/widgets/bento_grid.dart
-  - lib/widgets/staggered_fade_in.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
-  - patches/audio_streamer/README.md
-  - lib/l10n/app_localizations.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.lock
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/l10n/app_en.arb
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
-  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
-  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
-  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - lib/widgets/bouncing_button.dart
-  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
-  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-  - patches/audio_streamer/ios/audio_streamer.podspec
-  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-  - ios/Runner/Info.plist
-  - lib/tools/compass/compass_page.dart
-  - patches/audio_streamer/example/android/app/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-  - lib/models/tool_item.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
+  - lib/tools/random_wheel/wheel_painter.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
   - lib/widgets/tool_card.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
-  - patches/audio_streamer/example/README.md
   - pubspec.yaml
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
-  - lib/tools/protractor/protractor_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-  - patches/audio_streamer/example/ios/Podfile
-  - patches/audio_streamer/analysis_options.yaml
-  - patches/audio_streamer/example/ios/Runner/Info.plist
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-  - lib/tools/flashlight/flashlight_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-  - lib/tools/password_generator/password_generator_page.dart
-  - patches/audio_streamer/android/src/main/AndroidManifest.xml
-  - lib/pages/favorites_page.dart
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
-  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
-  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
-  - lib/pages/home_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/l10n/app_localizations_en.dart
-  - patches/audio_streamer/android/gradle.properties
-  - lib/tools/calculator/calculator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-  - lib/widgets/immersive_tool_scaffold.dart
-  - patches/audio_streamer/example/pubspec.yaml
-  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
-  - lib/theme/app_theme.dart
-  - patches/audio_streamer/example/android/gradle.properties
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-  - android/app/src/main/AndroidManifest.xml
-  - lib/tools/level/level_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
-  - patches/audio_streamer/LICENSE
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
-  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
-  - lib/app.dart
-  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
-  - patches/audio_streamer/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
-  - patches/audio_streamer/example/lib/main.dart
-  - patches/audio_streamer/CHANGELOG.md
-  - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - patches/audio_streamer/example/android/build.gradle
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
-  - patches/audio_streamer/android/settings.gradle
+  - lib/l10n/app_localizations.dart
   - lib/l10n/app_localizations_zh.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/l10n/app_en.arb
+  - lib/widgets/bento_grid.dart
+  - android/app/src/main/AndroidManifest.xml
+  - pubspec.lock
+  - lib/widgets/app_scaffold.dart
+  - lib/tools/invoice_checker/invoice_parser.dart
+  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/l10n/app_zh.arb
+  - lib/app.dart
+  - lib/pages/home_page.dart
+  - lib/models/tool_item.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/bmi_calculator/bmi_logic.dart
+  - lib/theme/app_theme.dart
+  - lib/tools/screen_ruler/ruler_painter.dart
+  - lib/tools/invoice_checker/invoice_api.dart
 tests:
-  - test/theme/app_theme_test.dart
-  - patches/audio_streamer/test/audio_streamer_test.dart
+  - test/tools/bmi_calculator_logic_test.dart
   - test/widgets/bento_grid_test.dart
+  - test/tools/split_bill_test.dart
+  - test/tools/invoice_checker_test.dart
   - test/models/tool_item_test.dart
-  - test/widgets/bouncing_button_test.dart
-  - test/pages/favorites_page_test.dart
   - test/widgets/tool_card_test.dart
-  - test/widgets/immersive_tool_scaffold_test.dart
   - test/pages/home_page_test.dart
-  - test/tools/password_generator_test.dart
-  - test/widgets/staggered_fade_in_test.dart
-  - test/tools/qr_generator_test.dart
+  - test/widget_test.dart
+  - test/pages/favorites_page_test.dart
 -->
 
 ---
 ### Requirement: Bottom navigation with three tabs
 
-The app SHALL display a bottom navigation bar with three tabs: Tools (工具), Favorites (收藏), and Settings (設定). The navigation SHALL use GoRouter ShellRoute to maintain tab state.
+The app SHALL display a bottom navigation bar with three tabs: Tools (工具), Favorites (收藏), and Settings (設定). The navigation SHALL use GoRouter ShellRoute to maintain tab state. The navigation bar colors SHALL derive from the indigo color scheme.
 
 #### Scenario: User switches between tabs
 
@@ -149,57 +71,46 @@ The app SHALL display a bottom navigation bar with three tabs: Tools (工具), F
 
 
 <!-- @trace
-source: mvp-v1-toolbox-app
-updated: 2026-03-18
+source: homepage-redesign-indigo
+updated: 2026-03-21
 code:
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - macos/Flutter/GeneratedPluginRegistrant.swift
-  - lib/tools/unit_converter/units_data.dart
-  - lib/pages/home_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - windows/flutter/generated_plugins.cmake
-  - pubspec.lock
-  - lib/l10n/l10n.dart
-  - lib/tools/password_generator/password_generator_page.dart
-  - lib/l10n/app_zh.arb
-  - lib/services/settings_service.dart
-  - android/app/src/main/AndroidManifest.xml
-  - lib/l10n/app_localizations.dart
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - lib/l10n/app_en.arb
-  - lib/pages/settings_page.dart
-  - lib/tools/level/level_page.dart
-  - windows/flutter/generated_plugin_registrant.cc
-  - lib/tools/compass/compass_page.dart
-  - l10n.yaml
-  - lib/models/tool_item.dart
-  - lib/app.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_localizations_zh.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/flashlight/flashlight_page.dart
-  - lib/theme/app_theme.dart
-  - lib/main.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - pubspec.yaml
-  - lib/tools/invoice_checker/invoice_api.dart
-  - lib/l10n/app_localizations_en.dart
+  - lib/tools/random_wheel/wheel_painter.dart
+  - lib/tools/random_wheel/random_wheel_page.dart
   - lib/widgets/tool_card.dart
-  - lib/tools/calculator/calculator_logic.dart
-  - lib/tools/calculator/calculator_page.dart
-  - ios/Runner/Info.plist
+  - pubspec.yaml
+  - lib/l10n/app_localizations.dart
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/l10n/app_en.arb
+  - lib/widgets/bento_grid.dart
+  - android/app/src/main/AndroidManifest.xml
+  - pubspec.lock
+  - lib/widgets/app_scaffold.dart
+  - lib/tools/invoice_checker/invoice_parser.dart
+  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/l10n/app_zh.arb
+  - lib/app.dart
+  - lib/pages/home_page.dart
+  - lib/models/tool_item.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/bmi_calculator/bmi_logic.dart
+  - lib/theme/app_theme.dart
+  - lib/tools/screen_ruler/ruler_painter.dart
+  - lib/tools/invoice_checker/invoice_api.dart
 tests:
-  - test/widget_test.dart
-  - test/tools/calculator_logic_test.dart
-  - test/tools/password_generator_test.dart
+  - test/tools/bmi_calculator_logic_test.dart
+  - test/widgets/bento_grid_test.dart
+  - test/tools/split_bill_test.dart
   - test/tools/invoice_checker_test.dart
-  - test/tools/unit_converter_test.dart
-  - test/tools/stopwatch_timer_test.dart
-  - test/services/settings_service_test.dart
+  - test/models/tool_item_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/pages/home_page_test.dart
+  - test/widget_test.dart
+  - test/pages/favorites_page_test.dart
 -->
 
 ---
@@ -342,150 +253,60 @@ tests:
 ---
 ### Requirement: Tool list displayed as grid
 
-The home page SHALL display all tools in a Bento Grid layout with variable-sized cards. Favorited tools SHALL be displayed as large cards spanning 2 columns. The home page SHALL include a search bar at the top to filter tools by name. When filtering, the Bento layout SHALL recalculate for the visible tools. The total tool count SHALL be 15.
+The home page SHALL display all tools in a uniform 2-column GridView with equal-sized cards. Each tool card SHALL show a colored rounded-square icon container with a white icon and the tool name. The home page SHALL include category filter chips (全部/計算/測量/生活) below the title area to filter tools by category. The title area SHALL display "工具箱" with subtitle "N 個工具，隨手可用".
 
 #### Scenario: User views the tool list
 
 - **WHEN** user is on the Tools tab
-- **THEN** all 15 tools SHALL be displayed in a Bento Grid layout with variable card sizes
+- **THEN** all tools SHALL be displayed in a uniform 2-column grid layout with category chips
 
-#### Scenario: User searches for a tool
+#### Scenario: User filters by category
 
-- **WHEN** user types a query in the search bar
-- **THEN** only tools whose name contains the query SHALL be displayed in a recalculated Bento layout
+- **WHEN** user taps a category chip
+- **THEN** only tools belonging to that category SHALL be displayed in the grid
 
 
 <!-- @trace
-source: add-tools-batch-2
-updated: 2026-03-19
+source: homepage-redesign-indigo
+updated: 2026-03-21
 code:
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
-  - lib/tools/screen_ruler/ruler_painter.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
-  - patches/audio_streamer/example/ios/Runner/AppDelegate.swift
-  - lib/tools/level/level_page.dart
-  - patches/audio_streamer/android/gradle.properties
-  - patches/audio_streamer/example/android/app/src/main/kotlin/plugins/cachet/audio_streamer_example/MainActivity.kt
-  - pubspec.yaml
-  - patches/audio_streamer/example/ios/Podfile
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.m
-  - lib/l10n/app_localizations_zh.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
-  - patches/audio_streamer/example/lib/main.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/theme/app_theme.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
-  - patches/audio_streamer/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
-  - patches/audio_streamer/android/src/main/kotlin/plugins/cachet/audio_streamer/AudioStreamerPlugin.kt
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/LaunchScreen.storyboard
-  - lib/widgets/staggered_fade_in.dart
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/contents.xcworkspacedata
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
-  - patches/audio_streamer/example/android/app/build.gradle
-  - patches/audio_streamer/example/pubspec.yaml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
-  - patches/audio_streamer/example/ios/Flutter/Release.xcconfig
-  - lib/pages/favorites_page.dart
-  - lib/tools/compass/compass_page.dart
-  - patches/audio_streamer/CHANGELOG.md
-  - patches/audio_streamer/example/android/app/src/main/res/drawable/launch_background.xml
-  - patches/audio_streamer/example/android/app/src/main/res/values/styles.xml
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
-  - lib/l10n/app_zh.arb
-  - patches/audio_streamer/example/ios/Runner/Base.lproj/Main.storyboard
-  - patches/audio_streamer/example/android/gradle/wrapper/gradle-wrapper.properties
-  - patches/audio_streamer/example/android/settings.gradle
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
-  - lib/tools/flashlight/flashlight_page.dart
-  - patches/audio_streamer/README.md
-  - lib/app.dart
-  - android/app/src/main/AndroidManifest.xml
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
-  - patches/audio_streamer/LICENSE
-  - patches/audio_streamer/example/ios/Runner/Runner-Bridging-Header.h
-  - patches/audio_streamer/example/ios/Flutter/AppFrameworkInfo.plist
-  - patches/audio_streamer/example/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - lib/tools/qr_scanner/qr_scanner_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
-  - lib/tools/invoice_checker/invoice_api.dart
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-  - lib/widgets/immersive_tool_scaffold.dart
-  - patches/audio_streamer/android/src/main/AndroidManifest.xml
-  - ios/Runner/Info.plist
-  - patches/audio_streamer/example/android/app/src/main/AndroidManifest.xml
-  - lib/widgets/bento_grid.dart
-  - patches/audio_streamer/analysis_options.yaml
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.pbxproj
-  - pubspec.lock
-  - lib/tools/split_bill/split_bill_page.dart
-  - patches/audio_streamer/example/android/app/src/profile/AndroidManifest.xml
-  - patches/audio_streamer/example/ios/Flutter/Debug.xcconfig
-  - lib/widgets/bouncing_button.dart
-  - lib/widgets/tool_card.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
-  - patches/audio_streamer/ios/audio_streamer.podspec
-  - lib/models/tool_item.dart
-  - patches/audio_streamer/lib/audio_streamer.dart
-  - lib/tools/random_wheel/random_wheel_page.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
-  - lib/pages/home_page.dart
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-  - patches/audio_streamer/example/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-  - lib/tools/bmi_calculator/bmi_calculator_page.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
-  - lib/tools/bmi_calculator/bmi_logic.dart
-  - lib/l10n/app_en.arb
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
   - lib/tools/random_wheel/wheel_painter.dart
-  - lib/tools/screen_ruler/screen_ruler_page.dart
-  - patches/audio_streamer/example/android/build.gradle
-  - patches/audio_streamer/example/README.md
-  - patches/audio_streamer/ios/Classes/SwiftAudioStreamerPlugin.swift
-  - patches/audio_streamer/example/android/gradle.properties
-  - lib/l10n/app_localizations_en.dart
-  - lib/tools/calculator/calculator_page.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - patches/audio_streamer/example/android/app/src/debug/AndroidManifest.xml
+  - lib/tools/random_wheel/random_wheel_page.dart
+  - lib/widgets/tool_card.dart
+  - pubspec.yaml
   - lib/l10n/app_localizations.dart
-  - patches/audio_streamer/example/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
-  - patches/audio_streamer/android/build.gradle
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-  - patches/audio_streamer/android/settings.gradle
-  - lib/tools/protractor/protractor_page.dart
-  - patches/audio_streamer/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-  - patches/audio_streamer/example/ios/Runner/Info.plist
-  - patches/audio_streamer/ios/Classes/AudioStreamerPlugin.h
-  - lib/tools/password_generator/password_generator_page.dart
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/split_bill/split_bill_page.dart
+  - lib/pages/favorites_page.dart
+  - lib/l10n/app_en.arb
+  - lib/widgets/bento_grid.dart
+  - android/app/src/main/AndroidManifest.xml
+  - pubspec.lock
+  - lib/widgets/app_scaffold.dart
+  - lib/tools/invoice_checker/invoice_parser.dart
+  - lib/tools/invoice_checker/invoice_checker_page.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/l10n/app_zh.arb
+  - lib/app.dart
+  - lib/pages/home_page.dart
+  - lib/models/tool_item.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/theme/design_tokens.dart
+  - lib/tools/bmi_calculator/bmi_logic.dart
+  - lib/theme/app_theme.dart
+  - lib/tools/screen_ruler/ruler_painter.dart
+  - lib/tools/invoice_checker/invoice_api.dart
 tests:
-  - test/tools/password_generator_test.dart
-  - test/widgets/bouncing_button_test.dart
+  - test/tools/bmi_calculator_logic_test.dart
+  - test/widgets/bento_grid_test.dart
   - test/tools/split_bill_test.dart
   - test/tools/invoice_checker_test.dart
-  - test/tools/qr_generator_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/tools/bmi_calculator_logic_test.dart
-  - test/widgets/immersive_tool_scaffold_test.dart
-  - test/widgets/staggered_fade_in_test.dart
   - test/models/tool_item_test.dart
-  - test/pages/favorites_page_test.dart
   - test/widgets/tool_card_test.dart
-  - test/theme/app_theme_test.dart
   - test/pages/home_page_test.dart
-  - patches/audio_streamer/test/audio_streamer_test.dart
+  - test/widget_test.dart
+  - test/pages/favorites_page_test.dart
 -->
 
 ---

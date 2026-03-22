@@ -2,7 +2,11 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 /// Compass tool page.
@@ -30,6 +34,9 @@ class _CompassPageState extends State<CompassPage>
 
   /// Whether the sensor is unavailable on this device.
   bool _unsupported = false;
+
+  /// Whether the calibration hint is expanded.
+  bool _showCalibrationHint = false;
 
   late final AnimationController _animController;
 
@@ -116,6 +123,12 @@ class _CompassPageState extends State<CompassPage>
     return directions[index];
   }
 
+  String _cardinalDirectionChinese(double heading) {
+    const directions = ['北', '東北', '東', '東南', '南', '西南', '西', '西北'];
+    final index = ((heading + 22.5) % 360 / 45).floor();
+    return directions[index];
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();
@@ -133,16 +146,38 @@ class _CompassPageState extends State<CompassPage>
         title: '指南針',
         heroTag: 'tool_hero_compass',
         headerFlex: 3,
-        bodyFlex: 1,
+        bodyFlex: 2,
         headerChild: SafeArea(
           child: _buildUnsupportedHeader(theme),
         ),
-        bodyChild: const SizedBox.shrink(),
+        bodyChild: Padding(
+          padding: const EdgeInsets.all(DT.toolBodyPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StaggeredFadeIn(
+                index: 0,
+                totalItems: 1,
+                child: ToolSectionCard(
+                  label: '說明',
+                  child: Text(
+                    '指南針需要磁力計感測器才能運作。\n'
+                    '模擬器及部分桌面裝置不支援此功能。',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
     final heading = _heading ?? 0;
     final cardinal = _cardinalDirection(heading);
+    final cardinalChinese = _cardinalDirectionChinese(heading);
     final degrees = heading.toStringAsFixed(0);
 
     return ImmersiveToolScaffold(
@@ -150,27 +185,11 @@ class _CompassPageState extends State<CompassPage>
       title: '指南針',
       heroTag: 'tool_hero_compass',
       headerFlex: 3,
-      bodyFlex: 1,
+      bodyFlex: 2,
       headerChild: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Heading readout
-            Text(
-              '$degrees\u00B0',
-              style: theme.textTheme.displayMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              cardinal,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
             // Compass dial
             Expanded(
               child: Center(
@@ -191,35 +210,151 @@ class _CompassPageState extends State<CompassPage>
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: DT.spaceLg),
           ],
         ),
       ),
-      bodyChild: const SizedBox.shrink(),
+      bodyChild: Padding(
+        padding: const EdgeInsets.all(DT.toolBodyPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Heading readout section
+            StaggeredFadeIn(
+              index: 0,
+              totalItems: 2,
+              child: ToolSectionCard(
+                label: '方位',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Degrees
+                    Text(
+                      '$degrees\u00B0',
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // Cardinal direction
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          cardinal,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          cardinalChinese,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: DT.toolSectionGap),
+            // Calibration hint section
+            StaggeredFadeIn(
+              index: 1,
+              totalItems: 2,
+              child: ToolSectionCard(
+                label: '校正提示',
+                child: BouncingButton(
+                  onTap: () {
+                    setState(() {
+                      _showCalibrationHint = !_showCalibrationHint;
+                    });
+                  },
+                  child: AnimatedCrossFade(
+                    firstChild: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: DT.iconSize,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: DT.spaceSm),
+                        Text(
+                          '點擊查看校正方法',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.expand_more,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    secondChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              size: DT.iconSize,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: DT.spaceSm),
+                            Text(
+                              '校正方法',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                            Icon(
+                              Icons.expand_less,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: DT.spaceSm),
+                        Text(
+                          '將裝置拿起，以 8 字形揮動數次，'
+                          '可以校正磁力計提升準確度。',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                    crossFadeState: _showCalibrationHint
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 200),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildUnsupportedHeader(ThemeData theme) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(DT.space3xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.explore_off, size: 80, color: theme.colorScheme.outline),
-            const SizedBox(height: 24),
+            const SizedBox(height: DT.space2xl),
             Text(
               '此裝置不支援磁力計',
               style: theme.textTheme.titleLarge,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              '指南針需要磁力計感測器才能運作。\n'
-              '模擬器及部分桌面裝置不支援此功能。',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
               textAlign: TextAlign.center,
             ),
           ],

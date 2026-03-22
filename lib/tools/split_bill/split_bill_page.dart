@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/animated_value_text.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 
 // ---------------------------------------------------------------------------
 // 計算邏輯（純函式，方便單元測試）
@@ -179,7 +184,7 @@ class _SplitBillHeader extends StatelessWidget {
       bottom: false,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: DT.space2xl),
           child: Text(
             summary,
             style: const TextStyle(
@@ -221,18 +226,42 @@ class _SplitBillBody extends StatelessWidget {
   final int minCount;
   final int maxCount;
 
+  static const Color _toolColor = Color(0xFF26A69A);
+  static const int _totalSections = 3;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildAmountField(context),
-          const SizedBox(height: 24),
-          _buildCountRow(context),
-          const SizedBox(height: 24),
-          _buildResultCard(context),
+          // 總金額輸入區
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '總金額',
+              child: _buildAmountField(context),
+            ),
+          ),
+          const SizedBox(height: DT.toolSectionGap),
+          // 人數控制區
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '人數',
+              child: _buildCountRow(context),
+            ),
+          ),
+          const SizedBox(height: DT.toolSectionGap),
+          // 結果區
+          StaggeredFadeIn(
+            index: 2,
+            totalItems: _totalSections,
+            child: _buildResultCard(context),
+          ),
         ],
       ),
     );
@@ -241,27 +270,15 @@ class _SplitBillBody extends StatelessWidget {
   // ---- 總金額輸入 ----
 
   Widget _buildAmountField(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '總金額',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: amountController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.attach_money),
-            hintText: '請輸入總金額',
-            border: OutlineInputBorder(),
-          ),
-        ),
-      ],
+    return TextField(
+      controller: amountController,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.attach_money),
+        hintText: '請輸入總金額',
+        border: OutlineInputBorder(),
+      ),
     );
   }
 
@@ -272,62 +289,56 @@ class _SplitBillBody extends StatelessWidget {
     final canIncrement = count < maxCount;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          '人數',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+        // 減號按鈕
+        BouncingButton(
+          onTap: canDecrement ? onDecrement : null,
+          child: Semantics(
+            label: '減少人數',
+            child: IconButton.outlined(
+              onPressed: canDecrement ? onDecrement : null,
+              icon: const Icon(Icons.remove),
+              style: IconButton.styleFrom(
+                side: BorderSide(
+                  color: canDecrement
+                      ? colorScheme.outline
+                      : colorScheme.outlineVariant,
+                ),
               ),
+            ),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 減號按鈕
-            Semantics(
-              label: '減少人數',
-              child: IconButton.outlined(
-                onPressed: canDecrement ? onDecrement : null,
-                icon: const Icon(Icons.remove),
-                style: IconButton.styleFrom(
-                  side: BorderSide(
-                    color: canDecrement
-                        ? colorScheme.outline
-                        : colorScheme.outlineVariant,
+        // 人數顯示
+        SizedBox(
+          width: 72,
+          child: Center(
+            child: AnimatedValueText(
+              value: '$count',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
+            ),
+          ),
+        ),
+        // 加號按鈕
+        BouncingButton(
+          onTap: canIncrement ? onIncrement : null,
+          child: Semantics(
+            label: '增加人數',
+            child: IconButton.outlined(
+              onPressed: canIncrement ? onIncrement : null,
+              icon: const Icon(Icons.add),
+              style: IconButton.styleFrom(
+                side: BorderSide(
+                  color: canIncrement
+                      ? colorScheme.outline
+                      : colorScheme.outlineVariant,
                 ),
               ),
             ),
-            // 人數顯示
-            SizedBox(
-              width: 72,
-              child: Center(
-                child: Text(
-                  '$count',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-            ),
-            // 加號按鈕
-            Semantics(
-              label: '增加人數',
-              child: IconButton.outlined(
-                onPressed: canIncrement ? onIncrement : null,
-                icon: const Icon(Icons.add),
-                style: IconButton.styleFrom(
-                  side: BorderSide(
-                    color: canIncrement
-                        ? colorScheme.outline
-                        : colorScheme.outlineVariant,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );
@@ -337,49 +348,65 @@ class _SplitBillBody extends StatelessWidget {
 
   Widget _buildResultCard(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final brightness = theme.brightness;
 
     // 每人金額顯示字串
     final perPersonStr = formatWithThousands(result.base);
 
-    return Card(
+    // 工具色 tinted background：8% 不透明度
+    final tintedBg = brightness == Brightness.dark
+        ? _toolColor.withValues(alpha: 0.12)
+        : _toolColor.withValues(alpha: 0.08);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: tintedBg,
+        borderRadius: BorderRadius.circular(DT.toolSectionRadius),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: DT.space2xl,
+          vertical: DT.spaceXl,
+        ),
         child: Column(
           children: [
             // 標籤
             Text(
               '每人應付',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              style: TextStyle(
+                fontSize: DT.fontToolLabel,
+                color: DT.brandPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 8),
-            // 金額大字
+            const SizedBox(height: DT.spaceSm),
+            // 金額大字（使用 AnimatedValueText）
             Semantics(
               label: '每人應付 $perPersonStr 元',
-              child: Text(
-                '\$$perPersonStr',
+              child: AnimatedValueText(
+                value: '\$$perPersonStr',
                 style: theme.textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF26A69A),
+                  color: _toolColor,
                 ),
               ),
             ),
             // 餘數備註
             if (!result.isEvenSplit) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: DT.toolSectionGap),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: DT.toolSectionGap,
+                  vertical: DT.spaceXs + 2,
+                ),
                 decoration: BoxDecoration(
-                  color: colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(8),
+                  color: _toolColor.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(DT.spaceSm),
                 ),
                 child: Text(
                   '第 1 人多付 ${result.remainder} 元（共付 \$${formatWithThousands(result.firstPersonAmount)}）',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSecondaryContainer,
+                    color: _toolColor,
                   ),
                   textAlign: TextAlign.center,
                 ),

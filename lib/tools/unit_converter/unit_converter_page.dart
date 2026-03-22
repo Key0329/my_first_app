@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/animated_value_text.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/staggered_fade_in.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'units_data.dart';
 
 /// Full-screen page for the unit converter tool.
@@ -118,13 +123,12 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                _result.isEmpty ? '-' : _result,
+              AnimatedValueText(
+                value: _result.isEmpty ? '-' : _result,
                 style: theme.textTheme.displaySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center,
               ),
               if (_result.isNotEmpty && _result != '請輸入有效數字')
                 Padding(
@@ -143,127 +147,161 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
     );
   }
 
+  /// Body 區塊總數（類別 + 來源 + 目標）
+  static const _totalSections = 3;
+
   /// 輸入欄位與選擇器（下方操作區）
   Widget _buildInputArea(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Category selector
-          _buildDropdown<String>(
-            label: '類別',
-            value: _selectedCategory.id,
-            items: allCategories
-                .map(
-                  (c) =>
-                      DropdownMenuItem(value: c.id, child: Text(c.name)),
-                )
-                .toList(),
-            onChanged: (id) {
-              if (id == null) return;
-              final cat = allCategories.firstWhere((c) => c.id == id);
-              _selectCategory(cat);
-            },
-          ),
-          const SizedBox(height: 24),
-
-          // Source unit dropdown
-          _buildDropdown<String>(
-            label: '來源單位',
-            value: _sourceUnit.id,
-            items: _selectedCategory.units
-                .map(
-                  (u) =>
-                      DropdownMenuItem(value: u.id, child: Text(u.name)),
-                )
-                .toList(),
-            onChanged: (id) {
-              if (id == null) return;
-              setState(() {
-                _sourceUnit = _selectedCategory.units.firstWhere(
-                  (u) => u.id == id,
-                );
-              });
-              _updateResult();
-            },
-          ),
-          const SizedBox(height: 16),
-
-          // Input field
-          TextField(
-            controller: _inputController,
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: true,
-              signed: true,
-            ),
-            decoration: const InputDecoration(
-              labelText: '輸入數值',
-              border: OutlineInputBorder(),
-              hintText: '請輸入數字',
+          // ── Section 0：類別選擇 ──
+          StaggeredFadeIn(
+            index: 0,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '類別',
+              child: _buildDropdown<String>(
+                value: _selectedCategory.id,
+                items: allCategories
+                    .map(
+                      (c) =>
+                          DropdownMenuItem(value: c.id, child: Text(c.name)),
+                    )
+                    .toList(),
+                onChanged: (id) {
+                  if (id == null) return;
+                  final cat = allCategories.firstWhere((c) => c.id == id);
+                  _selectCategory(cat);
+                },
+              ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: DT.toolSectionGap),
 
-          // Swap button
+          // ── Section 1：來源單位 + 輸入數值 ──
+          StaggeredFadeIn(
+            index: 1,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '來源',
+              child: Column(
+                children: [
+                  _buildDropdown<String>(
+                    value: _sourceUnit.id,
+                    items: _selectedCategory.units
+                        .map(
+                          (u) => DropdownMenuItem(
+                            value: u.id,
+                            child: Text(u.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (id) {
+                      if (id == null) return;
+                      setState(() {
+                        _sourceUnit = _selectedCategory.units.firstWhere(
+                          (u) => u.id == id,
+                        );
+                      });
+                      _updateResult();
+                    },
+                  ),
+                  const SizedBox(height: DT.toolSectionGap),
+                  TextField(
+                    controller: _inputController,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                      signed: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: '輸入數值',
+                      border: const OutlineInputBorder(),
+                      hintText: '請輸入數字',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: DT.brandPrimary,
+                          width: 2,
+                        ),
+                      ),
+                      floatingLabelStyle: TextStyle(
+                        color: DT.brandPrimary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: DT.toolSectionGap),
+
+          // ── 交換按鈕 ──
           Center(
-            child: IconButton.filled(
-              onPressed: _swapUnits,
-              icon: const Icon(Icons.swap_vert),
-              tooltip: '交換單位',
+            child: BouncingButton(
+              onTap: _swapUnits,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: DT.brandPrimary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.swap_vert,
+                  color: DT.brandPrimary,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: DT.toolSectionGap),
 
-          // Target unit dropdown
-          _buildDropdown<String>(
-            label: '目標單位',
-            value: _targetUnit.id,
-            items: _selectedCategory.units
-                .map(
-                  (u) =>
-                      DropdownMenuItem(value: u.id, child: Text(u.name)),
-                )
-                .toList(),
-            onChanged: (id) {
-              if (id == null) return;
-              setState(() {
-                _targetUnit = _selectedCategory.units.firstWhere(
-                  (u) => u.id == id,
-                );
-              });
-              _updateResult();
-            },
+          // ── Section 2：目標單位 ──
+          StaggeredFadeIn(
+            index: 2,
+            totalItems: _totalSections,
+            child: ToolSectionCard(
+              label: '目標',
+              child: _buildDropdown<String>(
+                value: _targetUnit.id,
+                items: _selectedCategory.units
+                    .map(
+                      (u) => DropdownMenuItem(
+                        value: u.id,
+                        child: Text(u.name),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (id) {
+                  if (id == null) return;
+                  setState(() {
+                    _targetUnit = _selectedCategory.units.firstWhere(
+                      (u) => u.id == id,
+                    );
+                  });
+                  _updateResult();
+                },
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  /// Builds a dropdown with [InputDecorator] wrapping a [DropdownButton]
-  /// to avoid the deprecated `DropdownButtonFormField.value` parameter.
+  /// Builds a dropdown with [InputDecorator] wrapping a [DropdownButton].
   Widget _buildDropdown<T>({
-    required String label,
     required T value,
     required List<DropdownMenuItem<T>> items,
     required ValueChanged<T?> onChanged,
   }) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 4,
-        ),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<T>(
-          value: value,
-          isExpanded: true,
-          items: items,
-          onChanged: onChanged,
-        ),
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<T>(
+        value: value,
+        isExpanded: true,
+        items: items,
+        onChanged: onChanged,
       ),
     );
   }

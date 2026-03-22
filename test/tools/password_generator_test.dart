@@ -110,13 +110,18 @@ void main() {
       // Turn on special characters
       final specialSwitch =
           find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)');
+      await tester.ensureVisible(specialSwitch);
+      await tester.pumpAndSettle();
       await tester.tap(specialSwitch);
       await tester.pump();
 
       // Generate several passwords and check at least one contains special chars
       bool foundSpecial = false;
+      final genBtn = find.text('產生新密碼');
+      await tester.ensureVisible(genBtn);
+      await tester.pumpAndSettle();
       for (var i = 0; i < 20; i++) {
-        await tester.tap(find.text('產生新密碼'));
+        await tester.tap(genBtn);
         await tester.pump();
         final password =
             tester.widget<SelectableText>(find.byType(SelectableText)).data!;
@@ -133,13 +138,22 @@ void main() {
 
       // Default: uppercase, lowercase, numbers ON (3 active)
       // Turn off uppercase
-      await tester.tap(find.widgetWithText(SwitchListTile, '大寫字母 (A-Z)'));
+      final upperSwitch = find.widgetWithText(SwitchListTile, '大寫字母 (A-Z)');
+      await tester.ensureVisible(upperSwitch);
+      await tester.pumpAndSettle();
+      await tester.tap(upperSwitch);
       await tester.pump();
       // Turn off lowercase
-      await tester.tap(find.widgetWithText(SwitchListTile, '小寫字母 (a-z)'));
+      final lowerSwitch = find.widgetWithText(SwitchListTile, '小寫字母 (a-z)');
+      await tester.ensureVisible(lowerSwitch);
+      await tester.pumpAndSettle();
+      await tester.tap(lowerSwitch);
       await tester.pump();
       // Now only numbers is ON. Trying to turn off numbers should show snackbar
-      await tester.tap(find.widgetWithText(SwitchListTile, '數字 (0-9)'));
+      final numSwitch = find.widgetWithText(SwitchListTile, '數字 (0-9)');
+      await tester.ensureVisible(numSwitch);
+      await tester.pumpAndSettle();
+      await tester.tap(numSwitch);
       await tester.pump();
 
       expect(find.text('至少需選擇一種字元類型'), findsOneWidget);

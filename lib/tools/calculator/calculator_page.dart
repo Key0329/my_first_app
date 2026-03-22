@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/animated_value_text.dart';
+import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:my_first_app/widgets/tool_section_card.dart';
 import 'calculator_logic.dart';
 
 class CalculatorPage extends StatefulWidget {
@@ -172,18 +176,17 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              // Result display
+              // Result display — AnimatedValueText
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 reverse: true,
-                child: Text(
-                  _result.isEmpty ? '' : '= $_result',
+                child: AnimatedValueText(
                   key: const Key('result_display'),
+                  value: _result.isEmpty ? '' : '= $_result',
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
                   ),
-                  maxLines: 1,
                 ),
               ),
             ],
@@ -192,9 +195,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
       ),
       bodyChild: Column(
         children: [
-          const Divider(height: 1),
           Expanded(
-            child: _buildButtonGrid(colorScheme),
+            child: Padding(
+              padding: const EdgeInsets.all(DT.toolBodyPadding),
+              child: ToolSectionCard(
+                child: _buildButtonGrid(colorScheme),
+              ),
+            ),
           ),
         ],
       ),
@@ -210,24 +217,21 @@ class _CalculatorPageState extends State<CalculatorPage> {
       ['0', '.', '<-', '='],
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: buttons.map((row) {
-          return Expanded(
-            child: Row(
-              children: row.map((label) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: _buildButton(label, colorScheme),
-                  ),
-                );
-              }).toList(),
-            ),
-          );
-        }).toList(),
-      ),
+    return Column(
+      children: buttons.map((row) {
+        return Expanded(
+          child: Row(
+            children: row.map((label) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(DT.spaceXs),
+                  child: _buildButton(label, colorScheme),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -267,23 +271,29 @@ class _CalculatorPageState extends State<CalculatorPage> {
       onPressed = () => _onDigit(label);
     }
 
-    return FilledButton(
-      key: Key('btn_$label'),
-      onPressed: onPressed,
-      style: FilledButton.styleFrom(
-        backgroundColor: bgColor,
-        foregroundColor: fgColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+    return BouncingButton(
+      onTap: onPressed,
+      child: FilledButton(
+        key: Key('btn_$label'),
+        onPressed: onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: bgColor,
+          foregroundColor: fgColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DT.toolButtonRadius),
+          ),
+          padding: EdgeInsets.zero,
         ),
-        padding: EdgeInsets.zero,
+        child: label == '<-'
+            ? Icon(Icons.backspace_outlined, color: fgColor)
+            : Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
       ),
-      child: label == '<-'
-          ? Icon(Icons.backspace_outlined, color: fgColor)
-          : Text(
-              label,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-            ),
     );
   }
 

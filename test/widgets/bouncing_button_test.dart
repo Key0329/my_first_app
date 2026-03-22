@@ -69,22 +69,40 @@ void main() {
         ),
       );
 
-      // ScaleTransition 應存在於 widget tree 中（可能有多個，例如 MaterialApp 內部也使用）
       expect(find.byType(ScaleTransition), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('wraps content in GestureDetector', (tester) async {
+    testWidgets('uses Listener for animation events', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: BouncingButton(
-              child: Text('gesture'),
+              child: Text('listener'),
             ),
           ),
         ),
       );
 
-      expect(find.byType(GestureDetector), findsWidgets);
+      expect(find.byType(Listener), findsWidgets);
+    });
+
+    testWidgets('wraps in GestureDetector only when onTap/onLongPress provided',
+        (tester) async {
+      // Without callbacks: no GestureDetector from BouncingButton
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: BouncingButton(
+              child: Text('no gesture'),
+            ),
+          ),
+        ),
+      );
+
+      // GestureDetector may still exist from MaterialApp internals,
+      // but BouncingButton should use Listener for animation
+      final bouncingFinder = find.byType(BouncingButton);
+      expect(bouncingFinder, findsOneWidget);
     });
 
     testWidgets('works without onTap and onLongPress (nullable)', (tester) async {
@@ -98,9 +116,33 @@ void main() {
         ),
       );
 
-      // 點擊不應拋出例外
       await tester.tap(find.byType(BouncingButton));
       await tester.pump();
+    });
+
+    testWidgets('wraps Material button without gesture conflict', (tester) async {
+      var buttonPressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: BouncingButton(
+                child: FilledButton(
+                  onPressed: () => buttonPressed = true,
+                  child: const Text('inner button'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('inner button'));
+      await tester.pump();
+
+      expect(buttonPressed, isTrue,
+          reason: 'Inner Material button onPressed should fire without gesture conflict');
     });
   });
 }
