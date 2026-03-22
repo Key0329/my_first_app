@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/tools/stopwatch_timer/stopwatch_timer_page.dart';
 
@@ -9,6 +10,22 @@ Widget _buildApp() {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() {
+    for (final channel in [
+      'xyz.luan/audioplayers',
+      'xyz.luan/audioplayers.global',
+      'dexterous.com/flutter/local_notifications',
+    ]) {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+        MethodChannel(channel),
+        (MethodCall methodCall) async => null,
+      );
+    }
+  });
+
   group('Timer Tab — state transitions', () {
     Future<void> switchToTimerTab(WidgetTester tester) async {
       await tester.pumpWidget(_buildApp());

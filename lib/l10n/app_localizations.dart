@@ -289,6 +289,330 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'使用條款'**
   String get settingsTermsOfService;
+
+  /// Tool name: Currency Converter
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率換算'**
+  String get toolCurrencyConverter;
+
+  /// Currency converter page title
+  ///
+  /// In zh, this message translates to:
+  /// **'匯率換算'**
+  String get tool_currency_converter_title;
+
+  /// Label for source currency
+  ///
+  /// In zh, this message translates to:
+  /// **'來源幣別'**
+  String get tool_currency_converter_from;
+
+  /// Label for target currency
+  ///
+  /// In zh, this message translates to:
+  /// **'目標幣別'**
+  String get tool_currency_converter_to;
+
+  /// Label for amount input
+  ///
+  /// In zh, this message translates to:
+  /// **'金額'**
+  String get tool_currency_converter_amount;
+
+  /// Hint for amount input
+  ///
+  /// In zh, this message translates to:
+  /// **'請輸入金額'**
+  String get tool_currency_converter_amount_hint;
+
+  /// Label for conversion result
+  ///
+  /// In zh, this message translates to:
+  /// **'結果'**
+  String get tool_currency_converter_result;
+
+  /// Swap currencies button tooltip
+  ///
+  /// In zh, this message translates to:
+  /// **'交換幣別'**
+  String get tool_currency_converter_swap;
+
+  /// Loading indicator text
+  ///
+  /// In zh, this message translates to:
+  /// **'載入匯率中...'**
+  String get tool_currency_converter_loading;
+
+  /// Offline mode indicator
+  ///
+  /// In zh, this message translates to:
+  /// **'離線模式'**
+  String get tool_currency_converter_offline;
+
+  /// Offline mode hint
+  ///
+  /// In zh, this message translates to:
+  /// **'使用快取匯率資料'**
+  String get tool_currency_converter_offline_hint;
+
+  /// Last updated timestamp
+  ///
+  /// In zh, this message translates to:
+  /// **'最後更新：{date}'**
+  String tool_currency_converter_last_updated(String date);
+
+  /// Error message
+  ///
+  /// In zh, this message translates to:
+  /// **'無法載入匯率資料'**
+  String get tool_currency_converter_error;
+
+  /// Error when no cache and no network
+  ///
+  /// In zh, this message translates to:
+  /// **'首次使用需要網路連線'**
+  String get tool_currency_converter_network_required;
+
+  /// Retry button label
+  ///
+  /// In zh, this message translates to:
+  /// **'重試'**
+  String get tool_currency_converter_retry;
+
+  /// Currency selector label
+  ///
+  /// In zh, this message translates to:
+  /// **'選擇幣別'**
+  String get tool_currency_converter_select_currency;
+
+  /// Tool name: QR Scanner Live
+  ///
+  /// In zh, this message translates to:
+  /// **'QR Code 掃描器'**
+  String get toolQrScannerLive;
+
+  /// QR scanner page title
+  ///
+  /// In zh, this message translates to:
+  /// **'QR Code 掃描器'**
+  String get tool_qr_scanner_live_title;
+
+  /// Hint text while scanning
+  ///
+  /// In zh, this message translates to:
+  /// **'將 QR Code 對準掃描框'**
+  String get tool_qr_scanner_live_scan_hint;
+
+  /// Result section label
+  ///
+  /// In zh, this message translates to:
+  /// **'掃描結果'**
+  String get tool_qr_scanner_live_result;
+
+  /// Result type label: URL
+  ///
+  /// In zh, this message translates to:
+  /// **'URL'**
+  String get tool_qr_scanner_live_type_url;
+
+  /// Result type label: Text
+  ///
+  /// In zh, this message translates to:
+  /// **'文字'**
+  String get tool_qr_scanner_live_type_text;
+
+  /// Copy button label
+  ///
+  /// In zh, this message translates to:
+  /// **'複製'**
+  String get tool_qr_scanner_live_copy;
+
+  /// Rescan button label
+  ///
+  /// In zh, this message translates to:
+  /// **'重新掃描'**
+  String get tool_qr_scanner_live_rescan;
+
+  /// Snackbar message after copying
+  ///
+  /// In zh, this message translates to:
+  /// **'已複製到剪貼簿'**
+  String get tool_qr_scanner_live_copied;
+
+  /// Hint for URL results
+  ///
+  /// In zh, this message translates to:
+  /// **'複製網址後可在瀏覽器中開啟'**
+  String get tool_qr_scanner_live_url_hint;
+
+  /// Permission denied title
+  ///
+  /// In zh, this message translates to:
+  /// **'需要相機權限'**
+  String get tool_qr_scanner_live_permission_title;
+
+  /// Permission denied message
+  ///
+  /// In zh, this message translates to:
+  /// **'請在系統設定中允許此 App 使用相機'**
+  String get tool_qr_scanner_live_permission_message;
+
+  /// Permission retry button
+  ///
+  /// In zh, this message translates to:
+  /// **'重新嘗試'**
+  String get tool_qr_scanner_live_permission_retry;
+
+  /// Permission section label in body
+  ///
+  /// In zh, this message translates to:
+  /// **'相機權限'**
+  String get tool_qr_scanner_live_permission_section;
+
+  /// Permission guidance text in body
+  ///
+  /// In zh, this message translates to:
+  /// **'請前往系統設定開啟相機權限，才能使用掃描功能。'**
+  String get tool_qr_scanner_live_permission_guidance;
+
+  /// Camera error title
+  ///
+  /// In zh, this message translates to:
+  /// **'相機啟動失敗'**
+  String get tool_qr_scanner_live_error_title;
+
+  /// Camera error message
+  ///
+  /// In zh, this message translates to:
+  /// **'請確認相機功能正常後重試'**
+  String get tool_qr_scanner_live_error_message;
+
+  /// Tool name: Date Calculator
+  ///
+  /// In zh, this message translates to:
+  /// **'日期計算機'**
+  String get toolDateCalculator;
+
+  /// Date calculator page title
+  ///
+  /// In zh, this message translates to:
+  /// **'日期計算機'**
+  String get tool_date_calculator_title;
+
+  /// Tab label: Date Interval
+  ///
+  /// In zh, this message translates to:
+  /// **'日期區間'**
+  String get tool_date_calculator_tab_interval;
+
+  /// Tab label: Add/Subtract Days
+  ///
+  /// In zh, this message translates to:
+  /// **'加減天數'**
+  String get tool_date_calculator_tab_add_sub;
+
+  /// Tab label: Business Days
+  ///
+  /// In zh, this message translates to:
+  /// **'工作日'**
+  String get tool_date_calculator_tab_business;
+
+  /// Label: Start Date
+  ///
+  /// In zh, this message translates to:
+  /// **'開始日期'**
+  String get tool_date_calculator_start_date;
+
+  /// Label: End Date
+  ///
+  /// In zh, this message translates to:
+  /// **'結束日期'**
+  String get tool_date_calculator_end_date;
+
+  /// Label: Base Date
+  ///
+  /// In zh, this message translates to:
+  /// **'基準日期'**
+  String get tool_date_calculator_base_date;
+
+  /// Label: Days
+  ///
+  /// In zh, this message translates to:
+  /// **'天數'**
+  String get tool_date_calculator_days;
+
+  /// Hint: Enter number of days
+  ///
+  /// In zh, this message translates to:
+  /// **'輸入天數'**
+  String get tool_date_calculator_enter_days;
+
+  /// Button: Add
+  ///
+  /// In zh, this message translates to:
+  /// **'加'**
+  String get tool_date_calculator_add;
+
+  /// Button: Subtract
+  ///
+  /// In zh, this message translates to:
+  /// **'減'**
+  String get tool_date_calculator_subtract;
+
+  /// Label: Target Date
+  ///
+  /// In zh, this message translates to:
+  /// **'目標日期'**
+  String get tool_date_calculator_target_date;
+
+  /// Result: N days
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 天'**
+  String tool_date_calculator_result_days(int count);
+
+  /// Result: N weeks M days
+  ///
+  /// In zh, this message translates to:
+  /// **'{weeks} 週 {days} 天'**
+  String tool_date_calculator_result_weeks(int weeks, int days);
+
+  /// Result: N months M days
+  ///
+  /// In zh, this message translates to:
+  /// **'{months} 個月 {days} 天'**
+  String tool_date_calculator_result_months(int months, int days);
+
+  /// Result: N business days
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 工作日'**
+  String tool_date_calculator_result_business_days(int count);
+
+  /// Result: N calendar days
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 日曆天'**
+  String tool_date_calculator_result_calendar_days(int count);
+
+  /// Result: N weekend days
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 天週末'**
+  String tool_date_calculator_result_weekend_days(int count);
+
+  /// Header label: Date Interval
+  ///
+  /// In zh, this message translates to:
+  /// **'日期區間'**
+  String get tool_date_calculator_interval_label;
+
+  /// Header label: Business Days Calculation
+  ///
+  /// In zh, this message translates to:
+  /// **'工作日計算'**
+  String get tool_date_calculator_business_label;
 }
 
 class _AppLocalizationsDelegate

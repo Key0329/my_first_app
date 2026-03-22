@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/services/timer_notification_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
 import 'package:my_first_app/widgets/confirm_dialog.dart';
@@ -317,7 +318,7 @@ class _TimerTab extends StatefulWidget {
 
 enum _TimerState { idle, running, paused, finished }
 
-class _TimerTabState extends State<_TimerTab> {
+class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
   int _hours = 0;
   int _minutes = 0;
   int _seconds = 0;
@@ -330,14 +331,33 @@ class _TimerTabState extends State<_TimerTab> {
   /// Tracks real elapsed time to avoid Timer.periodic drift.
   final Stopwatch _elapsed = Stopwatch();
 
+  final TimerNotificationService _notificationService =
+      TimerNotificationService.instance;
+
+  /// 追蹤 App 是否在前景。
+  bool _isInForeground = true;
+
   Duration get _pickerDuration => Duration(
         hours: _hours,
         minutes: _minutes,
         seconds: _seconds,
       );
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _notificationService.init();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _isInForeground = state == AppLifecycleState.resumed;
+  }
+
   void _startTimer() {
-    if (_state == _TimerState.idle) {
+    final isNewStart = _state == _TimerState.idle;
+    if (isNewStart) {
       _totalDuration = _pickerDuration;
       if (_totalDuration == Duration.zero) return;
       _remaining = _totalDuration;
@@ -355,18 +375,35 @@ class _TimerTabState extends State<_TimerTab> {
           _elapsed.stop();
           _ticker?.cancel();
           _ticker = null;
+          _onTimerFinished();
         } else {
           _remaining = newRemaining;
         }
       });
     });
     setState(() {});
+    // 排程通知（背景用）— 計算剩餘時間
+    _notificationService.scheduleTimerNotification(_remaining);
+  }
+
+  /// 倒數歸零時觸發：前景播放音效，背景由排程通知處理。
+  void _onTimerFinished() {
+    // 取消排程通知（前景已到達，不需要再彈通知）
+    _notificationService.cancelTimerNotification();
+
+    if (_isInForeground) {
+      _notificationService.playCompletionSound();
+    }
+    // 背景時通知已透過 scheduleTimerNotification 排程，
+    // 會在系統層級自動觸發，無需額外處理。
   }
 
   void _pauseTimer() {
     _elapsed.stop();
     _ticker?.cancel();
     _ticker = null;
+    // 暫停時取消排程通知
+    _notificationService.cancelTimerNotification();
     setState(() {
       _state = _TimerState.paused;
     });
@@ -392,6 +429,9 @@ class _TimerTabState extends State<_TimerTab> {
       ..reset();
     _ticker?.cancel();
     _ticker = null;
+    // 重設時取消排程通知與音效
+    _notificationService.cancelTimerNotification();
+    _notificationService.stopSound();
     setState(() {
       _state = _TimerState.idle;
       _remaining = Duration.zero;
@@ -401,6 +441,7 @@ class _TimerTabState extends State<_TimerTab> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _elapsed.stop();
     _ticker?.cancel();
     super.dispose();

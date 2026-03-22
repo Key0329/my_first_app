@@ -21,6 +21,10 @@ dependencies:
   noise_meter: ^5.1.0
   shared_preferences: ^2.2.0
   qr_flutter: ^4.1.0
+  audioplayers: ^6.1.0
+  flutter_local_notifications: ^18.0.0
+  timezone: ^0.10.0
+  http: ^1.2.0
 
 dependency_overrides:
   audio_streamer:
@@ -41,3 +45,5 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/sounds/

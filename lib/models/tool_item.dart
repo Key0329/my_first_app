@@ -66,6 +66,14 @@ final List<ToolItem> allTools = [
     routePath: '/tools/split-bill',
     category: ToolCategory.calculate,
   ),
+  ToolItem(
+    id: 'date_calculator',
+    nameKey: 'tool_date_calculator',
+    fallbackName: '日期計算機',
+    icon: Icons.date_range,
+    routePath: '/tools/date-calculator',
+    category: ToolCategory.calculate,
+  ),
   // ── 測量 ──
   ToolItem(
     id: 'level',
@@ -147,6 +155,22 @@ final List<ToolItem> allTools = [
     icon: Icons.qr_code,
     routePath: '/tools/qr-generator',
     category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'qr_scanner_live',
+    nameKey: 'tool_qr_scanner_live',
+    fallbackName: 'QR 掃描',
+    icon: Icons.qr_code_scanner,
+    routePath: '/tools/qr-scanner-live',
+    category: ToolCategory.life,
+  ),
+  ToolItem(
+    id: 'currency_converter',
+    nameKey: 'tool_currency_converter',
+    fallbackName: '匯率換算',
+    icon: Icons.currency_exchange,
+    routePath: '/tools/currency-converter',
+    category: ToolCategory.calculate,
   ),
   ToolItem(
     id: 'random_wheel',

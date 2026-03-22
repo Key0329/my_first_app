@@ -146,4 +146,7 @@ const Map<String, List<Color>> toolGradients = {
   'color_picker': [Color(0xFFEC4899), Color(0xFFF472B6)],
   'qr_generator': [Color(0xFF10B981), Color(0xFF34D399)],
   'random_wheel': [Color(0xFFEF4444), Color(0xFFF87171)],
+  'date_calculator': [Color(0xFF5C6BC0), Color(0xFF7986CB)],
+  'qr_scanner_live': [Color(0xFF00BCD4), Color(0xFF4DD0E1)],
+  'currency_converter': [Color(0xFF26A69A), Color(0xFF4DB6AC)],
 };

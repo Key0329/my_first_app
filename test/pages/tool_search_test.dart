@@ -13,12 +13,12 @@ void main() {
 
     test('matches Chinese tool name and category', () {
       final results = filterTools('計算');
-      // '計算' matches tool names (計算機, BMI 計算機) and the 計算 category
-      // (which also includes 單位換算, AA 制分帳)
-      expect(results.length, equals(4));
+      // '計算' matches tool names (計算機, BMI 計算機, 日期計算機) and the 計算 category
+      // (which also includes 單位換算, AA 制分帳, 匯率換算)
+      expect(results.length, equals(6));
       expect(
         results.map((t) => t.fallbackName),
-        containsAll(['計算機', 'BMI 計算機', '單位換算', 'AA 制分帳']),
+        containsAll(['計算機', 'BMI 計算機', '日期計算機', '單位換算', 'AA 制分帳', '匯率換算']),
       );
     });
 
@@ -37,8 +37,8 @@ void main() {
 
     test('matches by route path segment', () {
       final results = filterTools('calculator');
-      // /tools/calculator and /tools/bmi-calculator
-      expect(results.length, equals(2));
+      // /tools/calculator, /tools/bmi-calculator, /tools/date-calculator
+      expect(results.length, equals(3));
     });
 
     test('search is case insensitive', () {

@@ -22,6 +22,9 @@ import 'package:my_first_app/tools/bmi_calculator/bmi_calculator_page.dart';
 import 'package:my_first_app/tools/split_bill/split_bill_page.dart';
 import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
 import 'package:my_first_app/tools/screen_ruler/screen_ruler_page.dart';
+import 'package:my_first_app/tools/date_calculator/date_calculator_page.dart';
+import 'package:my_first_app/tools/qr_scanner_live/qr_scanner_live_page.dart';
+import 'package:my_first_app/tools/currency_converter/currency_converter_page.dart';
 import 'package:my_first_app/pages/onboarding_page.dart';
 import 'package:my_first_app/widgets/app_scaffold.dart';
 
@@ -250,6 +253,39 @@ class _ToolboxAppState extends State<ToolboxApp> {
           pageBuilder: (context, state) => CustomTransitionPage(
             key: state.pageKey,
             child: const ScreenRulerPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/date-calculator',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const DateCalculatorPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/qr-scanner-live',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const QrScannerLivePage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        ),
+        GoRoute(
+          path: '/tools/currency-converter',
+          pageBuilder: (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: const CurrencyConverterPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
