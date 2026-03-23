@@ -54,6 +54,11 @@ class AppSettings extends ChangeNotifier {
 
   Future<void> clearRecentTools() => userPreferencesService.clearRecentTools();
 
+  int get streakCount => userPreferencesService.streakCount;
+
+  String? getDailyRecommendation(List<String> allToolIds) =>
+      userPreferencesService.getDailyRecommendation(allToolIds);
+
   Future<void> toggleFavorite(String toolId) =>
       favoritesService.toggleFavorite(toolId);
 

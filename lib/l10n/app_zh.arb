@@ -782,5 +782,31 @@
   "@quickNotesCount": {
     "description": "Note count",
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+
+  "homeDailyRecommend": "今日推薦",
+  "@homeDailyRecommend": { "description": "Daily recommendation section title" },
+  "homeDailyRecommendHint": "試試這個工具吧！",
+  "@homeDailyRecommendHint": { "description": "Daily recommendation hint" },
+  "homeStreak": "連續 {days} 天",
+  "@homeStreak": {
+    "description": "Streak display",
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "shareHookBmi": "我的 BMI 是 {value}，你呢？",
+  "@shareHookBmi": {
+    "description": "BMI share hook",
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "shareHookNoise": "我測到 {value} dB，你的環境有多吵？",
+  "@shareHookNoise": {
+    "description": "Noise meter share hook",
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "shareHookSplitBill": "帳單算好了！快來看看誰該付多少 💰",
+  "@shareHookSplitBill": { "description": "Split bill share hook" },
+  "shareHookPassword": "我用工具箱產生了超強密碼，你也來試試！🔐",
+  "@shareHookPassword": { "description": "Password generator share hook" },
+  "shareHookDefault": "我在用工具箱 Pro，超好用！",
+  "@shareHookDefault": { "description": "Default share hook" }
 }

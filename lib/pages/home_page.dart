@@ -183,8 +183,68 @@ class _HomePageState extends State<HomePage> {
                     .whereType<ToolItem>()
                     .toList();
 
+                final streakCount = widget.settings.streakCount;
+                final dailyRec = widget.settings.getDailyRecommendation(
+                  allTools.map((t) => t.id).toList(),
+                );
+                final dailyTool = dailyRec != null
+                    ? allTools.cast<ToolItem?>().firstWhere(
+                        (t) => t!.id == dailyRec,
+                        orElse: () => null,
+                      )
+                    : null;
+
                 return CustomScrollView(
                   slivers: [
+                    // ── Streak + 每日推薦 ──
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          DT.spaceXl,
+                          0,
+                          DT.spaceXl,
+                          DT.spaceSm,
+                        ),
+                        child: Row(
+                          children: [
+                            // Streak 火焰
+                            if (streakCount > 0) ...[
+                              const Icon(
+                                Icons.local_fire_department,
+                                color: Colors.deepOrange,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                l10n.homeStreak(streakCount),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.deepOrange,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    // ── 每日推薦卡片 ──
+                    if (dailyTool != null)
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            DT.spaceXl,
+                            0,
+                            DT.spaceXl,
+                            DT.spaceMd,
+                          ),
+                          child: _DailyRecommendCard(
+                            tool: dailyTool,
+                            l10n: l10n,
+                            onTap: () => _openTool(context, dailyTool),
+                          ),
+                        ),
+                      ),
                     // ── 最近使用區段 ──
                     if (recentTools.isNotEmpty) ...[
                       SliverToBoxAdapter(
@@ -306,6 +366,95 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DailyRecommendCard extends StatelessWidget {
+  const _DailyRecommendCard({
+    required this.tool,
+    required this.l10n,
+    required this.onTap,
+  });
+
+  final ToolItem tool;
+  final AppLocalizations l10n;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final b = Theme.of(context).brightness;
+    final isDark = b == Brightness.dark;
+    final gradient = toolGradients[tool.id];
+    final color = gradient?.first ?? tool.color;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(DT.spaceLg),
+        decoration: BoxDecoration(
+          gradient: gradient != null
+              ? LinearGradient(
+                  colors: [
+                    gradient.first.withValues(alpha: isDark ? 0.3 : 0.12),
+                    gradient.last.withValues(alpha: isDark ? 0.15 : 0.06),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+          borderRadius: BorderRadius.circular(DT.radiusMd),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                gradient: gradient != null
+                    ? LinearGradient(colors: gradient)
+                    : null,
+                color: gradient == null ? color : null,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(tool.icon, color: Colors.white, size: 22),
+            ),
+            const SizedBox(width: DT.spaceMd),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.homeDailyRecommend,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: color,
+                    ),
+                  ),
+                  Text(
+                    tool.fallbackName,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    l10n.homeDailyRecommendHint,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? Colors.white54 : Colors.black45,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 16, color: color),
+          ],
+        ),
       ),
     );
   }

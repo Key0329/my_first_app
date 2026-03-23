@@ -2101,6 +2101,54 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'{count} 則筆記'**
   String quickNotesCount(int count);
+
+  /// Daily recommendation section title
+  ///
+  /// In zh, this message translates to:
+  /// **'今日推薦'**
+  String get homeDailyRecommend;
+
+  /// Daily recommendation hint
+  ///
+  /// In zh, this message translates to:
+  /// **'試試這個工具吧！'**
+  String get homeDailyRecommendHint;
+
+  /// Streak display
+  ///
+  /// In zh, this message translates to:
+  /// **'連續 {days} 天'**
+  String homeStreak(int days);
+
+  /// BMI share hook
+  ///
+  /// In zh, this message translates to:
+  /// **'我的 BMI 是 {value}，你呢？'**
+  String shareHookBmi(String value);
+
+  /// Noise meter share hook
+  ///
+  /// In zh, this message translates to:
+  /// **'我測到 {value} dB，你的環境有多吵？'**
+  String shareHookNoise(String value);
+
+  /// Split bill share hook
+  ///
+  /// In zh, this message translates to:
+  /// **'帳單算好了！快來看看誰該付多少 💰'**
+  String get shareHookSplitBill;
+
+  /// Password generator share hook
+  ///
+  /// In zh, this message translates to:
+  /// **'我用工具箱產生了超強密碼，你也來試試！🔐'**
+  String get shareHookPassword;
+
+  /// Default share hook
+  ///
+  /// In zh, this message translates to:
+  /// **'我在用工具箱 Pro，超好用！'**
+  String get shareHookDefault;
 }
 
 class _AppLocalizationsDelegate

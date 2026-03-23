@@ -1079,4 +1079,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String quickNotesCount(int count) {
     return '$count notes';
   }
+
+  @override
+  String get homeDailyRecommend => 'Today\'s Pick';
+
+  @override
+  String get homeDailyRecommendHint => 'Give this tool a try!';
+
+  @override
+  String homeStreak(int days) {
+    return '$days-day streak';
+  }
+
+  @override
+  String shareHookBmi(String value) {
+    return 'My BMI is $value, what\'s yours?';
+  }
+
+  @override
+  String shareHookNoise(String value) {
+    return 'I measured $value dB. How loud is yours?';
+  }
+
+  @override
+  String get shareHookSplitBill => 'Bill\'s all split! Check who owes what 💰';
+
+  @override
+  String get shareHookPassword =>
+      'Just generated a super strong password with Toolbox Pro! 🔐';
+
+  @override
+  String get shareHookDefault => 'I\'m using Toolbox Pro, it\'s awesome!';
 }

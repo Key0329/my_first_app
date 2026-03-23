@@ -196,7 +196,8 @@ class _SplitBillPageState extends State<SplitBillPage> {
 
     final xFile = await ShareCardGenerator.capture(_shareCardKey);
     if (xFile != null) {
-      await Share.shareXFiles([xFile], text: '用 Spectra 工具箱快速分帳');
+      final l10n = AppLocalizations.of(context)!;
+      await Share.shareXFiles([xFile], text: l10n.shareHookSplitBill);
     }
   }
 

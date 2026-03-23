@@ -1062,4 +1062,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String quickNotesCount(int count) {
     return '$count 則筆記';
   }
+
+  @override
+  String get homeDailyRecommend => '今日推薦';
+
+  @override
+  String get homeDailyRecommendHint => '試試這個工具吧！';
+
+  @override
+  String homeStreak(int days) {
+    return '連續 $days 天';
+  }
+
+  @override
+  String shareHookBmi(String value) {
+    return '我的 BMI 是 $value，你呢？';
+  }
+
+  @override
+  String shareHookNoise(String value) {
+    return '我測到 $value dB，你的環境有多吵？';
+  }
+
+  @override
+  String get shareHookSplitBill => '帳單算好了！快來看看誰該付多少 💰';
+
+  @override
+  String get shareHookPassword => '我用工具箱產生了超強密碼，你也來試試！🔐';
+
+  @override
+  String get shareHookDefault => '我在用工具箱 Pro，超好用！';
 }

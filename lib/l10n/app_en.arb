@@ -369,5 +369,14 @@
   "quickNotesMinutesAgo": "{minutes} min ago",
   "quickNotesHoursAgo": "{hours} hr ago",
   "quickNotesDaysAgo": "{days} days ago",
-  "quickNotesCount": "{count} notes"
+  "quickNotesCount": "{count} notes",
+
+  "homeDailyRecommend": "Today's Pick",
+  "homeDailyRecommendHint": "Give this tool a try!",
+  "homeStreak": "{days}-day streak",
+  "shareHookBmi": "My BMI is {value}, what's yours?",
+  "shareHookNoise": "I measured {value} dB. How loud is yours?",
+  "shareHookSplitBill": "Bill's all split! Check who owes what 💰",
+  "shareHookPassword": "Just generated a super strong password with Toolbox Pro! 🔐",
+  "shareHookDefault": "I'm using Toolbox Pro, it's awesome!"
 }

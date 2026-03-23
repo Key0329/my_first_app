@@ -192,35 +192,30 @@
 - [x] 快速筆記建立/編輯/刪除
 - [x] 本地持久化
 
-### Change #18: `tool-invoice-checker`
+### ~~Change #18: `tool-invoice-checker`~~ ⏭️ 跳過
 
 > 預估：2 天 | 依賴：#7 tool-registry | 備註：已有 spec `tool-invoice-checker`
+> **跳過原因**：暫不優先，後續視需求再加入
 
-- [ ] 統一發票對獎（手動輸入 + QR 掃描）
-- [ ] 中獎結果顯示 + 分享
-
-### Change #19: `tool-translator`
+### ~~Change #19: `tool-translator`~~ ⏭️ 跳過
 
 > 預估：2 天 | 依賴：#7 tool-registry
+> **跳過原因**：暫不優先，後續視需求再加入
 
-- [ ] 翻譯工具（免費 API 整合）
-- [ ] 與匯率形成「旅行套裝」
-
-### Change #20: `growth-engine`
+### ~~Change #20: `growth-engine`~~ ✅ archived 2026-03-23
 
 > 合併：5.2 病毒傳播 + 5.3 留存機制 | 預估：3 天
 > 依賴：#6 share-result-cards
 
 **病毒傳播：**
-- [ ] 噪音大挑戰（比較分貝）
-- [ ] 日期倒數卡片分享
-- [ ] 分帳挑戰語氣優化
-- [ ] 分享文案加入「比較鉤子」
+- [x] 分享文案加入「比較鉤子」（BMI、分帳等）
+- [ ] 噪音大挑戰（比較分貝）— 待噪音計加入分享功能
+- [ ] 日期倒數卡片分享 — 已有基礎，文案待優化
 
 **留存機制：**
-- [ ] 每日推薦工具（首頁頂部卡片）
-- [ ] 使用連續天數 Streak
-- [ ] 智慧通知（匯率波動、週五分帳提醒）
+- [x] 每日推薦工具（首頁頂部卡片）
+- [x] 使用連續天數 Streak
+- [ ] 智慧通知（匯率波動、週五分帳提醒）— 留待後續
 
 ### Change #21: `personalization`
 
@@ -346,9 +341,9 @@
 | ~~15~~ | ~~`tool-word-counter`~~ ✅ | 5 | 1d | #7 |
 | ~~16~~ | ~~`tool-pomodoro`~~ ✅ | 5 | 3d | #7 |
 | ~~17~~ | ~~`tool-quick-notes`~~ ✅ | 5 | 2d | #7 |
-| 18 | `tool-invoice-checker` | 5 | 2d | #7 |
-| 19 | `tool-translator` | 5 | 2d | #7 |
-| 20 | `growth-engine` | 5 | 3d | #6 |
+| ~~18~~ | ~~`tool-invoice-checker`~~ ⏭️ | 5 | 2d | #7 |
+| ~~19~~ | ~~`tool-translator`~~ ⏭️ | 5 | 2d | #7 |
+| ~~20~~ | ~~`growth-engine`~~ ✅ | 5 | 3d | #6 |
 | 21 | `personalization` | 5 | 3d | #9 |
 | 22 | `freemium-paywall` | 6 | 3d | #9 |
 | 23 | `pro-plus-features` | 6 | 3d | #22 |

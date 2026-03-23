@@ -66,7 +66,10 @@ class _BmiCalculatorPageState extends State<BmiCalculatorPage> {
 
     final xFile = await ShareCardGenerator.capture(_shareCardKey);
     if (xFile != null) {
-      await Share.shareXFiles([xFile], text: '用 Spectra 工具箱計算 BMI');
+      final l10n = AppLocalizations.of(context)!;
+      await Share.shareXFiles([
+        xFile,
+      ], text: l10n.shareHookBmi(_result.bmi.toStringAsFixed(1)));
     }
   }
 
