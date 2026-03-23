@@ -83,18 +83,12 @@ void main() {
   // ─────────────────────────────────────────────────────────────────────────
   group('DateCalculatorLogic.addDays', () {
     test('Mar 1 2026 + 30 days = Mar 31 2026', () {
-      final result = DateCalculatorLogic.addDays(
-        DateTime(2026, 3, 1),
-        30,
-      );
+      final result = DateCalculatorLogic.addDays(DateTime(2026, 3, 1), 30);
       expect(result, DateTime(2026, 3, 31));
     });
 
     test('Mar 22 2026 - 10 days = Mar 12 2026', () {
-      final result = DateCalculatorLogic.addDays(
-        DateTime(2026, 3, 22),
-        -10,
-      );
+      final result = DateCalculatorLogic.addDays(DateTime(2026, 3, 22), -10);
       expect(result, DateTime(2026, 3, 12));
     });
 
@@ -105,26 +99,17 @@ void main() {
     });
 
     test('跨月加法：Jan 30 + 5 = Feb 4', () {
-      final result = DateCalculatorLogic.addDays(
-        DateTime(2026, 1, 30),
-        5,
-      );
+      final result = DateCalculatorLogic.addDays(DateTime(2026, 1, 30), 5);
       expect(result, DateTime(2026, 2, 4));
     });
 
     test('跨年加法：Dec 30 2025 + 5 = Jan 4 2026', () {
-      final result = DateCalculatorLogic.addDays(
-        DateTime(2025, 12, 30),
-        5,
-      );
+      final result = DateCalculatorLogic.addDays(DateTime(2025, 12, 30), 5);
       expect(result, DateTime(2026, 1, 4));
     });
 
     test('大量天數：Jan 1 2026 + 365 = Jan 1 2027', () {
-      final result = DateCalculatorLogic.addDays(
-        DateTime(2026, 1, 1),
-        365,
-      );
+      final result = DateCalculatorLogic.addDays(DateTime(2026, 1, 1), 365);
       expect(result, DateTime(2027, 1, 1));
     });
   });
@@ -133,15 +118,17 @@ void main() {
   // businessDays（工作日計算，排除週末）
   // ─────────────────────────────────────────────────────────────────────────
   group('DateCalculatorLogic.businessDays', () {
-    test('Mon Mar 2 2026 to Fri Mar 13 2026：11 calendar days, 10 business days',
-        () {
-      final result = DateCalculatorLogic.businessDays(
-        DateTime(2026, 3, 2),
-        DateTime(2026, 3, 13),
-      );
-      expect(result.calendarDays, 11);
-      expect(result.businessDays, 10);
-    });
+    test(
+      'Mon Mar 2 2026 to Fri Mar 13 2026：11 calendar days, 10 business days',
+      () {
+        final result = DateCalculatorLogic.businessDays(
+          DateTime(2026, 3, 2),
+          DateTime(2026, 3, 13),
+        );
+        expect(result.calendarDays, 11);
+        expect(result.businessDays, 10);
+      },
+    );
 
     test('同一天：0 calendar days, 0 business days', () {
       final result = DateCalculatorLogic.businessDays(
@@ -152,29 +139,33 @@ void main() {
       expect(result.businessDays, 0);
     });
 
-    test('純週末：Sat Mar 7 to Sun Mar 8 = 1 calendar day, 0 business days, 2 weekend days',
-        () {
-      final result = DateCalculatorLogic.businessDays(
-        DateTime(2026, 3, 7),
-        DateTime(2026, 3, 8),
-      );
-      expect(result.calendarDays, 1);
-      expect(result.businessDays, 0);
-      expect(result.weekendDays, 2);
-    });
+    test(
+      '純週末：Sat Mar 7 to Sun Mar 8 = 1 calendar day, 0 business days, 2 weekend days',
+      () {
+        final result = DateCalculatorLogic.businessDays(
+          DateTime(2026, 3, 7),
+          DateTime(2026, 3, 8),
+        );
+        expect(result.calendarDays, 1);
+        expect(result.businessDays, 0);
+        expect(result.weekendDays, 2);
+      },
+    );
 
-    test('一整週 Mon to Mon：7 calendar days, 6 business days（Mon-Fri + next Mon inclusive）',
-        () {
-      // Mar 2 2026 = Monday, Mar 9 2026 = Monday
-      final result = DateCalculatorLogic.businessDays(
-        DateTime(2026, 3, 2),
-        DateTime(2026, 3, 9),
-      );
-      expect(result.calendarDays, 7);
-      // Inclusive [Mon2..Mon9]: Mon2,Tue3,Wed4,Thu5,Fri6,Sat7,Sun8,Mon9
-      // business=6, weekend=2
-      expect(result.businessDays, 6);
-    });
+    test(
+      '一整週 Mon to Mon：7 calendar days, 6 business days（Mon-Fri + next Mon inclusive）',
+      () {
+        // Mar 2 2026 = Monday, Mar 9 2026 = Monday
+        final result = DateCalculatorLogic.businessDays(
+          DateTime(2026, 3, 2),
+          DateTime(2026, 3, 9),
+        );
+        expect(result.calendarDays, 7);
+        // Inclusive [Mon2..Mon9]: Mon2,Tue3,Wed4,Thu5,Fri6,Sat7,Sun8,Mon9
+        // business=6, weekend=2
+        expect(result.businessDays, 6);
+      },
+    );
 
     test('結束日期在開始日期之前時回傳正值', () {
       final result = DateCalculatorLogic.businessDays(
@@ -185,16 +176,19 @@ void main() {
       expect(result.businessDays, 10);
     });
 
-    test('Fri to Mon = 3 calendar days, 2 business days（Fri + Mon inclusive）', () {
-      // Mar 6 2026 = Friday, Mar 9 2026 = Monday
-      final result = DateCalculatorLogic.businessDays(
-        DateTime(2026, 3, 6),
-        DateTime(2026, 3, 9),
-      );
-      expect(result.calendarDays, 3);
-      // Inclusive [Fri6, Sat7, Sun8, Mon9] → business=2, weekend=2
-      expect(result.businessDays, 2);
-    });
+    test(
+      'Fri to Mon = 3 calendar days, 2 business days（Fri + Mon inclusive）',
+      () {
+        // Mar 6 2026 = Friday, Mar 9 2026 = Monday
+        final result = DateCalculatorLogic.businessDays(
+          DateTime(2026, 3, 6),
+          DateTime(2026, 3, 9),
+        );
+        expect(result.calendarDays, 3);
+        // Inclusive [Fri6, Sat7, Sun8, Mon9] → business=2, weekend=2
+        expect(result.businessDays, 2);
+      },
+    );
 
     test('businessDays + weekendDays = calendarDays + 1（閉區間）', () {
       final result = DateCalculatorLogic.businessDays(

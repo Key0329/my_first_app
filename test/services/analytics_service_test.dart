@@ -13,8 +13,10 @@ void main() {
 
     test('logToolOpen does not throw without Firebase', () {
       expect(
-        () => AnalyticsService.instance
-            .logToolOpen(toolId: 'calculator', source: 'home'),
+        () => AnalyticsService.instance.logToolOpen(
+          toolId: 'calculator',
+          source: 'home',
+        ),
         returnsNormally,
       );
     });
@@ -22,7 +24,9 @@ void main() {
     test('logToolComplete does not throw without Firebase', () {
       expect(
         () => AnalyticsService.instance.logToolComplete(
-            toolId: 'bmi_calculator', resultType: 'bmi_calculated'),
+          toolId: 'bmi_calculator',
+          resultType: 'bmi_calculated',
+        ),
         returnsNormally,
       );
     });
@@ -30,7 +34,9 @@ void main() {
     test('logToolShare does not throw without Firebase', () {
       expect(
         () => AnalyticsService.instance.logToolShare(
-            toolId: 'split_bill', shareMethod: 'system_share'),
+          toolId: 'split_bill',
+          shareMethod: 'system_share',
+        ),
         returnsNormally,
       );
     });
@@ -44,8 +50,9 @@ void main() {
 
     test('logScreenView does not throw without Firebase', () {
       expect(
-        () => AnalyticsService.instance
-            .logScreenView(screenName: '/tools/calculator'),
+        () => AnalyticsService.instance.logScreenView(
+          screenName: '/tools/calculator',
+        ),
         returnsNormally,
       );
     });

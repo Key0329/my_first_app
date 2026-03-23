@@ -153,10 +153,12 @@ class _RandomWheelPageState extends State<RandomWheelPage>
 
   /// 計算動畫當前幀對應的旋轉角度（絕對值，傳給 WheelPainter）
   double get _currentAnimatedRotation {
-    if (!_isSpinning && _animationController.status != AnimationStatus.completed) {
+    if (!_isSpinning &&
+        _animationController.status != AnimationStatus.completed) {
       return _currentRotation;
     }
-    return _currentRotation + (_targetRotation - _currentRotation) * _animation.value;
+    return _currentRotation +
+        (_targetRotation - _currentRotation) * _animation.value;
   }
 
   /// 根據最終旋轉角度計算選中的選項 index
@@ -164,7 +166,8 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     final finalAngle = _targetRotation % (2 * pi);
     final segmentAngle = 2 * pi / _options.length;
     // 指針在頂部（12 點方向）
-    final index = ((2 * pi - finalAngle) / segmentAngle).floor() % _options.length;
+    final index =
+        ((2 * pi - finalAngle) / segmentAngle).floor() % _options.length;
     return index;
   }
 
@@ -254,7 +257,8 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     if (xFile != null) {
       await Share.shareXFiles(
         [xFile],
-        text: '🎯 轉盤結果：$_lastResult\n\n用 Spectra 工具箱隨機決定 👉 https://spectra.app/tools/random-wheel',
+        text:
+            '🎯 轉盤結果：$_lastResult\n\n用 Spectra 工具箱隨機決定 👉 https://spectra.app/tools/random-wheel',
       );
     }
   }
@@ -364,9 +368,7 @@ class _RandomWheelPageState extends State<RandomWheelPage>
       child: Column(
         children: [
           // ── 選項清單區段 ─────────────────────────────────────
-          Expanded(
-            child: _buildOptionListSection(colors, canDelete),
-          ),
+          Expanded(child: _buildOptionListSection(colors, canDelete)),
 
           const SizedBox(height: DT.toolSectionGap),
 
@@ -381,7 +383,9 @@ class _RandomWheelPageState extends State<RandomWheelPage>
                     focusNode: _textFocusNode,
                     enabled: canAdd,
                     decoration: InputDecoration(
-                      hintText: canAdd ? l10n.randomWheelOptionHint : l10n.randomWheelMaxReached(_maxOptions),
+                      hintText: canAdd
+                          ? l10n.randomWheelOptionHint
+                          : l10n.randomWheelMaxReached(_maxOptions),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(DT.radiusSm),
                         borderSide: BorderSide.none,
@@ -394,7 +398,8 @@ class _RandomWheelPageState extends State<RandomWheelPage>
                       isDense: true,
                     ),
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => (canAdd && hasText) ? _addOption() : null,
+                    onSubmitted: (_) =>
+                        (canAdd && hasText) ? _addOption() : null,
                   ),
                 ),
                 const SizedBox(width: DT.spaceSm),
@@ -488,7 +493,9 @@ class _RandomWheelPageState extends State<RandomWheelPage>
     final l10n = AppLocalizations.of(context)!;
     return Dismissible(
       key: ValueKey('option_${option}_$index'),
-      direction: canDelete ? DismissDirection.endToStart : DismissDirection.none,
+      direction: canDelete
+          ? DismissDirection.endToStart
+          : DismissDirection.none,
       confirmDismiss: (_) => showConfirmDialog(
         context: context,
         title: l10n.randomWheelDeleteTitle,
@@ -507,15 +514,9 @@ class _RandomWheelPageState extends State<RandomWheelPage>
         leading: Container(
           width: 16,
           height: 16,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        title: Text(
-          option,
-          style: const TextStyle(fontSize: 15),
-        ),
+        title: Text(option, style: const TextStyle(fontSize: 15)),
         trailing: canDelete
             ? BouncingButton(
                 onTap: () => _confirmRemoveOption(index),

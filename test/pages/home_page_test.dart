@@ -17,14 +17,11 @@ Widget _wrapHomePage(AppSettings settings) {
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: const Locale('zh'),
-    home: Scaffold(
-      body: HomePage(settings: settings),
-    ),
+    home: Scaffold(body: HomePage(settings: settings)),
     // 攔截所有 named/路徑路由，避免 GoRouter 找不到路由而報錯。
     // HomePage 使用 context.push，GoRouter 未注入時會 fallback 到 Navigator。
-    onGenerateRoute: (routeSettings) => MaterialPageRoute(
-      builder: (_) => const Scaffold(body: SizedBox()),
-    ),
+    onGenerateRoute: (routeSettings) =>
+        MaterialPageRoute(builder: (_) => const Scaffold(body: SizedBox())),
   );
 }
 
@@ -60,16 +57,21 @@ void main() {
     // 2. SliverGrid 渲染所有工具（HomePage 使用 CustomScrollView + SliverGrid）
     // -------------------------------------------------------------------------
     group('GridView display', () {
-      testWidgets('應使用 SliverGrid widget（Bento 重構後改用 CustomScrollView + SliverGrid）',
-          (tester) async {
-        final settings = await _makeSettings();
-        await tester.pumpWidget(_wrapHomePage(settings));
-        await tester.pump();
+      testWidgets(
+        '應使用 SliverGrid widget（Bento 重構後改用 CustomScrollView + SliverGrid）',
+        (tester) async {
+          final settings = await _makeSettings();
+          await tester.pumpWidget(_wrapHomePage(settings));
+          await tester.pump();
 
-        // HomePage 已重構為 CustomScrollView + SliverGrid，不再使用 GridView
-        expect(find.byType(CustomScrollView), findsOneWidget);
-        expect(find.byWidgetPredicate((w) => w is SliverGrid), findsOneWidget);
-      });
+          // HomePage 已重構為 CustomScrollView + SliverGrid，不再使用 GridView
+          expect(find.byType(CustomScrollView), findsOneWidget);
+          expect(
+            find.byWidgetPredicate((w) => w is SliverGrid),
+            findsOneWidget,
+          );
+        },
+      );
 
       testWidgets('無篩選時 SliverGrid 應包含全部工具', (tester) async {
         final settings = await _makeSettings();

@@ -460,13 +460,10 @@ void main() {
       timer.onPhaseComplete = null;
 
       fakeAsync((async) {
-        expect(
-          () {
-            timer.start();
-            async.elapse(const Duration(seconds: 1 * 60 + 1));
-          },
-          returnsNormally,
-        );
+        expect(() {
+          timer.start();
+          async.elapse(const Duration(seconds: 1 * 60 + 1));
+        }, returnsNormally);
       });
       timer.dispose();
     });

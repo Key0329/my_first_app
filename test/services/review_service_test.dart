@@ -17,7 +17,10 @@ class _MockInAppReview implements InAppReview {
   }
 
   @override
-  Future<void> openStoreListing({String? appStoreId, String? microsoftStoreId}) async {}
+  Future<void> openStoreListing({
+    String? appStoreId,
+    String? microsoftStoreId,
+  }) async {}
 }
 
 void main() {

@@ -6,11 +6,14 @@ void main() {
   group('ToolCategory enum', () {
     test('has exactly three values: calculate, measure, life', () {
       expect(ToolCategory.values.length, 3);
-      expect(ToolCategory.values, containsAll([
-        ToolCategory.calculate,
-        ToolCategory.measure,
-        ToolCategory.life,
-      ]));
+      expect(
+        ToolCategory.values,
+        containsAll([
+          ToolCategory.calculate,
+          ToolCategory.measure,
+          ToolCategory.life,
+        ]),
+      );
     });
 
     test('each category has a label', () {
@@ -59,26 +62,29 @@ void main() {
 
     test('allTools contains expected tool ids', () {
       final ids = allTools.map((t) => t.id).toList();
-      expect(ids, containsAll([
-        'calculator',
-        'unit_converter',
-        'qr_generator',
-        'flashlight',
-        'level',
-        'compass',
-        'stopwatch_timer',
-        'noise_meter',
-        'password_generator',
-        'color_picker',
-        'protractor',
-        'bmi_calculator',
-        'split_bill',
-        'random_wheel',
-        'screen_ruler',
-        'date_calculator',
-        'qr_scanner_live',
-        'currency_converter',
-      ]));
+      expect(
+        ids,
+        containsAll([
+          'calculator',
+          'unit_converter',
+          'qr_generator',
+          'flashlight',
+          'level',
+          'compass',
+          'stopwatch_timer',
+          'noise_meter',
+          'password_generator',
+          'color_picker',
+          'protractor',
+          'bmi_calculator',
+          'split_bill',
+          'random_wheel',
+          'screen_ruler',
+          'date_calculator',
+          'qr_scanner_live',
+          'currency_converter',
+        ]),
+      );
     });
   });
 }

@@ -149,7 +149,9 @@ void main() {
       expect(find.byKey(const Key('retry_button')), findsOneWidget);
     });
 
-    testWidgets('shows offline indicator when using cached data', (tester) async {
+    testWidgets('shows offline indicator when using cached data', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));
 

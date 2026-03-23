@@ -42,8 +42,7 @@ class AppScaffold extends StatelessWidget {
             selectedIndex: currentIndex,
             onDestinationSelected: (index) {
               HapticService.selection();
-              AnalyticsService.instance
-                  .logTabSwitch(tabName: tabLabels[index]);
+              AnalyticsService.instance.logTabSwitch(tabName: tabLabels[index]);
               context.go(_tabPaths[index]);
             },
             destinations: List.generate(

@@ -31,10 +31,7 @@ const List<SosStep> sosPattern = [
 
 /// 計算完整 SOS 週期的總持續時間（毫秒）。
 int sosPatternTotalDurationMs() {
-  return sosPattern.fold<int>(
-    0,
-    (sum, step) => sum + step.onMs + step.offMs,
-  );
+  return sosPattern.fold<int>(0, (sum, step) => sum + step.onMs + step.offMs);
 }
 
 /// 判斷該步驟是否為短閃（dot）：onMs <= 200。

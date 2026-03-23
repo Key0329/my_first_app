@@ -18,13 +18,7 @@ final _testTool = ToolItem(
 Widget _wrap(Widget child, {ThemeData? theme}) {
   return MaterialApp(
     theme: theme,
-    home: Scaffold(
-      body: SizedBox(
-        width: 200,
-        height: 200,
-        child: child,
-      ),
-    ),
+    home: Scaffold(body: SizedBox(width: 200, height: 200, child: child)),
   );
 }
 

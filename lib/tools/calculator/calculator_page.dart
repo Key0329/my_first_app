@@ -222,9 +222,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(DT.toolBodyPadding),
-              child: ToolSectionCard(
-                child: _buildButtonGrid(colorScheme),
-              ),
+              child: ToolSectionCard(child: _buildButtonGrid(colorScheme)),
             ),
           ),
         ],
@@ -315,27 +313,27 @@ class _CalculatorPageState extends State<CalculatorPage> {
       button: true,
       label: semanticLabel,
       child: BouncingButton(
-      child: FilledButton(
-        key: Key('btn_$label'),
-        onPressed: onPressed,
-        style: FilledButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: fgColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(DT.toolButtonRadius),
+        child: FilledButton(
+          key: Key('btn_$label'),
+          onPressed: onPressed,
+          style: FilledButton.styleFrom(
+            backgroundColor: bgColor,
+            foregroundColor: fgColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DT.toolButtonRadius),
+            ),
+            padding: EdgeInsets.zero,
           ),
-          padding: EdgeInsets.zero,
-        ),
-        child: label == '<-'
-            ? Icon(Icons.backspace_outlined, color: fgColor)
-            : Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
+          child: label == '<-'
+              ? Icon(Icons.backspace_outlined, color: fgColor)
+              : Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-      ),
+        ),
       ),
     );
   }
@@ -396,9 +394,11 @@ class _HistorySheetState extends State<_HistorySheet> {
     if (_searchQuery.isEmpty) return widget.history;
     final q = _searchQuery.toLowerCase();
     return widget.history
-        .where((e) =>
-            e.expression.toLowerCase().contains(q) ||
-            e.result.toLowerCase().contains(q))
+        .where(
+          (e) =>
+              e.expression.toLowerCase().contains(q) ||
+              e.result.toLowerCase().contains(q),
+        )
         .toList();
   }
 
@@ -414,10 +414,7 @@ class _HistorySheetState extends State<_HistorySheet> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -465,10 +462,9 @@ class _HistorySheetState extends State<_HistorySheet> {
                     title: Text(entry.expression),
                     trailing: Text(
                       '= ${entry.result}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     onTap: () => widget.onSelect(entry),
                   );

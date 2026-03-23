@@ -69,7 +69,9 @@ void main() {
       );
     });
 
-    testWidgets('animate: false 時子 widget 立即顯示，不套動畫 transition', (tester) async {
+    testWidgets('animate: false 時子 widget 立即顯示，不套動畫 transition', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -102,7 +104,9 @@ void main() {
       expect(find.text('no animation'), findsOneWidget);
     });
 
-    testWidgets('animate: true 時初始 opacity 為 0，動畫進行後 opacity 增加', (tester) async {
+    testWidgets('animate: true 時初始 opacity 為 0，動畫進行後 opacity 增加', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -168,9 +172,9 @@ void main() {
       // 推進 100ms：index 0 的動畫已在播放，index 5 (250ms delay) 尚未開始
       await tester.pump(const Duration(milliseconds: 100));
 
-      final staggeredWidgets = tester.widgetList<StaggeredFadeIn>(
-        find.byType(StaggeredFadeIn),
-      ).toList();
+      final staggeredWidgets = tester
+          .widgetList<StaggeredFadeIn>(find.byType(StaggeredFadeIn))
+          .toList();
 
       final fadeCard0 = tester.widget<FadeTransition>(
         find.descendant(

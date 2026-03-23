@@ -44,19 +44,106 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   static const _specialChars = '!@#\$%^&*()_+-=[]{}|;:,.<>?';
 
   static const _words = [
-    'apple', 'beach', 'cloud', 'dance', 'eagle', 'flame', 'grape', 'honey',
-    'ivory', 'jewel', 'karma', 'lemon', 'mango', 'noble', 'ocean', 'pearl',
-    'quest', 'river', 'storm', 'tiger', 'ultra', 'vivid', 'whale', 'xenon',
-    'youth', 'zebra', 'amber', 'bloom', 'coral', 'dream', 'ember', 'frost',
-    'glow', 'haven', 'inlet', 'lunar', 'maple', 'north', 'oasis', 'plume',
-    'quilt', 'ridge', 'solar', 'trail', 'unity', 'vapor', 'winds', 'axis',
-    'blaze', 'crest', 'delta', 'epoch', 'flora', 'grain', 'haste', 'irony',
-    'joint', 'knelt', 'light', 'march', 'nerve', 'orbit', 'pilot', 'razor',
-    'scale', 'thorn', 'urban', 'vault', 'wrist', 'yield', 'acorn', 'brave',
-    'charm', 'drift', 'elect', 'forge', 'glide', 'hound', 'image', 'judge',
-    'knack', 'lance', 'minor', 'novel', 'oxide', 'plaza', 'reign', 'slate',
-    'tempo', 'usher', 'vigor', 'worth', 'atlas', 'brine', 'cliff', 'dune',
-    'elfin', 'fable', 'guild', 'hazel',
+    'apple',
+    'beach',
+    'cloud',
+    'dance',
+    'eagle',
+    'flame',
+    'grape',
+    'honey',
+    'ivory',
+    'jewel',
+    'karma',
+    'lemon',
+    'mango',
+    'noble',
+    'ocean',
+    'pearl',
+    'quest',
+    'river',
+    'storm',
+    'tiger',
+    'ultra',
+    'vivid',
+    'whale',
+    'xenon',
+    'youth',
+    'zebra',
+    'amber',
+    'bloom',
+    'coral',
+    'dream',
+    'ember',
+    'frost',
+    'glow',
+    'haven',
+    'inlet',
+    'lunar',
+    'maple',
+    'north',
+    'oasis',
+    'plume',
+    'quilt',
+    'ridge',
+    'solar',
+    'trail',
+    'unity',
+    'vapor',
+    'winds',
+    'axis',
+    'blaze',
+    'crest',
+    'delta',
+    'epoch',
+    'flora',
+    'grain',
+    'haste',
+    'irony',
+    'joint',
+    'knelt',
+    'light',
+    'march',
+    'nerve',
+    'orbit',
+    'pilot',
+    'razor',
+    'scale',
+    'thorn',
+    'urban',
+    'vault',
+    'wrist',
+    'yield',
+    'acorn',
+    'brave',
+    'charm',
+    'drift',
+    'elect',
+    'forge',
+    'glide',
+    'hound',
+    'image',
+    'judge',
+    'knack',
+    'lance',
+    'minor',
+    'novel',
+    'oxide',
+    'plaza',
+    'reign',
+    'slate',
+    'tempo',
+    'usher',
+    'vigor',
+    'worth',
+    'atlas',
+    'brine',
+    'cliff',
+    'dune',
+    'elfin',
+    'fable',
+    'guild',
+    'hazel',
   ];
 
   @override
@@ -92,8 +179,10 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
       if (pool.isEmpty) return;
       final random = Random.secure();
       final len = _length.round();
-      final password =
-          List.generate(len, (_) => pool[random.nextInt(pool.length)]).join();
+      final password = List.generate(
+        len,
+        (_) => pool[random.nextInt(pool.length)],
+      ).join();
       setState(() => _password = password);
     }
     _addToHistory(_password);
@@ -163,7 +252,9 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
   void _toggleType(bool current, void Function(bool) setter) {
     if (current && !_canToggleOff(current)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.passwordMinOneType)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.passwordMinOneType),
+        ),
       );
       return;
     }
@@ -176,9 +267,9 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
     await Clipboard.setData(ClipboardData(text: _password));
     if (mounted) {
       final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.copiedToClipboard)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.copiedToClipboard)));
     }
   }
 
@@ -477,8 +568,7 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
                               icon: const Icon(Icons.copy, size: 20),
                               tooltip: l10n.commonCopy,
                               onPressed: () async {
-                                final messenger =
-                                    ScaffoldMessenger.of(context);
+                                final messenger = ScaffoldMessenger.of(context);
                                 await Clipboard.setData(
                                   ClipboardData(text: password),
                                 );

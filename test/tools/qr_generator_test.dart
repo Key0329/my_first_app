@@ -6,8 +6,9 @@ import 'package:my_first_app/tools/qr_generator/qr_generator_page.dart';
 
 void main() {
   group('QR Code Generator', () {
-    testWidgets('displays QrImageView after generating QR Code',
-        (tester) async {
+    testWidgets('displays QrImageView after generating QR Code', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -33,8 +34,9 @@ void main() {
       expect(find.byType(QrImageView), findsOneWidget);
     });
 
-    testWidgets('different input produces different QR Code widgets',
-        (tester) async {
+    testWidgets('different input produces different QR Code widgets', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -37,19 +37,21 @@ List<ToolItem> getRecommendations(String toolId) {
 
   if (relatedIds != null && relatedIds.isNotEmpty) {
     return relatedIds
-        .map((id) => allTools.cast<ToolItem?>().firstWhere(
-              (t) => t!.id == id,
-              orElse: () => null,
-            ))
+        .map(
+          (id) => allTools.cast<ToolItem?>().firstWhere(
+            (t) => t!.id == id,
+            orElse: () => null,
+          ),
+        )
         .whereType<ToolItem>()
         .toList();
   }
 
   // Fallback: same category
   final currentTool = allTools.cast<ToolItem?>().firstWhere(
-        (t) => t!.id == toolId,
-        orElse: () => null,
-      );
+    (t) => t!.id == toolId,
+    orElse: () => null,
+  );
   if (currentTool == null) return [];
 
   return allTools

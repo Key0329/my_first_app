@@ -69,10 +69,9 @@ void main() {
     });
 
     testWidgets('有 icon 時顯示圖標', (tester) async {
-      await tester.pumpWidget(buildSubject(
-        onPressed: () {},
-        icon: Icons.play_arrow,
-      ));
+      await tester.pumpWidget(
+        buildSubject(onPressed: () {}, icon: Icons.play_arrow),
+      );
 
       expect(find.byIcon(Icons.play_arrow), findsOneWidget);
 

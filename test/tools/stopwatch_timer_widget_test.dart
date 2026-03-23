@@ -24,9 +24,9 @@ void main() {
     ]) {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(
-        MethodChannel(channel),
-        (MethodCall methodCall) async => null,
-      );
+            MethodChannel(channel),
+            (MethodCall methodCall) async => null,
+          );
     }
   });
 
@@ -46,8 +46,7 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('renders idle state with 設定時間 and 開始 button',
-        (tester) async {
+    testWidgets('renders idle state with 設定時間 and 開始 button', (tester) async {
       await switchToTimerTab(tester);
 
       expect(find.text('設定時間'), findsOneWidget);
@@ -76,8 +75,9 @@ void main() {
       expect(find.text('設定時間'), findsOneWidget);
     });
 
-    testWidgets('timer starts and shows 暫停 and 重設 buttons when running',
-        (tester) async {
+    testWidgets('timer starts and shows 暫停 and 重設 buttons when running', (
+      tester,
+    ) async {
       await switchToTimerTab(tester);
 
       // Scroll the 秒 picker to set 5 seconds
@@ -85,8 +85,7 @@ void main() {
       final secPickerFinder = find.byWidgetPredicate(
         (w) =>
             w is ListWheelScrollView &&
-            (w.childDelegate as ListWheelChildBuilderDelegate).childCount ==
-                60,
+            (w.childDelegate as ListWheelChildBuilderDelegate).childCount == 60,
       );
       // There are two ListWheelScrollViews with 60 items (minutes and seconds)
       // We need the last one (seconds)
@@ -94,7 +93,10 @@ void main() {
       final secPicker = secPickerFinder.last;
 
       // Scroll down to select a non-zero value
-      await tester.drag(secPicker, const Offset(0, -200)); // scroll down = higher values
+      await tester.drag(
+        secPicker,
+        const Offset(0, -200),
+      ); // scroll down = higher values
       await tester.pumpAndSettle();
 
       // Now tap 開始
@@ -116,8 +118,7 @@ void main() {
       final secPickerFinder = find.byWidgetPredicate(
         (w) =>
             w is ListWheelScrollView &&
-            (w.childDelegate as ListWheelChildBuilderDelegate).childCount ==
-                60,
+            (w.childDelegate as ListWheelChildBuilderDelegate).childCount == 60,
       );
       await tester.drag(secPickerFinder.last, const Offset(0, -400));
       await tester.pumpAndSettle();
@@ -152,8 +153,7 @@ void main() {
       final secPickerFinder = find.byWidgetPredicate(
         (w) =>
             w is ListWheelScrollView &&
-            (w.childDelegate as ListWheelChildBuilderDelegate).childCount ==
-                60,
+            (w.childDelegate as ListWheelChildBuilderDelegate).childCount == 60,
       );
       await tester.drag(secPickerFinder.last, const Offset(0, -200));
       await tester.pumpAndSettle();
@@ -183,8 +183,7 @@ void main() {
       final secPickerFinder = find.byWidgetPredicate(
         (w) =>
             w is ListWheelScrollView &&
-            (w.childDelegate as ListWheelChildBuilderDelegate).childCount ==
-                60,
+            (w.childDelegate as ListWheelChildBuilderDelegate).childCount == 60,
       );
       await tester.drag(secPickerFinder.last, const Offset(0, -200));
       await tester.pumpAndSettle();

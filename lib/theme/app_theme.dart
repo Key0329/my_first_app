@@ -6,10 +6,7 @@ class AppTheme {
     final scheme = ColorScheme.fromSeed(
       seedColor: DT.brandPrimary,
       brightness: Brightness.light,
-    ).copyWith(
-      surface: DT.lightPageBg,
-      primary: DT.brandPrimary,
-    );
+    ).copyWith(surface: DT.lightPageBg, primary: DT.brandPrimary);
 
     return ThemeData(
       useMaterial3: true,
@@ -53,18 +50,19 @@ class AppTheme {
   }
 
   static ThemeData dark() {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: DT.brandPrimary,
-      brightness: Brightness.dark,
-    ).copyWith(
-      surface: DT.darkPageBg,
-      primary: DT.brandPrimary,
-      surfaceContainerLowest: DT.darkCardBg,
-      surfaceContainerLow: DT.darkCardBg,
-      surfaceContainer: DT.darkCardBg,
-      surfaceContainerHigh: DT.darkCardBg,
-      surfaceContainerHighest: DT.darkCardBg,
-    );
+    final scheme =
+        ColorScheme.fromSeed(
+          seedColor: DT.brandPrimary,
+          brightness: Brightness.dark,
+        ).copyWith(
+          surface: DT.darkPageBg,
+          primary: DT.brandPrimary,
+          surfaceContainerLowest: DT.darkCardBg,
+          surfaceContainerLow: DT.darkCardBg,
+          surfaceContainer: DT.darkCardBg,
+          surfaceContainerHigh: DT.darkCardBg,
+          surfaceContainerHighest: DT.darkCardBg,
+        );
 
     return ThemeData(
       useMaterial3: true,

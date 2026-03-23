@@ -65,16 +65,12 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
     final startDelay = widget.staggerDelay * widget.index;
     final totalDuration = startDelay + widget.itemDuration;
 
-    _controller = AnimationController(
-      duration: totalDuration,
-      vsync: this,
-    );
+    _controller = AnimationController(duration: totalDuration, vsync: this);
 
     // 計算此項目動畫在整體持續時間中的區間
-    final double startRatio =
-        totalDuration.inMicroseconds > 0
-            ? startDelay.inMicroseconds / totalDuration.inMicroseconds
-            : 0.0;
+    final double startRatio = totalDuration.inMicroseconds > 0
+        ? startDelay.inMicroseconds / totalDuration.inMicroseconds
+        : 0.0;
 
     final interval = Interval(startRatio, 1.0, curve: Curves.easeOut);
 
@@ -110,10 +106,7 @@ class _StaggeredFadeInState extends State<StaggeredFadeIn>
 
     return FadeTransition(
       opacity: _opacity,
-      child: SlideTransition(
-        position: _slide,
-        child: widget.child,
-      ),
+      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }

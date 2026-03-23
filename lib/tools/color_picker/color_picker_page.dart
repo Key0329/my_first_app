@@ -35,8 +35,8 @@ class _ColorEntry {
 
   String get hex =>
       '#${r8.toRadixString(16).padLeft(2, '0')}'
-      '${g8.toRadixString(16).padLeft(2, '0')}'
-      '${b8.toRadixString(16).padLeft(2, '0')}'
+              '${g8.toRadixString(16).padLeft(2, '0')}'
+              '${b8.toRadixString(16).padLeft(2, '0')}'
           .toUpperCase();
 
   String get rgb => '$r8, $g8, $b8';
@@ -47,13 +47,20 @@ class _ColorEntry {
   }
 
   Map<String, dynamic> toJson() => {
-    'r': r8, 'g': g8, 'b': b8,
+    'r': r8,
+    'g': g8,
+    'b': b8,
     'pickedAt': pickedAt.toIso8601String(),
   };
 
   static _ColorEntry fromJson(Map<String, dynamic> json) {
     return _ColorEntry(
-      color: Color.fromARGB(255, json['r'] as int, json['g'] as int, json['b'] as int),
+      color: Color.fromARGB(
+        255,
+        json['r'] as int,
+        json['g'] as int,
+        json['b'] as int,
+      ),
       pickedAt: DateTime.parse(json['pickedAt'] as String),
     );
   }
@@ -192,8 +199,9 @@ class _ColorPickerPageState extends State<ColorPickerPage>
     setState(() => _isCapturing = true);
 
     try {
-      final boundary = _cameraKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary =
+          _cameraKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
       if (boundary == null) return;
 
       final image = await boundary.toImage(pixelRatio: 1.0);
@@ -508,7 +516,9 @@ class _ColorPickerPageState extends State<ColorPickerPage>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withValues(alpha: 0.3) : Colors.black.withValues(alpha: 0.3),
+          color: isActive
+              ? Colors.white.withValues(alpha: 0.3)
+              : Colors.black.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isActive ? Colors.white : Colors.white38,
@@ -589,7 +599,10 @@ class _ColorPickerPageState extends State<ColorPickerPage>
             Positioned(
               bottom: 16,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(20),

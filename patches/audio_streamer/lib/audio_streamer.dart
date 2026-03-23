@@ -6,10 +6,12 @@ const String METHOD_CHANNEL_NAME = 'audio_streamer.methodChannel';
 
 /// API for streaming raw audio data.
 class AudioStreamer {
-  static const EventChannel _noiseEventChannel =
-      EventChannel(EVENT_CHANNEL_NAME);
-  static const MethodChannel _sampleRateChannel =
-      MethodChannel(METHOD_CHANNEL_NAME);
+  static const EventChannel _noiseEventChannel = EventChannel(
+    EVENT_CHANNEL_NAME,
+  );
+  static const MethodChannel _sampleRateChannel = MethodChannel(
+    METHOD_CHANNEL_NAME,
+  );
   static const int DEFAULT_SAMPLING_RATE = 44100;
 
   int _sampleRate = DEFAULT_SAMPLING_RATE;
@@ -47,7 +49,9 @@ class AudioStreamer {
   Stream<List<double>> get audioStream => _stream ??= _noiseEventChannel
       .receiveBroadcastStream({"sampleRate": sampleRate})
       .map((buffer) => buffer as List<dynamic>?)
-      .map((list) => (list != null && list.isNotEmpty && list[0] is double)
-          ? list.cast<double>()
-          : list!.map((e) => e is double ? e : double.parse('$e')).toList());
+      .map(
+        (list) => (list != null && list.isNotEmpty && list[0] is double)
+            ? list.cast<double>()
+            : list!.map((e) => e is double ? e : double.parse('$e')).toList(),
+      );
 }

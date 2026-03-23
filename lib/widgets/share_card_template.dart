@@ -62,9 +62,7 @@ class ShareCardTemplate extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // 結果內容
-              Expanded(
-                child: Center(child: resultChild),
-              ),
+              Expanded(child: Center(child: resultChild)),
               const SizedBox(height: 16),
               // 品牌水印
               Row(

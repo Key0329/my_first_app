@@ -565,9 +565,7 @@ class _ResultContent extends StatelessWidget {
                 ),
               ),
               backgroundColor: categoryColor.withValues(alpha: 0.12),
-              side: BorderSide(
-                color: categoryColor.withValues(alpha: 0.4),
-              ),
+              side: BorderSide(color: categoryColor.withValues(alpha: 0.4)),
               padding: const EdgeInsets.symmetric(horizontal: DT.spaceXs),
               visualDensity: VisualDensity.compact,
             ),
@@ -577,7 +575,10 @@ class _ResultContent extends StatelessWidget {
 
         // 建議體重範圍
         Text(
-          l10n.bmiHealthyRange(minWeight.toStringAsFixed(1), maxWeight.toStringAsFixed(1)),
+          l10n.bmiHealthyRange(
+            minWeight.toStringAsFixed(1),
+            maxWeight.toStringAsFixed(1),
+          ),
           style: textTheme.bodyMedium?.copyWith(
             color: brandColor,
             fontWeight: FontWeight.w500,

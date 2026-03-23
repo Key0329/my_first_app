@@ -77,10 +77,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
   /// 開始錄音並監聽噪音資料
   Future<void> _startRecording() async {
     try {
-      _noiseSubscription = _noiseMeter.noise.listen(
-        _onData,
-        onError: _onError,
-      );
+      _noiseSubscription = _noiseMeter.noise.listen(_onData, onError: _onError);
       setState(() {
         _isRecording = true;
         _permissionDenied = false;
@@ -204,9 +201,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _isRecording
-                          ? _currentDb.toStringAsFixed(1)
-                          : '--',
+                      _isRecording ? _currentDb.toStringAsFixed(1) : '--',
                       style: TextStyle(
                         fontSize: 72,
                         fontWeight: FontWeight.bold,
@@ -217,9 +212,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                       AppLocalizations.of(context)!.noiseMeterDb,
                       style: TextStyle(
                         fontSize: 24,
-                        color: _isRecording
-                            ? dbColor
-                            : colorScheme.outline,
+                        color: _isRecording ? dbColor : colorScheme.outline,
                       ),
                     ),
                   ],
@@ -370,11 +363,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
     );
   }
 
-  Widget _buildStatChip(
-    String label,
-    String value,
-    ColorScheme colorScheme,
-  ) {
+  Widget _buildStatChip(String label, String value, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
@@ -386,10 +375,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant),
           ),
           const SizedBox(width: 6),
           Text(
@@ -432,14 +418,10 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
             decoration: BoxDecoration(
               color: isActive
                   ? ref.color.withValues(alpha: 0.2)
-                  : Theme.of(context)
-                      .colorScheme
-                      .surfaceContainerHighest
-                      .withValues(alpha: 0.5),
+                  : Theme.of(context).colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: isActive
-                  ? Border.all(color: ref.color, width: 2)
-                  : null,
+              border: isActive ? Border.all(color: ref.color, width: 2) : null,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -450,8 +432,7 @@ class _NoiseMeterPageState extends State<NoiseMeterPage> {
                   localizedLabels[index],
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight:
-                        isActive ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     color: isActive
                         ? ref.color
                         : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -531,20 +512,12 @@ class _NoiseChartPainter extends CustomPainter {
       ..color = gridColor
       ..strokeWidth = 0.5;
 
-    final textStyle = TextStyle(
-      color: textColor,
-      fontSize: 10,
-    );
+    final textStyle = TextStyle(color: textColor, fontSize: 10);
 
     for (final dbMark in [0, 30, 60, 90, 120]) {
-      final y = paddingTop +
-          chartHeight * (1 - (dbMark - minDb) / dbRange);
+      final y = paddingTop + chartHeight * (1 - (dbMark - minDb) / dbRange);
 
-      canvas.drawLine(
-        Offset(paddingLeft, y),
-        Offset(size.width, y),
-        gridPaint,
-      );
+      canvas.drawLine(Offset(paddingLeft, y), Offset(size.width, y), gridPaint);
 
       final textSpan = TextSpan(text: '$dbMark', style: textStyle);
       final textPainter = TextPainter(
@@ -554,8 +527,7 @@ class _NoiseChartPainter extends CustomPainter {
 
       textPainter.paint(
         canvas,
-        Offset(paddingLeft - textPainter.width - 4,
-            y - textPainter.height / 2),
+        Offset(paddingLeft - textPainter.width - 4, y - textPainter.height / 2),
       );
     }
 
@@ -568,16 +540,17 @@ class _NoiseChartPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     final fillPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          lineColor.withValues(alpha: 0.3),
-          lineColor.withValues(alpha: 0.0),
-        ],
-      ).createShader(
-        Rect.fromLTWH(paddingLeft, paddingTop, chartWidth, chartHeight),
-      );
+      ..shader =
+          LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              lineColor.withValues(alpha: 0.3),
+              lineColor.withValues(alpha: 0.0),
+            ],
+          ).createShader(
+            Rect.fromLTWH(paddingLeft, paddingTop, chartWidth, chartHeight),
+          );
 
     final path = Path();
     final fillPath = Path();

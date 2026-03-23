@@ -5,8 +5,7 @@ import 'package:my_first_app/widgets/tool_recommendation_bar.dart';
 
 void main() {
   group('ToolRecommendationBar', () {
-    testWidgets('renders recommendation chips for known tool',
-        (tester) async {
+    testWidgets('renders recommendation chips for known tool', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

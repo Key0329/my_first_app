@@ -43,10 +43,9 @@ class ThemeService extends ChangeNotifier {
   Future<void> setLocale(Locale locale) async {
     _locale = locale;
     notifyListeners();
-    final localeString =
-        locale.countryCode != null
-            ? '${locale.languageCode}_${locale.countryCode}'
-            : locale.languageCode;
+    final localeString = locale.countryCode != null
+        ? '${locale.languageCode}_${locale.countryCode}'
+        : locale.languageCode;
     await _prefs.setString(_keyLocale, localeString);
   }
 }

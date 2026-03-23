@@ -21,7 +21,9 @@ class Note {
   String get displayTitle {
     if (title.isNotEmpty) return title;
     final firstLine = content.split('\n').first;
-    return firstLine.length > 50 ? '${firstLine.substring(0, 50)}...' : firstLine;
+    return firstLine.length > 50
+        ? '${firstLine.substring(0, 50)}...'
+        : firstLine;
   }
 
   /// 預覽文字：content 前 100 字。
@@ -34,20 +36,20 @@ class Note {
   bool get isEmpty => title.trim().isEmpty && content.trim().isEmpty;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'content': content,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'id': id,
+    'title': title,
+    'content': content,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 
   factory Note.fromJson(Map<String, dynamic> json) => Note(
-        id: json['id'] as String,
-        title: json['title'] as String? ?? '',
-        content: json['content'] as String? ?? '',
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
-      );
+    id: json['id'] as String,
+    title: json['title'] as String? ?? '',
+    content: json['content'] as String? ?? '',
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    updatedAt: DateTime.parse(json['updatedAt'] as String),
+  );
 }
 
 /// 筆記持久化服務。

@@ -92,10 +92,7 @@ class ImmersiveToolScaffold extends StatelessWidget {
         toolColor.withValues(alpha: 0.2),
       ];
     }
-    return [
-      toolColor.withValues(alpha: 0.8),
-      toolColor.withValues(alpha: 0.4),
-    ];
+    return [toolColor.withValues(alpha: 0.8), toolColor.withValues(alpha: 0.4)];
   }
 
   /// 建構漸層 header Container。
@@ -126,21 +123,19 @@ class ImmersiveToolScaffold extends StatelessWidget {
     return Hero(
       tag: heroTag!,
       // 飛行期間只顯示漸層背景，避免 headerChild 內容在過渡動畫中被擠壓閃爍
-      flightShuttleBuilder: (flightContext, animation, direction, fromContext, toContext) {
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: gradientColors,
-            ),
-          ),
-        );
-      },
-      child: Material(
-        type: MaterialType.transparency,
-        child: headerContainer,
-      ),
+      flightShuttleBuilder:
+          (flightContext, animation, direction, fromContext, toContext) {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: gradientColors,
+                ),
+              ),
+            );
+          },
+      child: Material(type: MaterialType.transparency, child: headerContainer),
     );
   }
 
@@ -152,19 +147,13 @@ class ImmersiveToolScaffold extends StatelessWidget {
 
     return Scaffold(
       // 透明 AppBar（主題已設定 backgroundColor: transparent）
-      appBar: AppBar(
-        title: Text(title),
-        actions: actions,
-      ),
+      appBar: AppBar(title: Text(title), actions: actions),
       // 使漸層背景延伸至 AppBar 後方
       extendBodyBehindAppBar: true,
       body: Column(
         children: [
           // ── 上方漸層區 ─────────────────────────────────────────
-          Expanded(
-            flex: headerFlex,
-            child: _buildHeader(gradientColors),
-          ),
+          Expanded(flex: headerFlex, child: _buildHeader(gradientColors)),
 
           // ── 下方圓角表面區 ─────────────────────────────────────
           // 使用負 margin 使圓角覆蓋在漸層上方（overlap 24px）

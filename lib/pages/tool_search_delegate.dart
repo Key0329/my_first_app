@@ -19,19 +19,16 @@ List<ToolItem> filterTools(String query) {
 
 class ToolSearchDelegate extends SearchDelegate<ToolItem?> {
   ToolSearchDelegate({required String searchHint})
-      : super(
-          searchFieldLabel: searchHint,
-          searchFieldStyle: const TextStyle(fontSize: 16),
-        );
+    : super(
+        searchFieldLabel: searchHint,
+        searchFieldStyle: const TextStyle(fontSize: 16),
+      );
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       if (query.isNotEmpty)
-        IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () => query = '',
-        ),
+        IconButton(icon: const Icon(Icons.clear), onPressed: () => query = ''),
     ];
   }
 

@@ -125,9 +125,7 @@ class DateCalculatorLogic {
     var weekendCount = 0;
 
     // 遍歷 [s, e] 閉區間（包含起始和結束日期）
-    for (var d = s;
-        !d.isAfter(e);
-        d = d.add(const Duration(days: 1))) {
+    for (var d = s; !d.isAfter(e); d = d.add(const Duration(days: 1))) {
       if (d.weekday == DateTime.saturday || d.weekday == DateTime.sunday) {
         weekendCount++;
       } else {

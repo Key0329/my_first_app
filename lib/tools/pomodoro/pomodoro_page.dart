@@ -50,17 +50,18 @@ class _PomodoroPageState extends State<PomodoroPage> {
 
     // 顯示本地通知
     final isWorkDone = _timer.phase != PomodoroPhase.work; // 已經切換了
-    final message =
-        isWorkDone ? l10n.pomodoroWorkComplete : l10n.pomodoroBreakComplete;
+    final message = isWorkDone
+        ? l10n.pomodoroWorkComplete
+        : l10n.pomodoroBreakComplete;
     TimerNotificationService.instance.init().then((_) {
       // 不用排程 — 直接顯示即時通知比較合適
       // 但 scheduleTimerNotification 需要 duration，改用立即顯示
     });
     // 用 SnackBar 作為前景提示
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -145,7 +146,8 @@ class _PomodoroPageState extends State<PomodoroPage> {
           // 番茄數
           Text(
             l10n.pomodoroSession(
-              _timer.completedSessions % PomodoroTimer.sessionsBeforeLongBreak + 1,
+              _timer.completedSessions % PomodoroTimer.sessionsBeforeLongBreak +
+                  1,
               PomodoroTimer.sessionsBeforeLongBreak,
             ),
             style: const TextStyle(color: Colors.white54, fontSize: 13),
@@ -164,11 +166,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // ── 控制按鈕 ──
-          StaggeredFadeIn(
-            index: 0,
-            totalItems: 5,
-            child: _buildControls(l10n),
-          ),
+          StaggeredFadeIn(index: 0, totalItems: 5, child: _buildControls(l10n)),
           const SizedBox(height: DT.spaceLg),
           // ── 今日統計 ──
           StaggeredFadeIn(
@@ -228,8 +226,8 @@ class _PomodoroPageState extends State<PomodoroPage> {
             isRunning
                 ? l10n.pomodoroPause
                 : isPaused
-                    ? l10n.pomodoroResume
-                    : l10n.pomodoroStart,
+                ? l10n.pomodoroResume
+                : l10n.pomodoroStart,
           ),
           style: FilledButton.styleFrom(
             backgroundColor: _toolColor,
@@ -276,8 +274,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
           const SizedBox(height: DT.spaceSm),
           Row(
             children: [
-              Icon(Icons.local_fire_department,
-                  color: _toolColor, size: 20),
+              Icon(Icons.local_fire_department, color: _toolColor, size: 20),
               const SizedBox(width: DT.spaceXs),
               Text(l10n.pomodoroTodayCount(_timer.todayCount)),
               const Spacer(),

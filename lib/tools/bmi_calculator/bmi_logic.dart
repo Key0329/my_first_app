@@ -31,10 +31,7 @@ enum BmiCategory {
 
 /// BMI 計算結果
 class BmiResult {
-  const BmiResult({
-    required this.bmi,
-    required this.category,
-  });
+  const BmiResult({required this.bmi, required this.category});
 
   /// BMI 數值（四捨五入至小數點後兩位）
   final double bmi;
@@ -57,10 +54,7 @@ class BmiLogic {
     final heightM = heightCm / 100.0;
     final bmi = weightKg / (heightM * heightM);
     final rounded = double.parse(bmi.toStringAsFixed(2));
-    return BmiResult(
-      bmi: rounded,
-      category: _classify(bmi),
-    );
+    return BmiResult(bmi: rounded, category: _classify(bmi));
   }
 
   /// 計算指定身高的健康體重範圍（BMI 18.5–24.9）。

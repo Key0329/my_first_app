@@ -76,9 +76,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Divider(
-                color: isDark ? Colors.white24 : Colors.grey.shade300,
-              ),
+              Divider(color: isDark ? Colors.white24 : Colors.grey.shade300),
               // ── 內容 ──
               Expanded(
                 child: TextField(

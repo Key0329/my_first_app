@@ -15,24 +15,15 @@ void main() {
     });
 
     test('only seconds', () {
-      expect(
-        formatDuration(const Duration(seconds: 7)),
-        equals('00:00:07.00'),
-      );
+      expect(formatDuration(const Duration(seconds: 7)), equals('00:00:07.00'));
     });
 
     test('only minutes', () {
-      expect(
-        formatDuration(const Duration(minutes: 5)),
-        equals('00:05:00.00'),
-      );
+      expect(formatDuration(const Duration(minutes: 5)), equals('00:05:00.00'));
     });
 
     test('only hours', () {
-      expect(
-        formatDuration(const Duration(hours: 2)),
-        equals('02:00:00.00'),
-      );
+      expect(formatDuration(const Duration(hours: 2)), equals('02:00:00.00'));
     });
 
     test('mixed duration', () {
@@ -47,7 +38,12 @@ void main() {
     test('maximum typical stopwatch value', () {
       expect(
         formatDuration(
-          const Duration(hours: 99, minutes: 59, seconds: 59, milliseconds: 990),
+          const Duration(
+            hours: 99,
+            minutes: 59,
+            seconds: 59,
+            milliseconds: 990,
+          ),
         ),
         equals('99:59:59.99'),
       );

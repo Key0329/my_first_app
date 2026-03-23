@@ -7,11 +7,7 @@ void main() {
     testWidgets('renders child widget', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: BouncingButton(
-              child: Text('hello'),
-            ),
-          ),
+          home: Scaffold(body: BouncingButton(child: Text('hello'))),
         ),
       );
 
@@ -61,11 +57,7 @@ void main() {
     testWidgets('uses ScaleTransition for scale animation', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: BouncingButton(
-              child: Text('animated'),
-            ),
-          ),
+          home: Scaffold(body: BouncingButton(child: Text('animated'))),
         ),
       );
 
@@ -75,44 +67,36 @@ void main() {
     testWidgets('uses Listener for animation events', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: BouncingButton(
-              child: Text('listener'),
-            ),
-          ),
+          home: Scaffold(body: BouncingButton(child: Text('listener'))),
         ),
       );
 
       expect(find.byType(Listener), findsWidgets);
     });
 
-    testWidgets('wraps in GestureDetector only when onTap/onLongPress provided',
-        (tester) async {
-      // Without callbacks: no GestureDetector from BouncingButton
+    testWidgets(
+      'wraps in GestureDetector only when onTap/onLongPress provided',
+      (tester) async {
+        // Without callbacks: no GestureDetector from BouncingButton
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(body: BouncingButton(child: Text('no gesture'))),
+          ),
+        );
+
+        // GestureDetector may still exist from MaterialApp internals,
+        // but BouncingButton should use Listener for animation
+        final bouncingFinder = find.byType(BouncingButton);
+        expect(bouncingFinder, findsOneWidget);
+      },
+    );
+
+    testWidgets('works without onTap and onLongPress (nullable)', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: BouncingButton(
-              child: Text('no gesture'),
-            ),
-          ),
-        ),
-      );
-
-      // GestureDetector may still exist from MaterialApp internals,
-      // but BouncingButton should use Listener for animation
-      final bouncingFinder = find.byType(BouncingButton);
-      expect(bouncingFinder, findsOneWidget);
-    });
-
-    testWidgets('works without onTap and onLongPress (nullable)', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: BouncingButton(
-              child: Icon(Icons.star),
-            ),
-          ),
+          home: Scaffold(body: BouncingButton(child: Icon(Icons.star))),
         ),
       );
 
@@ -120,7 +104,9 @@ void main() {
       await tester.pump();
     });
 
-    testWidgets('wraps Material button without gesture conflict', (tester) async {
+    testWidgets('wraps Material button without gesture conflict', (
+      tester,
+    ) async {
       var buttonPressed = false;
 
       await tester.pumpWidget(
@@ -141,8 +127,12 @@ void main() {
       await tester.tap(find.text('inner button'));
       await tester.pump();
 
-      expect(buttonPressed, isTrue,
-          reason: 'Inner Material button onPressed should fire without gesture conflict');
+      expect(
+        buttonPressed,
+        isTrue,
+        reason:
+            'Inner Material button onPressed should fire without gesture conflict',
+      );
     });
   });
 }

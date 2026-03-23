@@ -11,8 +11,8 @@ String colorToHex(Color color) {
   final g = to8bit(color.g);
   final b = to8bit(color.b);
   return '#${r.toRadixString(16).padLeft(2, '0')}'
-      '${g.toRadixString(16).padLeft(2, '0')}'
-      '${b.toRadixString(16).padLeft(2, '0')}'
+          '${g.toRadixString(16).padLeft(2, '0')}'
+          '${b.toRadixString(16).padLeft(2, '0')}'
       .toUpperCase();
 }
 

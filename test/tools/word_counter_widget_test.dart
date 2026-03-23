@@ -79,7 +79,9 @@ void main() {
       expect(find.text('0'), findsNWidgets(6));
     });
 
-    testWidgets('copy button copies summary and shows snackbar', (tester) async {
+    testWidgets('copy button copies summary and shows snackbar', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -96,8 +98,10 @@ void main() {
         },
       );
       addTearDown(() {
-        tester.binding.defaultBinaryMessenger
-            .setMockMethodCallHandler(SystemChannels.platform, null);
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        );
       });
 
       await tester.pumpWidget(_buildApp());

@@ -114,14 +114,11 @@ class RulerPainter extends CustomPainter {
       final bool isCm = mm % 10 == 0;
       final bool isFiveMm = mm % 5 == 0;
 
-      final double tickWidth =
-          isCm ? _longTickWidth : (isFiveMm ? _midTickWidth : _shortTickWidth);
+      final double tickWidth = isCm
+          ? _longTickWidth
+          : (isFiveMm ? _midTickWidth : _shortTickWidth);
 
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(tickWidth, y),
-        tickPaint,
-      );
+      canvas.drawLine(Offset(0, y), Offset(tickWidth, y), tickPaint);
 
       // Centimetre label.
       if (isCm && mm > 0) {
@@ -170,8 +167,9 @@ class RulerPainter extends CustomPainter {
       final bool isInch = unit % 16 == 0;
       final bool isQuarter = unit % 4 == 0;
 
-      final double tickWidth =
-          isInch ? _longTickWidth : (isQuarter ? _midTickWidth : _shortTickWidth);
+      final double tickWidth = isInch
+          ? _longTickWidth
+          : (isQuarter ? _midTickWidth : _shortTickWidth);
 
       // Right-side ticks extend from the right edge leftward.
       canvas.drawLine(
@@ -226,8 +224,7 @@ class RulerPainter extends CustomPainter {
       textAlign: align,
     )..layout(maxWidth: maxWidth.clamp(0.0, double.infinity));
 
-    final double dx =
-        align == ui.TextAlign.right ? x - tp.width : x;
+    final double dx = align == ui.TextAlign.right ? x - tp.width : x;
     final double dy = y - tp.height / 2;
 
     tp.paint(canvas, Offset(dx, dy));

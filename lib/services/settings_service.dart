@@ -52,8 +52,7 @@ class AppSettings extends ChangeNotifier {
   Future<void> addRecentTool(String toolId) =>
       userPreferencesService.addRecentTool(toolId);
 
-  Future<void> clearRecentTools() =>
-      userPreferencesService.clearRecentTools();
+  Future<void> clearRecentTools() => userPreferencesService.clearRecentTools();
 
   Future<void> toggleFavorite(String toolId) =>
       favoritesService.toggleFavorite(toolId);

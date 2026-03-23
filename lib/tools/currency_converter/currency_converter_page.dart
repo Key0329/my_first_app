@@ -358,15 +358,24 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: DT.toolSectionGap),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.amber.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: Colors.amber.withValues(alpha: 0.4),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.warning_amber, color: Colors.amber, size: 20),
+                    const Icon(
+                      Icons.warning_amber,
+                      color: Colors.amber,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -415,14 +424,9 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
                       border: const OutlineInputBorder(),
                       hintText: l10n.tool_currency_converter_amount_hint,
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: _toolColor,
-                          width: 2,
-                        ),
+                        borderSide: BorderSide(color: _toolColor, width: 2),
                       ),
-                      floatingLabelStyle: const TextStyle(
-                        color: _toolColor,
-                      ),
+                      floatingLabelStyle: const TextStyle(color: _toolColor),
                     ),
                   ),
                 ],
@@ -468,10 +472,7 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
                       color: _toolColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.swap_vert,
-                      color: _toolColor,
-                    ),
+                    child: const Icon(Icons.swap_vert, color: _toolColor),
                   ),
                 ),
               ),
@@ -537,7 +538,9 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
               ),
             DropdownMenuItem(
               value: codes[i],
-              child: Text('${codes[i]} — ${_currencyNames[codes[i]] ?? codes[i]}'),
+              child: Text(
+                '${codes[i]} — ${_currencyNames[codes[i]] ?? codes[i]}',
+              ),
             ),
           ],
         ],
@@ -550,15 +553,14 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
   Widget _buildMultiCurrencyResults(AppLocalizations l10n) {
     final text = _amountController.text.trim();
     final amount = double.tryParse(text);
-    final targets = _multiTargets
-        .where((c) => c != _fromCurrency && _currencyCodes.contains(c))
-        .toList()
-      ..sort();
+    final targets =
+        _multiTargets
+            .where((c) => c != _fromCurrency && _currencyCodes.contains(c))
+            .toList()
+          ..sort();
 
     // Target currency chips
-    final allCodes = _currencyCodes
-        .where((c) => c != _fromCurrency)
-        .toList();
+    final allCodes = _currencyCodes.where((c) => c != _fromCurrency).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -570,24 +572,28 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
           children: _favoriteCurrencies
               .where((c) => c != _fromCurrency && allCodes.contains(c))
               .followedBy(
-                allCodes.where((c) =>
-                    !_favoriteCurrencies.contains(c) &&
-                    _multiTargets.contains(c)),
+                allCodes.where(
+                  (c) =>
+                      !_favoriteCurrencies.contains(c) &&
+                      _multiTargets.contains(c),
+                ),
               )
               .toSet()
-              .map((code) => FilterChip(
-                    label: Text(code),
-                    selected: _multiTargets.contains(code),
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          _multiTargets.add(code);
-                        } else {
-                          _multiTargets.remove(code);
-                        }
-                      });
-                    },
-                  ))
+              .map(
+                (code) => FilterChip(
+                  label: Text(code),
+                  selected: _multiTargets.contains(code),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        _multiTargets.add(code);
+                      } else {
+                        _multiTargets.remove(code);
+                      }
+                    });
+                  },
+                ),
+              )
               .toList(),
         ),
         if (amount != null && targets.isNotEmpty) ...[
@@ -641,11 +647,7 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.cloud_off,
-              size: 64,
-              color: Colors.grey,
-            ),
+            const Icon(Icons.cloud_off, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
             Text(
               message,

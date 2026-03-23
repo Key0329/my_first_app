@@ -76,10 +76,7 @@ class _WheelResultOverlayState extends State<WheelResultOverlay>
           child: Container(
             color: Colors.black.withValues(alpha: 0.5 * _bgOpacity.value),
             child: Center(
-              child: Transform.scale(
-                scale: _cardScale.value,
-                child: child,
-              ),
+              child: Transform.scale(scale: _cardScale.value, child: child),
             ),
           ),
         );
@@ -134,8 +131,7 @@ class _WheelResultOverlayState extends State<WheelResultOverlay>
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.white54),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DT.toolButtonRadius),
+                      borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                     ),
                   ),
                   child: const Text(

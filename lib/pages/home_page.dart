@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
     widget.settings.toggleFavorite(tool.id);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(wasFavorite ? l10n.homeFavoriteRemoved : l10n.homeFavoriteAdded),
+        content: Text(
+          wasFavorite ? l10n.homeFavoriteRemoved : l10n.homeFavoriteAdded,
+        ),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -78,7 +80,10 @@ class _HomePageState extends State<HomePage> {
           // ── 標題區（64dp）──
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              DT.spaceXl, DT.spaceLg, DT.spaceXl, DT.spaceMd,
+              DT.spaceXl,
+              DT.spaceLg,
+              DT.spaceXl,
+              DT.spaceMd,
             ),
             child: Row(
               children: [
@@ -144,8 +149,7 @@ class _HomePageState extends State<HomePage> {
                   _CategoryChip(
                     label: l10n.categoryAll,
                     selected: _selectedCategory == null,
-                    onSelected: () =>
-                        setState(() => _selectedCategory = null),
+                    onSelected: () => setState(() => _selectedCategory = null),
                   ),
                   const SizedBox(width: DT.spaceSm),
                   for (final category in ToolCategory.values) ...[
@@ -170,10 +174,12 @@ class _HomePageState extends State<HomePage> {
                 final tools = _filteredTools;
                 final recentToolIds = widget.settings.recentTools;
                 final recentTools = recentToolIds
-                    .map((id) => allTools.cast<ToolItem?>().firstWhere(
-                          (t) => t!.id == id,
-                          orElse: () => null,
-                        ))
+                    .map(
+                      (id) => allTools.cast<ToolItem?>().firstWhere(
+                        (t) => t!.id == id,
+                        orElse: () => null,
+                      ),
+                    )
                     .whereType<ToolItem>()
                     .toList();
 
@@ -184,7 +190,10 @@ class _HomePageState extends State<HomePage> {
                       SliverToBoxAdapter(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(
-                            DT.spaceXl, 0, DT.spaceXl, DT.spaceSm,
+                            DT.spaceXl,
+                            0,
+                            DT.spaceXl,
+                            DT.spaceSm,
                           ),
                           child: Text(
                             l10n.homeRecentTools,
@@ -260,37 +269,35 @@ class _HomePageState extends State<HomePage> {
                     // ── 工具 Grid ──
                     SliverPadding(
                       padding: const EdgeInsets.fromLTRB(
-                        DT.spaceXl, 0, DT.spaceXl, DT.spaceLg,
+                        DT.spaceXl,
+                        0,
+                        DT.spaceXl,
+                        DT.spaceLg,
                       ),
                       sliver: SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: DT.gridSpacing,
-                          crossAxisSpacing: DT.gridSpacing,
-                          childAspectRatio: 1.2,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final tool = tools[index];
-                            return StaggeredFadeIn(
-                              index: index,
-                              totalItems: tools.length,
-                              animate: shouldAnimate,
-                              child: ToolCard(
-                                tool: tool,
-                                isFavorite:
-                                    widget.settings.isFavorite(tool.id),
-                                onTap: () => _openTool(context, tool),
-                                onLongPress: () =>
-                                    _toggleFavorite(context, tool),
-                                onFavoriteToggle: () =>
-                                    _toggleFavorite(context, tool),
-                              ),
-                            );
-                          },
-                          childCount: tools.length,
-                        ),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: DT.gridSpacing,
+                              crossAxisSpacing: DT.gridSpacing,
+                              childAspectRatio: 1.2,
+                            ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final tool = tools[index];
+                          return StaggeredFadeIn(
+                            index: index,
+                            totalItems: tools.length,
+                            animate: shouldAnimate,
+                            child: ToolCard(
+                              tool: tool,
+                              isFavorite: widget.settings.isFavorite(tool.id),
+                              onTap: () => _openTool(context, tool),
+                              onLongPress: () => _toggleFavorite(context, tool),
+                              onFavoriteToggle: () =>
+                                  _toggleFavorite(context, tool),
+                            ),
+                          );
+                        }, childCount: tools.length),
                       ),
                     ),
                   ],

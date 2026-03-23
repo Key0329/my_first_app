@@ -105,44 +105,44 @@ class _ProtractorPageState extends State<ProtractorPage> {
                         color: theme.colorScheme.primary,
                       ),
                     ),
-                  // 重設按鈕
-                  BouncingButton(
-                    onTap: _reset,
-                    child: Container(
-                      height: DT.toolButtonHeight,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: DT.toolBodyPadding,
-                      ),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(
-                          DT.toolButtonRadius,
+                    // 重設按鈕
+                    BouncingButton(
+                      onTap: _reset,
+                      child: Container(
+                        height: DT.toolButtonHeight,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: DT.toolBodyPadding,
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.refresh,
-                            size: 18,
-                            color: theme.colorScheme.onPrimaryContainer,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(
+                            DT.toolButtonRadius,
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            AppLocalizations.of(context)!.commonReset,
-                            style: TextStyle(
-                              fontSize: DT.fontToolButton,
-                              fontWeight: FontWeight.w600,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.refresh,
+                              size: 18,
                               color: theme.colorScheme.onPrimaryContainer,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 6),
+                            Text(
+                              AppLocalizations.of(context)!.commonReset,
+                              style: TextStyle(
+                                fontSize: DT.fontToolButton,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             ),
           ],
         ),
@@ -271,8 +271,7 @@ class _ProtractorPainter extends CustomPainter {
       final isMid = i % 10 == 0;
 
       final outerR = radius + 18;
-      final innerR =
-          isMajor ? radius - 5 : (isMid ? radius + 4 : radius + 10);
+      final innerR = isMajor ? radius - 5 : (isMid ? radius + 4 : radius + 10);
 
       final outer = Offset(
         center.dx + outerR * math.cos(angle),

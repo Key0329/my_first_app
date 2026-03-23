@@ -61,8 +61,9 @@ void main() {
     });
 
     // ─── 漸層背景（使用 toolColor） ──────────────────────────────
-    testWidgets('gradient background uses toolColor in light mode',
-        (tester) async {
+    testWidgets('gradient background uses toolColor in light mode', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           ImmersiveToolScaffold(
@@ -84,12 +85,16 @@ void main() {
         return false;
       }).toList();
 
-      expect(gradientContainer, isNotEmpty,
-          reason: '應有至少一個帶 LinearGradient 的 Container');
+      expect(
+        gradientContainer,
+        isNotEmpty,
+        reason: '應有至少一個帶 LinearGradient 的 Container',
+      );
 
       // 取第一個漸層並驗證顏色包含 toolColor
-      final gradient = (gradientContainer.first.decoration! as BoxDecoration)
-          .gradient! as LinearGradient;
+      final gradient =
+          (gradientContainer.first.decoration! as BoxDecoration).gradient!
+              as LinearGradient;
 
       // Light mode: [toolColor.withValues(alpha: 0.8), toolColor.withValues(alpha: 0.4)]
       expect(gradient.colors.length, 2);
@@ -144,8 +149,9 @@ void main() {
 
       expect(gradientContainer, isNotEmpty);
 
-      final gradient = (gradientContainer.first.decoration! as BoxDecoration)
-          .gradient! as LinearGradient;
+      final gradient =
+          (gradientContainer.first.decoration! as BoxDecoration).gradient!
+              as LinearGradient;
 
       // Dark mode: [toolColor.withValues(alpha: 0.5), toolColor.withValues(alpha: 0.2)]
       expect(
@@ -161,7 +167,9 @@ void main() {
     });
 
     // ─── 預設 flex ratio 2:3 ─────────────────────────────────────
-    testWidgets('default flex ratio is headerFlex=2 bodyFlex=3', (tester) async {
+    testWidgets('default flex ratio is headerFlex=2 bodyFlex=3', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           ImmersiveToolScaffold(
@@ -174,13 +182,16 @@ void main() {
       );
 
       // 找出所有 Expanded，驗證 flex 值為 2 與 3
-      final expandedWidgets =
-          tester.widgetList<Expanded>(find.byType(Expanded)).toList();
+      final expandedWidgets = tester
+          .widgetList<Expanded>(find.byType(Expanded))
+          .toList();
 
-      final flexValues =
-          expandedWidgets.map((e) => e.flex).toSet();
-      expect(flexValues, containsAll([2, 3]),
-          reason: '預設應存在 flex=2 和 flex=3 的 Expanded');
+      final flexValues = expandedWidgets.map((e) => e.flex).toSet();
+      expect(
+        flexValues,
+        containsAll([2, 3]),
+        reason: '預設應存在 flex=2 和 flex=3 的 Expanded',
+      );
     });
 
     // ─── 自訂 flex ratio ──────────────────────────────────────────
@@ -198,17 +209,21 @@ void main() {
         ),
       );
 
-      final expandedWidgets =
-          tester.widgetList<Expanded>(find.byType(Expanded)).toList();
-      final flexValues =
-          expandedWidgets.map((e) => e.flex).toSet();
-      expect(flexValues, containsAll([1, 4]),
-          reason: '自訂後應存在 flex=1 和 flex=4 的 Expanded');
+      final expandedWidgets = tester
+          .widgetList<Expanded>(find.byType(Expanded))
+          .toList();
+      final flexValues = expandedWidgets.map((e) => e.flex).toSet();
+      expect(
+        flexValues,
+        containsAll([1, 4]),
+        reason: '自訂後應存在 flex=1 和 flex=4 的 Expanded',
+      );
     });
 
     // ─── body 圓角（24px） ───────────────────────────────────────
-    testWidgets('body section has rounded top corners with radius 24',
-        (tester) async {
+    testWidgets('body section has rounded top corners with radius 24', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           ImmersiveToolScaffold(
@@ -234,13 +249,17 @@ void main() {
         return false;
       }).toList();
 
-      expect(roundedBodyContainers, isNotEmpty,
-          reason: 'body Container 應有 topLeft/topRight radius = 24');
+      expect(
+        roundedBodyContainers,
+        isNotEmpty,
+        reason: 'body Container 應有 topLeft/topRight radius = 24',
+      );
     });
 
     // ─── extendBodyBehindAppBar ──────────────────────────────────
-    testWidgets('Scaffold has extendBodyBehindAppBar set to true',
-        (tester) async {
+    testWidgets('Scaffold has extendBodyBehindAppBar set to true', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           ImmersiveToolScaffold(
@@ -252,10 +271,12 @@ void main() {
         ),
       );
 
-      final scaffold =
-          tester.widget<Scaffold>(find.byType(Scaffold).first);
-      expect(scaffold.extendBodyBehindAppBar, isTrue,
-          reason: 'extendBodyBehindAppBar 必須為 true 使漸層延伸至 AppBar 後方');
+      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
+      expect(
+        scaffold.extendBodyBehindAppBar,
+        isTrue,
+        reason: 'extendBodyBehindAppBar 必須為 true 使漸層延伸至 AppBar 後方',
+      );
     });
 
     // ─── Hero 動畫支援 ───────────────────────────────────────────
@@ -274,8 +295,9 @@ void main() {
       expect(find.byType(Hero), findsNothing);
     });
 
-    testWidgets('with heroTag, Hero widget with correct tag exists',
-        (tester) async {
+    testWidgets('with heroTag, Hero widget with correct tag exists', (
+      tester,
+    ) async {
       const tag = 'tool_hero_calculator';
       await tester.pumpWidget(
         _wrap(
@@ -291,8 +313,11 @@ void main() {
       // 提供 heroTag 後，應存在一個 Hero widget
       final heroes = tester.widgetList<Hero>(find.byType(Hero)).toList();
       expect(heroes, hasLength(1), reason: '應存在一個 Hero widget');
-      expect(heroes.first.tag, equals(tag),
-          reason: 'Hero.tag 應與傳入的 heroTag 相同');
+      expect(
+        heroes.first.tag,
+        equals(tag),
+        reason: 'Hero.tag 應與傳入的 heroTag 相同',
+      );
     });
 
     // ─── 漸層方向（top to bottom） ───────────────────────────────
@@ -317,8 +342,9 @@ void main() {
         return false;
       });
 
-      final gradient = (gradientContainer.decoration! as BoxDecoration)
-          .gradient! as LinearGradient;
+      final gradient =
+          (gradientContainer.decoration! as BoxDecoration).gradient!
+              as LinearGradient;
 
       expect(gradient.begin, Alignment.topCenter);
       expect(gradient.end, Alignment.bottomCenter);

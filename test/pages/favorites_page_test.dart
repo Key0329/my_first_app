@@ -12,9 +12,7 @@ Widget _wrap(AppSettings settings) {
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: const Locale('zh'),
-    home: Scaffold(
-      body: FavoritesPage(settings: settings),
-    ),
+    home: Scaffold(body: FavoritesPage(settings: settings)),
   );
 }
 

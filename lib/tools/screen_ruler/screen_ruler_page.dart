@@ -103,8 +103,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
 
   // ── 判斷目前應顯示哪個模式 ────────────────────────────────────────────────
 
-  bool get _showCalibration =>
-      _calibratedPpi == null || _isCalibrating;
+  bool get _showCalibration => _calibratedPpi == null || _isCalibrating;
 
   // ── Build ─────────────────────────────────────────────────────────────────
 
@@ -150,11 +149,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                     label: AppLocalizations.of(context)!.rulerCalibrate,
                     child: Column(
                       children: [
-                        Icon(
-                          Icons.credit_card,
-                          size: 56,
-                          color: _toolColor,
-                        ),
+                        Icon(Icons.credit_card, size: 56, color: _toolColor),
                         const SizedBox(height: DT.spaceSm),
                         Text(
                           '請將信用卡放在螢幕上，調整大小使其吻合',
@@ -184,10 +179,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                           height: cardHeight,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(DT.radiusSm),
-                            border: Border.all(
-                              color: _toolColor,
-                              width: 2.5,
-                            ),
+                            border: Border.all(color: _toolColor, width: 2.5),
                             color: _toolColor.withValues(alpha: 0.06),
                           ),
                           child: Center(
@@ -245,8 +237,9 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                         height: DT.toolButtonHeight,
                         decoration: BoxDecoration(
                           color: _toolColor,
-                          borderRadius:
-                              BorderRadius.circular(DT.toolButtonRadius),
+                          borderRadius: BorderRadius.circular(
+                            DT.toolButtonRadius,
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -316,17 +309,12 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                     height: DT.toolButtonHeight,
                     decoration: BoxDecoration(
                       color: _toolColor.withValues(alpha: 0.12),
-                      borderRadius:
-                          BorderRadius.circular(DT.toolButtonRadius),
+                      borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.tune,
-                          size: 18,
-                          color: _toolColor,
-                        ),
+                        Icon(Icons.tune, size: 18, color: _toolColor),
                         const SizedBox(width: DT.spaceSm),
                         Text(
                           AppLocalizations.of(context)!.rulerRecalibrate,
@@ -354,10 +342,7 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return CustomPaint(
-                        size: Size(
-                          constraints.maxWidth,
-                          constraints.maxHeight,
-                        ),
+                        size: Size(constraints.maxWidth, constraints.maxHeight),
                         painter: RulerPainter(
                           ppi: _calibratedPpi!,
                           scrollOffset: _scrollOffset,

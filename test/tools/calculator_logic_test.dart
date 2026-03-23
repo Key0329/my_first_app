@@ -63,10 +63,7 @@ void main() {
       });
 
       test('decimal multiplication: 0.1*0.2', () {
-        expect(
-          CalculatorLogic.evaluate('0.1*0.2'),
-          closeTo(0.02, 1e-10),
-        );
+        expect(CalculatorLogic.evaluate('0.1*0.2'), closeTo(0.02, 1e-10));
       });
 
       test('mixed integer and decimal: 3+0.14=3.14', () {
@@ -114,38 +111,23 @@ void main() {
 
     group('error cases', () {
       test('division by zero throws ArgumentError', () {
-        expect(
-          () => CalculatorLogic.evaluate('5/0'),
-          throwsArgumentError,
-        );
+        expect(() => CalculatorLogic.evaluate('5/0'), throwsArgumentError);
       });
 
       test('empty expression throws FormatException', () {
-        expect(
-          () => CalculatorLogic.evaluate(''),
-          throwsFormatException,
-        );
+        expect(() => CalculatorLogic.evaluate(''), throwsFormatException);
       });
 
       test('missing closing parenthesis throws FormatException', () {
-        expect(
-          () => CalculatorLogic.evaluate('(2+3'),
-          throwsFormatException,
-        );
+        expect(() => CalculatorLogic.evaluate('(2+3'), throwsFormatException);
       });
 
       test('invalid characters throw FormatException', () {
-        expect(
-          () => CalculatorLogic.evaluate('2+abc'),
-          throwsFormatException,
-        );
+        expect(() => CalculatorLogic.evaluate('2+abc'), throwsFormatException);
       });
 
       test('trailing operator throws FormatException', () {
-        expect(
-          () => CalculatorLogic.evaluate('2+'),
-          throwsFormatException,
-        );
+        expect(() => CalculatorLogic.evaluate('2+'), throwsFormatException);
       });
     });
   });

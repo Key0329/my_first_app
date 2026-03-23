@@ -59,7 +59,7 @@ class _BouncingButtonState extends State<BouncingButton>
 
     _scaleAnimation = Tween<double>(
       begin: 0.95, // 完全按下時的縮放值
-      end: 1.0,    // 正常狀態的縮放值
+      end: 1.0, // 正常狀態的縮放值
     ).animate(_controller);
   }
 
@@ -107,10 +107,7 @@ class _BouncingButtonState extends State<BouncingButton>
         widget.onTap?.call();
       },
       onLongPress: widget.onLongPress,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: widget.child,
-      ),
+      child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
     );
   }
 }

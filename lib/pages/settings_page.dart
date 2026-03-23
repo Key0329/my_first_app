@@ -83,7 +83,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow(Icons.info_outline, l10n.settingsVersion, '1.0.0'),
+                      _buildInfoRow(
+                        Icons.info_outline,
+                        l10n.settingsVersion,
+                        '1.0.0',
+                      ),
                       const SizedBox(height: DT.spaceSm),
                       _buildTappableRow(
                         Icons.privacy_tip_outlined,
@@ -127,9 +131,18 @@ class _SettingsPageState extends State<SettingsPage> {
           width: double.infinity,
           child: SegmentedButton<ThemeMode>(
             segments: [
-              ButtonSegment(value: ThemeMode.light, label: Text(l10n.settingsThemeLight)),
-              ButtonSegment(value: ThemeMode.system, label: Text(l10n.settingsThemeSystem)),
-              ButtonSegment(value: ThemeMode.dark, label: Text(l10n.settingsThemeDark)),
+              ButtonSegment(
+                value: ThemeMode.light,
+                label: Text(l10n.settingsThemeLight),
+              ),
+              ButtonSegment(
+                value: ThemeMode.system,
+                label: Text(l10n.settingsThemeSystem),
+              ),
+              ButtonSegment(
+                value: ThemeMode.dark,
+                label: Text(l10n.settingsThemeDark),
+              ),
             ],
             selected: {widget.settings.themeMode},
             onSelectionChanged: (selection) {
@@ -231,10 +244,7 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(width: DT.spaceMd),
             Text(
               label,
-              style: TextStyle(
-                fontSize: DT.fontToolLabel,
-                color: DT.title(b),
-              ),
+              style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
             ),
           ],
         ),
@@ -256,18 +266,12 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(width: DT.spaceMd),
           Text(
             label,
-            style: TextStyle(
-              fontSize: DT.fontToolLabel,
-              color: DT.title(b),
-            ),
+            style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
           ),
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
-              fontSize: DT.fontToolLabel,
-              color: DT.subtitle(b),
-            ),
+            style: TextStyle(fontSize: DT.fontToolLabel, color: DT.subtitle(b)),
           ),
         ],
       ),
@@ -291,10 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(width: DT.spaceMd),
             Text(
               label,
-              style: TextStyle(
-                fontSize: DT.fontToolLabel,
-                color: DT.title(b),
-              ),
+              style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
             ),
             const Spacer(),
             Icon(Icons.chevron_right, size: 20, color: DT.subtitle(b)),

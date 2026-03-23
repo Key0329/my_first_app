@@ -18,11 +18,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('light mode 下有正確的圓角和背景色', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(child: Text('content'))),
       );
 
       // 找到 Container / DecoratedBox 的 BoxDecoration
@@ -50,12 +46,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('有 label 時顯示品牌色文字', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            label: '測試標題',
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(label: '測試標題', child: Text('content'))),
       );
 
       // 找到 label 文字
@@ -73,11 +64,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('沒有 label 時不顯示標題', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(child: Text('content'))),
       );
 
       // 確認子 widget 存在
@@ -102,10 +89,7 @@ void main() {
     testWidgets('dark mode 下使用 DT.brandPrimaryBgDark 背景色', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          const ToolSectionCard(
-            label: '深色標題',
-            child: Text('dark content'),
-          ),
+          const ToolSectionCard(label: '深色標題', child: Text('dark content')),
           brightness: Brightness.dark,
         ),
       );
@@ -130,11 +114,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('內邊距為 DT.toolSectionPadding', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(child: Text('content'))),
       );
 
       final paddingFinder = find.descendant(
@@ -154,12 +134,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('有 label 時，標題與內容之間有 8dp 間距', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            label: '間距測試',
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(label: '間距測試', child: Text('content'))),
       );
 
       // 有 label 時使用 Column，其中應含一個 SizedBox 作為間距
@@ -179,11 +154,7 @@ void main() {
     // -----------------------------------------------------------------------
     testWidgets('無邊框', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          const ToolSectionCard(
-            child: Text('content'),
-          ),
-        ),
+        _wrap(const ToolSectionCard(child: Text('content'))),
       );
 
       final container = tester.widget<Container>(

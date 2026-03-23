@@ -16,7 +16,8 @@ final Color _toolColor =
 
 /// 碼錶/計時器的漸層色
 final List<Color> _stopwatchGradient =
-    toolGradients['stopwatch_timer'] ?? [const Color(0xFFF59E0B), const Color(0xFFFBBF24)];
+    toolGradients['stopwatch_timer'] ??
+    [const Color(0xFFF59E0B), const Color(0xFFFBBF24)];
 
 /// Formats a [Duration] as HH:MM:SS.mm (centiseconds).
 String formatDuration(Duration d) {
@@ -64,22 +65,24 @@ class StopwatchTimerPage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: TabBar(
               tabs: [
-                Tab(icon: const Icon(Icons.timer_outlined), text: l10n.stopwatchTitle),
-                Tab(icon: const Icon(Icons.hourglass_bottom), text: l10n.timerTitle),
+                Tab(
+                  icon: const Icon(Icons.timer_outlined),
+                  text: l10n.stopwatchTitle,
+                ),
+                Tab(
+                  icon: const Icon(Icons.hourglass_bottom),
+                  text: l10n.timerTitle,
+                ),
               ],
               labelColor: Theme.of(context).colorScheme.onSurface,
-              unselectedLabelColor:
-                  Theme.of(context).colorScheme.onSurfaceVariant,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant,
               indicatorColor: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
-        bodyChild: const TabBarView(
-          children: [
-            _StopwatchTab(),
-            _TimerTab(),
-          ],
-        ),
+        bodyChild: const TabBarView(children: [_StopwatchTab(), _TimerTab()]),
       ),
     );
   }
@@ -153,11 +156,7 @@ class _StopwatchTabState extends State<_StopwatchTab> {
     final lapTime = total - _lastLapTotal;
     _laps.insert(
       0,
-      LapRecord(
-        number: _laps.length + 1,
-        lapTime: lapTime,
-        totalTime: total,
-      ),
+      LapRecord(number: _laps.length + 1, lapTime: lapTime, totalTime: total),
     );
     _lastLapTotal = total;
     setState(() {});
@@ -171,9 +170,9 @@ class _StopwatchTabState extends State<_StopwatchTab> {
       buffer.writeln('#${lap.number}  ${formatDuration(lap.lapTime)}');
     }
     Clipboard.setData(ClipboardData(text: buffer.toString().trimRight()));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.stopwatchLapsExported)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.stopwatchLapsExported)));
   }
 
   @override
@@ -222,8 +221,9 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(DT.toolButtonRadius),
+                        borderRadius: BorderRadius.circular(
+                          DT.toolButtonRadius,
+                        ),
                       ),
                     ),
                   ),
@@ -237,8 +237,9 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     style: FilledButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(DT.toolButtonRadius),
+                        borderRadius: BorderRadius.circular(
+                          DT.toolButtonRadius,
+                        ),
                       ),
                     ),
                   ),
@@ -252,8 +253,9 @@ class _StopwatchTabState extends State<_StopwatchTab> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, DT.toolButtonHeight),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(DT.toolButtonRadius),
+                        borderRadius: BorderRadius.circular(
+                          DT.toolButtonRadius,
+                        ),
                       ),
                     ),
                   ),
@@ -345,9 +347,7 @@ class _LapListSection extends StatelessWidget {
                   final lap = laps[index];
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      child: Text('${lap.number}'),
-                    ),
+                    leading: CircleAvatar(child: Text('${lap.number}')),
                     title: Text('分圈 ${formatDuration(lap.lapTime)}'),
                     trailing: Text(
                       '總計 ${formatDuration(lap.totalTime)}',
@@ -399,11 +399,8 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
   /// 追蹤 App 是否在前景。
   bool _isInForeground = true;
 
-  Duration get _pickerDuration => Duration(
-        hours: _hours,
-        minutes: _minutes,
-        seconds: _seconds,
-      );
+  Duration get _pickerDuration =>
+      Duration(hours: _hours, minutes: _minutes, seconds: _seconds);
 
   @override
   void initState() {
@@ -562,10 +559,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
             _buildQuickSetChips(),
             const SizedBox(height: DT.spaceLg),
             // Duration picker wrapped in ToolSectionCard
-            ToolSectionCard(
-              label: '設定時間',
-              child: _buildDurationPicker(theme),
-            ),
+            ToolSectionCard(label: '設定時間', child: _buildDurationPicker(theme)),
           ] else ...[
             // Countdown display
             _buildCountdownDisplay(theme),
@@ -654,11 +648,10 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 child: CircularProgressIndicator(
                   value: _totalDuration.inMilliseconds > 0
                       ? _remaining.inMilliseconds /
-                          _totalDuration.inMilliseconds
+                            _totalDuration.inMilliseconds
                       : 0,
                   strokeWidth: 8,
-                  backgroundColor:
-                      theme.colorScheme.surfaceContainerHighest,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
                   color: isFinished
                       ? theme.colorScheme.error
                       : theme.colorScheme.primary,
@@ -716,8 +709,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(DT.toolButtonRadius),
+                    borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                   ),
                 ),
               ),
@@ -731,8 +723,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(DT.toolButtonRadius),
+                    borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                   ),
                 ),
               ),
@@ -751,8 +742,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(DT.toolButtonRadius),
+                    borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                   ),
                 ),
               ),
@@ -778,8 +768,7 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, DT.toolButtonHeight),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(DT.toolButtonRadius),
+                    borderRadius: BorderRadius.circular(DT.toolButtonRadius),
                   ),
                 ),
               ),
@@ -873,8 +862,9 @@ class _NumberPickerState extends State<_NumberPicker> {
                       color: isSelected
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurfaceVariant,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
                 );

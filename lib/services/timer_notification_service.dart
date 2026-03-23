@@ -13,8 +13,7 @@ import 'package:timezone/timezone.dart' as tz;
 class TimerNotificationService {
   TimerNotificationService._();
 
-  static final TimerNotificationService instance =
-      TimerNotificationService._();
+  static final TimerNotificationService instance = TimerNotificationService._();
 
   static const int _timerNotificationId = 0;
   static const String _channelId = 'timer_channel';
@@ -36,8 +35,9 @@ class TimerNotificationService {
       tz.initializeTimeZones();
 
       // Android 初始化設定
-      const androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
 
       // iOS/macOS 初始化設定
       const darwinSettings = DarwinInitializationSettings(
@@ -58,7 +58,8 @@ class TimerNotificationService {
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         await _notificationsPlugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.requestNotificationsPermission();
       }
 
@@ -93,8 +94,7 @@ class TimerNotificationService {
     if (!_initialized) return; // init failed (e.g. in tests)
 
     try {
-      final scheduledDate =
-          tz.TZDateTime.now(tz.local).add(duration);
+      final scheduledDate = tz.TZDateTime.now(tz.local).add(duration);
 
       const androidDetails = AndroidNotificationDetails(
         _channelId,

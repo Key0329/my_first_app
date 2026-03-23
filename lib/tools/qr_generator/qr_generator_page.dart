@@ -52,7 +52,9 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
         return 'WIFI:T:$encryption;S:$ssid;P:$password;;';
       case 2: // Email
         final to = _emailToController.text.trim();
-        final subject = Uri.encodeComponent(_emailSubjectController.text.trim());
+        final subject = Uri.encodeComponent(
+          _emailSubjectController.text.trim(),
+        );
         final body = Uri.encodeComponent(_emailBodyController.text.trim());
         return 'mailto:$to?subject=$subject&body=$body';
       default: // Text
@@ -65,9 +67,9 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
     if (content.isEmpty ||
         (_qrType == 1 && _wifiSsidController.text.trim().isEmpty) ||
         (_qrType == 2 && _emailToController.text.trim().isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('請先輸入要編碼的內容')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('請先輸入要編碼的內容')));
       return;
     }
     setState(() => _generatedText = content);
@@ -81,9 +83,9 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
     if (_generatedText == null) return;
     await Clipboard.setData(ClipboardData(text: _generatedText!));
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('已複製到剪貼簿')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('已複製到剪貼簿')));
     }
   }
 
@@ -100,7 +102,8 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
         ShareButton(
           toolId: 'qr_generator',
           enabled: _generatedText != null,
-          shareText: '用 Spectra 工具箱產生 QR Code 👉 https://spectra.app/tools/qr-generator',
+          shareText:
+              '用 Spectra 工具箱產生 QR Code 👉 https://spectra.app/tools/qr-generator',
         ),
       ],
       headerChild: _buildQrPreview(context),
@@ -123,15 +126,10 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(DT.radiusLg),
-                  border: Border.all(
-                    color: colorScheme.outlineVariant,
-                  ),
+                  border: Border.all(color: colorScheme.outlineVariant),
                 ),
                 child: Center(
-                  child: QrImageView(
-                    data: _generatedText!,
-                    size: 160,
-                  ),
+                  child: QrImageView(data: _generatedText!, size: 160),
                 ),
               )
             : Column(
@@ -275,9 +273,21 @@ class _QrGeneratorPageState extends State<QrGeneratorPage> {
             totalItems: totalItems,
             child: SegmentedButton<int>(
               segments: [
-                ButtonSegment(value: 0, label: Text(l10n.qrTypeText), icon: const Icon(Icons.text_fields)),
-                ButtonSegment(value: 1, label: Text(l10n.qrTypeWifi), icon: const Icon(Icons.wifi)),
-                ButtonSegment(value: 2, label: Text(l10n.qrTypeEmail), icon: const Icon(Icons.email)),
+                ButtonSegment(
+                  value: 0,
+                  label: Text(l10n.qrTypeText),
+                  icon: const Icon(Icons.text_fields),
+                ),
+                ButtonSegment(
+                  value: 1,
+                  label: Text(l10n.qrTypeWifi),
+                  icon: const Icon(Icons.wifi),
+                ),
+                ButtonSegment(
+                  value: 2,
+                  label: Text(l10n.qrTypeEmail),
+                  icon: const Icon(Icons.email),
+                ),
               ],
               selected: {_qrType},
               onSelectionChanged: (selected) {

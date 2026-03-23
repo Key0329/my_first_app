@@ -76,19 +76,13 @@ void main() {
     test('fetchRates throws on server error', () async {
       final api = CurrencyApi(client: _failClient());
 
-      expect(
-        () => api.fetchRates('USD'),
-        throwsA(isA<CurrencyApiException>()),
-      );
+      expect(() => api.fetchRates('USD'), throwsA(isA<CurrencyApiException>()));
     });
 
     test('fetchRates throws on network error', () async {
       final api = CurrencyApi(client: _timeoutClient());
 
-      expect(
-        () => api.fetchRates('USD'),
-        throwsA(isA<CurrencyApiException>()),
-      );
+      expect(() => api.fetchRates('USD'), throwsA(isA<CurrencyApiException>()));
     });
 
     test('fetchCurrencies returns currency names', () async {
@@ -104,26 +98,35 @@ void main() {
     test('fetchCurrencies throws on server error', () async {
       final api = CurrencyApi(client: _failClient());
 
-      expect(
-        () => api.fetchCurrencies(),
-        throwsA(isA<CurrencyApiException>()),
-      );
+      expect(() => api.fetchCurrencies(), throwsA(isA<CurrencyApiException>()));
     });
 
     test('convert calculates correct amount', () {
       final rates = {'EUR': 0.92, 'GBP': 0.79, 'JPY': 149.5};
 
       // USD -> EUR: 100 * 0.92 = 92
-      expect(CurrencyApi.convert(100, 'USD', 'EUR', rates, 'USD'), closeTo(92, 0.01));
+      expect(
+        CurrencyApi.convert(100, 'USD', 'EUR', rates, 'USD'),
+        closeTo(92, 0.01),
+      );
 
       // USD -> JPY: 100 * 149.5 = 14950
-      expect(CurrencyApi.convert(100, 'USD', 'JPY', rates, 'USD'), closeTo(14950, 0.01));
+      expect(
+        CurrencyApi.convert(100, 'USD', 'JPY', rates, 'USD'),
+        closeTo(14950, 0.01),
+      );
 
       // EUR -> GBP: 100 / 0.92 * 0.79 ≈ 85.87
-      expect(CurrencyApi.convert(100, 'EUR', 'GBP', rates, 'USD'), closeTo(85.87, 0.01));
+      expect(
+        CurrencyApi.convert(100, 'EUR', 'GBP', rates, 'USD'),
+        closeTo(85.87, 0.01),
+      );
 
       // EUR -> USD: 100 / 0.92 ≈ 108.70
-      expect(CurrencyApi.convert(100, 'EUR', 'USD', rates, 'USD'), closeTo(108.70, 0.01));
+      expect(
+        CurrencyApi.convert(100, 'EUR', 'USD', rates, 'USD'),
+        closeTo(108.70, 0.01),
+      );
 
       // USD -> USD: identity
       expect(CurrencyApi.convert(100, 'USD', 'USD', rates, 'USD'), equals(100));
@@ -138,11 +141,13 @@ void main() {
       final rates = {'EUR': 0.92};
       expect(
         () => CurrencyApi.convert(100, 'XYZ', 'EUR', rates, 'USD'),
-        throwsA(isA<ArgumentError>().having(
-          (e) => e.message,
-          'message',
-          contains('XYZ'),
-        )),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            contains('XYZ'),
+          ),
+        ),
       );
     });
 
@@ -150,11 +155,13 @@ void main() {
       final rates = {'EUR': 0.92};
       expect(
         () => CurrencyApi.convert(100, 'EUR', 'XYZ', rates, 'USD'),
-        throwsA(isA<ArgumentError>().having(
-          (e) => e.message,
-          'message',
-          contains('XYZ'),
-        )),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            contains('XYZ'),
+          ),
+        ),
       );
     });
   });

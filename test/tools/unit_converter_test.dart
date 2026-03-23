@@ -180,7 +180,10 @@ void main() {
     test('allCategories contains all 5 categories', () {
       expect(allCategories.length, equals(5));
       final ids = allCategories.map((c) => c.id).toList();
-      expect(ids, containsAll(['length', 'weight', 'area', 'temperature', 'year']));
+      expect(
+        ids,
+        containsAll(['length', 'weight', 'area', 'temperature', 'year']),
+      );
     });
 
     test('each category has at least 2 units', () {

@@ -34,8 +34,10 @@ void main() {
       expect(find.text('大寫字母 (A-Z)'), findsOneWidget);
       expect(find.text('小寫字母 (a-z)'), findsOneWidget);
       expect(find.text('數字 (0-9)'), findsOneWidget);
-      expect(find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)'),
-          findsOneWidget);
+      expect(
+        find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)'),
+        findsOneWidget,
+      );
 
       // Generate button
       expect(find.text('產生新密碼'), findsOneWidget);
@@ -54,8 +56,9 @@ void main() {
       await tester.pumpWidget(_buildApp());
 
       // A password should be generated immediately (displayed as SelectableText)
-      final selectableText =
-          tester.widget<SelectableText>(find.byType(SelectableText));
+      final selectableText = tester.widget<SelectableText>(
+        find.byType(SelectableText),
+      );
       expect(selectableText.data, isNotNull);
       expect(selectableText.data, isNotEmpty);
       // Default length is 16
@@ -65,8 +68,9 @@ void main() {
     testWidgets('generates new password when button tapped', (tester) async {
       await tester.pumpWidget(_buildApp());
 
-      final firstPassword =
-          tester.widget<SelectableText>(find.byType(SelectableText)).data;
+      final firstPassword = tester
+          .widget<SelectableText>(find.byType(SelectableText))
+          .data;
 
       // Tap generate button multiple times to increase chance of different password
       String? newPassword;
@@ -75,8 +79,9 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.text('產生新密碼'));
         await tester.pump();
-        newPassword =
-            tester.widget<SelectableText>(find.byType(SelectableText)).data;
+        newPassword = tester
+            .widget<SelectableText>(find.byType(SelectableText))
+            .data;
         if (newPassword != firstPassword) break;
       }
 
@@ -89,8 +94,9 @@ void main() {
       await tester.pumpWidget(_buildApp());
 
       // Default is 16 chars
-      var password =
-          tester.widget<SelectableText>(find.byType(SelectableText)).data!;
+      var password = tester
+          .widget<SelectableText>(find.byType(SelectableText))
+          .data!;
       expect(password.length, 16);
 
       // Move slider to right end (64)
@@ -99,30 +105,36 @@ void main() {
       await tester.drag(slider, const Offset(300, 0));
       await tester.pump();
 
-      password =
-          tester.widget<SelectableText>(find.byType(SelectableText)).data!;
+      password = tester
+          .widget<SelectableText>(find.byType(SelectableText))
+          .data!;
       expect(password.length, greaterThan(16));
     });
 
-    testWidgets('password contains only expected character types',
-        (tester) async {
+    testWidgets('password contains only expected character types', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
 
       // Default: uppercase, lowercase, numbers ON; special OFF
-      final password =
-          tester.widget<SelectableText>(find.byType(SelectableText)).data!;
+      final password = tester
+          .widget<SelectableText>(find.byType(SelectableText))
+          .data!;
 
       // Should only contain alphanumeric chars (no special)
       expect(password, matches(RegExp(r'^[A-Za-z0-9]+$')));
     });
 
-    testWidgets('toggling special characters on includes them in pool',
-        (tester) async {
+    testWidgets('toggling special characters on includes them in pool', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
 
       // Turn on special characters
-      final specialSwitch =
-          find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)');
+      final specialSwitch = find.widgetWithText(
+        SwitchListTile,
+        '特殊字元 (!@#\$...)',
+      );
       await tester.ensureVisible(specialSwitch);
       await tester.pumpAndSettle();
       await tester.tap(specialSwitch);
@@ -136,8 +148,9 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await tester.tap(genBtn);
         await tester.pump();
-        final password =
-            tester.widget<SelectableText>(find.byType(SelectableText)).data!;
+        final password = tester
+            .widget<SelectableText>(find.byType(SelectableText))
+            .data!;
         if (password.contains(RegExp(r'[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]'))) {
           foundSpecial = true;
           break;
@@ -172,8 +185,9 @@ void main() {
       expect(find.text('至少需選擇一種字元類型'), findsOneWidget);
     });
 
-    testWidgets('copy button copies password and shows snackbar',
-        (tester) async {
+    testWidgets('copy button copies password and shows snackbar', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
       await tester.pumpAndSettle();
 
@@ -210,31 +224,36 @@ void main() {
       expect(find.text('強'), findsOneWidget);
     });
 
-    testWidgets('strength changes to very strong with long password + many types',
-        (tester) async {
-      await tester.pumpWidget(_buildApp());
+    testWidgets(
+      'strength changes to very strong with long password + many types',
+      (tester) async {
+        await tester.pumpWidget(_buildApp());
 
-      // Turn on special characters (4 types)
-      await tester.tap(
-          find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)'));
-      await tester.pump();
+        // Turn on special characters (4 types)
+        await tester.tap(
+          find.widgetWithText(SwitchListTile, '特殊字元 (!@#\$...)'),
+        );
+        await tester.pump();
 
-      // Drag slider to make length >= 20
-      final slider = find.byType(Slider);
-      await tester.drag(slider, const Offset(100, 0));
-      await tester.pump();
+        // Drag slider to make length >= 20
+        final slider = find.byType(Slider);
+        await tester.drag(slider, const Offset(100, 0));
+        await tester.pump();
 
-      final password =
-          tester.widget<SelectableText>(find.byType(SelectableText)).data!;
+        final password = tester
+            .widget<SelectableText>(find.byType(SelectableText))
+            .data!;
 
-      // If length >= 20 and types >= 3, should be very strong
-      if (password.length >= 20) {
-        expect(find.text('非常強'), findsOneWidget);
-      }
-    });
+        // If length >= 20 and types >= 3, should be very strong
+        if (password.length >= 20) {
+          expect(find.text('非常強'), findsOneWidget);
+        }
+      },
+    );
 
-    testWidgets('strength shows weak for short password with few types',
-        (tester) async {
+    testWidgets('strength shows weak for short password with few types', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
 
       // Turn off uppercase and numbers so only lowercase remains
@@ -263,11 +282,18 @@ void main() {
     });
 
     test('has increasing value progression', () {
-      expect(PasswordStrength.weak.value, lessThan(PasswordStrength.medium.value));
       expect(
-          PasswordStrength.medium.value, lessThan(PasswordStrength.strong.value));
-      expect(PasswordStrength.strong.value,
-          lessThan(PasswordStrength.veryStrong.value));
+        PasswordStrength.weak.value,
+        lessThan(PasswordStrength.medium.value),
+      );
+      expect(
+        PasswordStrength.medium.value,
+        lessThan(PasswordStrength.strong.value),
+      );
+      expect(
+        PasswordStrength.strong.value,
+        lessThan(PasswordStrength.veryStrong.value),
+      );
     });
   });
 }

@@ -21,10 +21,7 @@ import 'package:share_plus/share_plus.dart';
 /// - [remainder] ：除不盡的餘數（0 表示整除）
 /// - [firstExtra]：第一人需額外多付的金額（等於 remainder）
 class SplitBillResult {
-  const SplitBillResult({
-    required this.base,
-    required this.remainder,
-  });
+  const SplitBillResult({required this.base, required this.remainder});
 
   /// 每人基礎付款金額（total ~/ count）
   final int base;
@@ -43,10 +40,7 @@ class SplitBillResult {
 ///
 /// [total] 必須 >= 0，[count] 必須 >= 2。
 /// 若 [total] 為 0，回傳 base = 0、remainder = 0。
-SplitBillResult calculateSplitBill({
-  required int total,
-  required int count,
-}) {
+SplitBillResult calculateSplitBill({required int total, required int count}) {
   assert(count >= 2, 'count must be at least 2');
   assert(total >= 0, 'total must be non-negative');
 
@@ -54,10 +48,7 @@ SplitBillResult calculateSplitBill({
     return const SplitBillResult(base: 0, remainder: 0);
   }
 
-  return SplitBillResult(
-    base: total ~/ count,
-    remainder: total % count,
-  );
+  return SplitBillResult(base: total ~/ count, remainder: total % count);
 }
 
 /// 含小費的分帳計算。
@@ -71,10 +62,7 @@ SplitBillResult calculateWithTip({
 }
 
 /// 按比例分帳。回傳每人應付金額列表。
-List<int> calculateByRatio({
-  required int total,
-  required List<int> ratios,
-}) {
+List<int> calculateByRatio({required int total, required List<int> ratios}) {
   assert(ratios.isNotEmpty);
   final sum = ratios.fold(0, (a, b) => a + b);
   if (sum == 0) return List.filled(ratios.length, 0);
@@ -236,7 +224,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final result = _splitMode == 0
-        ? calculateWithTip(total: _total, count: _count, tipPercent: _tipPercent)
+        ? calculateWithTip(
+            total: _total,
+            count: _count,
+            tipPercent: _tipPercent,
+          )
         : calculateSplitBill(total: _total, count: _count);
     final enabled = _total > 0;
 
@@ -274,17 +266,31 @@ class _SplitBillPageState extends State<SplitBillPage> {
                 children: [
                   Text(
                     l10n.splitBillPerPerson,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xFF666666)),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF666666),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'NT\$${formatWithThousands(result.base)}',
-                    style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Color(0xFF26A69A)),
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF26A69A),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    l10n.splitBillSummary('NT\$${formatWithThousands(_totalWithTip)}', _count),
-                    style: const TextStyle(fontSize: 14, color: Color(0xFF999999)),
+                    l10n.splitBillSummary(
+                      'NT\$${formatWithThousands(_totalWithTip)}',
+                      _count,
+                    ),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF999999),
+                    ),
                   ),
                 ],
               ),
@@ -295,7 +301,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
     );
   }
 
-  Widget _buildBodyForMode(BuildContext context, AppLocalizations l10n, SplitBillResult result) {
+  Widget _buildBodyForMode(
+    BuildContext context,
+    AppLocalizations l10n,
+    SplitBillResult result,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(DT.toolBodyPadding),
       child: Column(
@@ -321,7 +331,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
     );
   }
 
-  List<Widget> _buildEqualMode(BuildContext context, AppLocalizations l10n, SplitBillResult result) {
+  List<Widget> _buildEqualMode(
+    BuildContext context,
+    AppLocalizations l10n,
+    SplitBillResult result,
+  ) {
     return [
       // Total amount
       ToolSectionCard(
@@ -361,8 +375,20 @@ class _SplitBillPageState extends State<SplitBillPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.splitBillTipAmount, style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
-              Text('NT\$${formatWithThousands(_tipAmount)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              Text(
+                l10n.splitBillTipAmount,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              Text(
+                'NT\$${formatWithThousands(_tipAmount)}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         ),
@@ -371,8 +397,20 @@ class _SplitBillPageState extends State<SplitBillPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.splitBillFinalTotal, style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline)),
-              Text('NT\$${formatWithThousands(_totalWithTip)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              Text(
+                l10n.splitBillFinalTotal,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              Text(
+                'NT\$${formatWithThousands(_totalWithTip)}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         ),
@@ -407,7 +445,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
               onPressed: canDecrement ? _decrement : null,
               icon: const Icon(Icons.remove),
               style: IconButton.styleFrom(
-                side: BorderSide(color: canDecrement ? colorScheme.outline : colorScheme.outlineVariant),
+                side: BorderSide(
+                  color: canDecrement
+                      ? colorScheme.outline
+                      : colorScheme.outlineVariant,
+                ),
               ),
             ),
           ),
@@ -417,7 +459,9 @@ class _SplitBillPageState extends State<SplitBillPage> {
           child: Center(
             child: AnimatedValueText(
               value: '$_count',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -429,7 +473,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
               onPressed: canIncrement ? _increment : null,
               icon: const Icon(Icons.add),
               style: IconButton.styleFrom(
-                side: BorderSide(color: canIncrement ? colorScheme.outline : colorScheme.outlineVariant),
+                side: BorderSide(
+                  color: canIncrement
+                      ? colorScheme.outline
+                      : colorScheme.outlineVariant,
+                ),
               ),
             ),
           ),
@@ -438,7 +486,11 @@ class _SplitBillPageState extends State<SplitBillPage> {
     );
   }
 
-  Widget _buildResultCard(BuildContext context, AppLocalizations l10n, SplitBillResult result) {
+  Widget _buildResultCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    SplitBillResult result,
+  ) {
     final theme = Theme.of(context);
     final brightness = theme.brightness;
     final perPersonStr = formatWithThousands(result.base);
@@ -451,28 +503,47 @@ class _SplitBillPageState extends State<SplitBillPage> {
         color: tintedBg,
         borderRadius: BorderRadius.circular(DT.toolSectionRadius),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: DT.space2xl, vertical: DT.spaceXl),
+      padding: const EdgeInsets.symmetric(
+        horizontal: DT.space2xl,
+        vertical: DT.spaceXl,
+      ),
       child: Column(
         children: [
-          Text(l10n.splitBillPerPerson, style: TextStyle(fontSize: DT.fontToolLabel, color: DT.brandPrimary, fontWeight: FontWeight.w600)),
+          Text(
+            l10n.splitBillPerPerson,
+            style: TextStyle(
+              fontSize: DT.fontToolLabel,
+              color: DT.brandPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: DT.spaceSm),
           Semantics(
             label: l10n.splitBillPerPersonSemantic(perPersonStr),
             child: AnimatedValueText(
               value: '\$$perPersonStr',
-              style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold, color: _toolColor),
+              style: theme.textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: _toolColor,
+              ),
             ),
           ),
           if (!result.isEvenSplit) ...[
             const SizedBox(height: DT.toolSectionGap),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: DT.toolSectionGap, vertical: DT.spaceXs + 2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: DT.toolSectionGap,
+                vertical: DT.spaceXs + 2,
+              ),
               decoration: BoxDecoration(
                 color: _toolColor.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(DT.spaceSm),
               ),
               child: Text(
-                l10n.splitBillFirstPaysDetail(result.remainder, formatWithThousands(result.firstPersonAmount)),
+                l10n.splitBillFirstPaysDetail(
+                  result.remainder,
+                  formatWithThousands(result.firstPersonAmount),
+                ),
                 style: theme.textTheme.bodySmall?.copyWith(color: _toolColor),
                 textAlign: TextAlign.center,
               ),
@@ -507,11 +578,15 @@ class _SplitBillPageState extends State<SplitBillPage> {
         label: l10n.splitBillTip,
         child: Wrap(
           spacing: 8,
-          children: [0, 5, 10, 15, 20].map((pct) => ChoiceChip(
-            label: Text(pct == 0 ? '0%' : '$pct%'),
-            selected: _tipPercent == pct,
-            onSelected: (_) => setState(() => _tipPercent = pct),
-          )).toList(),
+          children: [0, 5, 10, 15, 20]
+              .map(
+                (pct) => ChoiceChip(
+                  label: Text(pct == 0 ? '0%' : '$pct%'),
+                  selected: _tipPercent == pct,
+                  onSelected: (_) => setState(() => _tipPercent = pct),
+                ),
+              )
+              .toList(),
         ),
       ),
       const SizedBox(height: DT.toolSectionGap),
@@ -547,7 +622,10 @@ class _SplitBillPageState extends State<SplitBillPage> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
                         border: OutlineInputBorder(),
                       ),
                       controller: TextEditingController(text: '${_ratios[i]}'),
@@ -579,7 +657,10 @@ class _SplitBillPageState extends State<SplitBillPage> {
     ];
   }
 
-  List<Widget> _buildMultiItemMode(BuildContext context, AppLocalizations l10n) {
+  List<Widget> _buildMultiItemMode(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     final perPersonAmounts = calculateMultiItemPerPerson(_items);
 
     return [
@@ -606,7 +687,9 @@ class _SplitBillPageState extends State<SplitBillPage> {
                     Expanded(
                       child: TextField(
                         keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         decoration: InputDecoration(
                           hintText: l10n.splitBillItemAmount,
                           border: const OutlineInputBorder(),
@@ -622,14 +705,18 @@ class _SplitBillPageState extends State<SplitBillPage> {
                       width: 80,
                       child: TextField(
                         keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
                           hintText: l10n.splitBillItemPeople,
                           border: const OutlineInputBorder(),
                           isDense: true,
                         ),
-                        controller: TextEditingController(text: '${item.people}'),
+                        controller: TextEditingController(
+                          text: '${item.people}',
+                        ),
                         onChanged: (v) {
                           final val = int.tryParse(v) ?? 1;
                           setState(() => item.people = val < 1 ? 1 : val);
@@ -683,12 +770,17 @@ class _SplitBillPageState extends State<SplitBillPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        _items[i].name.isEmpty ? '${l10n.splitBillItemName} ${i + 1}' : _items[i].name,
+                        _items[i].name.isEmpty
+                            ? '${l10n.splitBillItemName} ${i + 1}'
+                            : _items[i].name,
                         style: const TextStyle(fontSize: 13),
                       ),
                       Text(
                         'NT\$${formatWithThousands(perPersonAmounts[i])} × ${_items[i].people}',
-                        style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.outline),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                     ],
                   ),
@@ -698,10 +790,16 @@ class _SplitBillPageState extends State<SplitBillPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.splitBillTotalAmount, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    l10n.splitBillTotalAmount,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   Text(
                     'NT\$${formatWithThousands(_items.fold(0, (sum, item) => sum + item.amount))}',
-                    style: TextStyle(fontWeight: FontWeight.w600, color: _toolColor),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: _toolColor,
+                    ),
                   ),
                 ],
               ),
@@ -717,10 +815,7 @@ class _SplitBillPageState extends State<SplitBillPage> {
 // ---------------------------------------------------------------------------
 
 class _SplitBillHeader extends StatelessWidget {
-  const _SplitBillHeader({
-    required this.total,
-    required this.count,
-  });
+  const _SplitBillHeader({required this.total, required this.count});
 
   final int total;
   final int count;

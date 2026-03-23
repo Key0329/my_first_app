@@ -7,9 +7,7 @@ void main() {
     testWidgets('初始渲染顯示正確的文字', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AnimatedValueText(value: '42'),
-          ),
+          home: Scaffold(body: AnimatedValueText(value: '42')),
         ),
       );
 
@@ -19,9 +17,7 @@ void main() {
     testWidgets('值改變後顯示新文字', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AnimatedValueText(value: '10'),
-          ),
+          home: Scaffold(body: AnimatedValueText(value: '10')),
         ),
       );
 
@@ -30,9 +26,7 @@ void main() {
       // 更新值
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AnimatedValueText(value: '20'),
-          ),
+          home: Scaffold(body: AnimatedValueText(value: '20')),
         ),
       );
 
@@ -49,10 +43,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: AnimatedValueText(
-              value: '99',
-              style: style,
-            ),
+            body: AnimatedValueText(value: '99', style: style),
           ),
         ),
       );
@@ -65,9 +56,7 @@ void main() {
     testWidgets('找到 AnimatedSwitcher widget', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AnimatedValueText(value: '0'),
-          ),
+          home: Scaffold(body: AnimatedValueText(value: '0')),
         ),
       );
 

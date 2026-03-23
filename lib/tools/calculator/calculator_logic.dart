@@ -144,11 +144,7 @@ class _Parser {
       _position++;
     }
     if (_position == start) {
-      throw FormatException(
-        'Expected a number',
-        _source,
-        _position,
-      );
+      throw FormatException('Expected a number', _source, _position);
     }
     final numberStr = _source.substring(start, _position);
     final value = double.tryParse(numberStr);
@@ -174,10 +170,10 @@ class CalculationEntry {
   });
 
   Map<String, dynamic> toJson() => {
-        'expression': expression,
-        'result': result,
-        'timestamp': timestamp.toIso8601String(),
-      };
+    'expression': expression,
+    'result': result,
+    'timestamp': timestamp.toIso8601String(),
+  };
 
   factory CalculationEntry.fromJson(Map<String, dynamic> json) =>
       CalculationEntry(

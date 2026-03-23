@@ -18,8 +18,9 @@ const _testSurfaceSize = Size(414, 896);
 
 void main() {
   group('Calculator button single event firing', () {
-    testWidgets('tapping digit 5 appends exactly one "5" to expression',
-        (tester) async {
+    testWidgets('tapping digit 5 appends exactly one "5" to expression', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(_buildApp());
@@ -34,8 +35,9 @@ void main() {
       expect(textWidget.data, equals('5'));
     });
 
-    testWidgets('tapping multiple digits appends each exactly once',
-        (tester) async {
+    testWidgets('tapping multiple digits appends each exactly once', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(_buildApp());
@@ -53,8 +55,9 @@ void main() {
       expect(textWidget.data, equals('123'));
     });
 
-    testWidgets('tapping equals after 2+3 evaluates exactly once',
-        (tester) async {
+    testWidgets('tapping equals after 2+3 evaluates exactly once', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(_buildApp());

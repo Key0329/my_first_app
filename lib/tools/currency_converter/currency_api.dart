@@ -36,11 +36,7 @@ class ExchangeRatesResult {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'base': base,
-    'date': date,
-    'rates': rates,
-  };
+  Map<String, dynamic> toJson() => {'base': base, 'date': date, 'rates': rates};
 }
 
 // ---------------------------------------------------------------------------
@@ -138,15 +134,11 @@ class CurrencyApi {
     if (fromCurrency == toCurrency) return amount;
 
     // Convert fromCurrency -> base -> toCurrency
-    final fromRate = fromCurrency == ratesBase
-        ? 1.0
-        : rates[fromCurrency];
+    final fromRate = fromCurrency == ratesBase ? 1.0 : rates[fromCurrency];
     if (fromRate == null) {
       throw ArgumentError('Unsupported currency: $fromCurrency');
     }
-    final toRate = toCurrency == ratesBase
-        ? 1.0
-        : rates[toCurrency];
+    final toRate = toCurrency == ratesBase ? 1.0 : rates[toCurrency];
     if (toRate == null) {
       throw ArgumentError('Unsupported currency: $toCurrency');
     }
@@ -170,10 +162,7 @@ class CurrencyCache {
     final prefs = await SharedPreferences.getInstance();
     final json = jsonEncode(result.toJson());
     await prefs.setString(_keyRates, json);
-    await prefs.setString(
-      _keyTimestamp,
-      DateTime.now().toIso8601String(),
-    );
+    await prefs.setString(_keyTimestamp, DateTime.now().toIso8601String());
   }
 
   /// Load cached exchange rates. Returns `null` if no cache exists.

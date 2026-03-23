@@ -144,36 +144,40 @@ class _FlashlightPageState extends State<FlashlightPage> {
     final step = _sosPattern[_sosStepIndex];
 
     // Turn on
-    TorchLight.enableTorch().then((_) {
-      if (!_isSosActive || !mounted) return;
-      setState(() => _isOn = true);
-
-      // Schedule turn off after on duration
-      _sosTimer = Timer(Duration(milliseconds: step.onMs), () {
-        if (!_isSosActive || !mounted) return;
-
-        TorchLight.disableTorch().then((_) {
+    TorchLight.enableTorch()
+        .then((_) {
           if (!_isSosActive || !mounted) return;
-          setState(() => _isOn = false);
+          setState(() => _isOn = true);
 
-          // Schedule next step after off duration
-          _sosTimer = Timer(Duration(milliseconds: step.offMs), () {
+          // Schedule turn off after on duration
+          _sosTimer = Timer(Duration(milliseconds: step.onMs), () {
             if (!_isSosActive || !mounted) return;
-            _sosStepIndex = (_sosStepIndex + 1) % _sosPattern.length;
-            _executeSosStep();
+
+            TorchLight.disableTorch()
+                .then((_) {
+                  if (!_isSosActive || !mounted) return;
+                  setState(() => _isOn = false);
+
+                  // Schedule next step after off duration
+                  _sosTimer = Timer(Duration(milliseconds: step.offMs), () {
+                    if (!_isSosActive || !mounted) return;
+                    _sosStepIndex = (_sosStepIndex + 1) % _sosPattern.length;
+                    _executeSosStep();
+                  });
+                })
+                .catchError((e) {
+                  if (mounted) _stopSos();
+                });
           });
-        }).catchError((e) {
-          if (mounted) _stopSos();
+        })
+        .catchError((e) {
+          if (mounted) {
+            setState(() {
+              _errorMessage = 'SOS 操作失敗：$e';
+            });
+            _stopSos();
+          }
         });
-      });
-    }).catchError((e) {
-      if (mounted) {
-        setState(() {
-          _errorMessage = 'SOS 操作失敗：$e';
-        });
-        _stopSos();
-      }
-    });
   }
 
   @override
@@ -216,8 +220,8 @@ class _FlashlightPageState extends State<FlashlightPage> {
                 _isSosActive
                     ? l10n.flashlightSosMode
                     : _isOn
-                        ? l10n.flashlightOn
-                        : l10n.flashlightOff,
+                    ? l10n.flashlightOn
+                    : l10n.flashlightOff,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: _isOn || _isSosActive
                       ? colorScheme.primary
@@ -309,17 +313,11 @@ class _FlashlightPageState extends State<FlashlightPage> {
   Widget _buildSosButtonContent(ThemeData theme, ColorScheme colorScheme) {
     return FilledButton.tonalIcon(
       onPressed: _isTorchAvailable ? _toggleSos : null,
-      icon: Icon(
-        _isSosActive ? Icons.stop : Icons.sos,
-      ),
+      icon: Icon(_isSosActive ? Icons.stop : Icons.sos),
       label: Text(_isSosActive ? '停止 SOS' : 'SOS 模式'),
       style: FilledButton.styleFrom(
-        backgroundColor: _isSosActive
-            ? colorScheme.errorContainer
-            : null,
-        foregroundColor: _isSosActive
-            ? colorScheme.onErrorContainer
-            : null,
+        backgroundColor: _isSosActive ? colorScheme.errorContainer : null,
+        foregroundColor: _isSosActive ? colorScheme.onErrorContainer : null,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       ),
     );

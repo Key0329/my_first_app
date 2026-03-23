@@ -28,8 +28,9 @@ class CalculatorHistoryService {
   /// 儲存歷史紀錄至 SharedPreferences。
   Future<void> save(List<CalculationEntry> entries) async {
     final prefs = await SharedPreferences.getInstance();
-    final trimmed =
-        entries.length > maxEntries ? entries.sublist(0, maxEntries) : entries;
+    final trimmed = entries.length > maxEntries
+        ? entries.sublist(0, maxEntries)
+        : entries;
     final list = trimmed.map((e) => jsonEncode(e.toJson())).toList();
     await prefs.setStringList(_key, list);
   }

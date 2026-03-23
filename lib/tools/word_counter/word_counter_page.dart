@@ -129,7 +129,8 @@ class _WordCounterPageState extends State<WordCounterPage> {
         ? l10n.wordCounterReadingTimeLessThan1
         : l10n.wordCounterReadingTimeValue(_stats.readingTimeMinutes);
 
-    final summary = '${l10n.wordCounterCharsWithSpaces}: ${_stats.charsWithSpaces}\n'
+    final summary =
+        '${l10n.wordCounterCharsWithSpaces}: ${_stats.charsWithSpaces}\n'
         '${l10n.wordCounterCharsNoSpaces}: ${_stats.charsNoSpaces}\n'
         '${l10n.wordCounterWords}: ${_stats.words}\n'
         '${l10n.wordCounterLines}: ${_stats.lines}\n'
@@ -137,9 +138,9 @@ class _WordCounterPageState extends State<WordCounterPage> {
         '${l10n.wordCounterReadingTime}: $readingTime';
 
     Clipboard.setData(ClipboardData(text: summary));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.wordCounterCopiedSummary)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.wordCounterCopiedSummary)));
   }
 
   @override
@@ -194,10 +195,7 @@ class _WordCounterPageState extends State<WordCounterPage> {
             ),
             const SizedBox(height: DT.spaceLg),
             // ── 統計結果 Grid ──
-            Expanded(
-              flex: 2,
-              child: _buildStatsGrid(l10n, isDark),
-            ),
+            Expanded(flex: 2, child: _buildStatsGrid(l10n, isDark)),
           ],
         ),
       ),
@@ -208,8 +206,8 @@ class _WordCounterPageState extends State<WordCounterPage> {
     final readingTimeValue = _controller.text.isEmpty
         ? '0'
         : _stats.isLessThanOneMinute
-            ? l10n.wordCounterReadingTimeLessThan1
-            : l10n.wordCounterReadingTimeValue(_stats.readingTimeMinutes);
+        ? l10n.wordCounterReadingTimeLessThan1
+        : l10n.wordCounterReadingTimeValue(_stats.readingTimeMinutes);
 
     final items = [
       _StatItem(l10n.wordCounterCharsWithSpaces, '${_stats.charsWithSpaces}'),

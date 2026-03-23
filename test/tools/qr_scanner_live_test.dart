@@ -6,16 +6,31 @@ import 'package:my_first_app/tools/qr_scanner_live/qr_scanner_live_page.dart';
 void main() {
   group('QR Scanner Live - Result Type Detection', () {
     test('detectResultType returns url for http URLs', () {
-      expect(QrScanResultType.detect('https://example.com'), QrScanResultType.url);
-      expect(QrScanResultType.detect('http://example.com'), QrScanResultType.url);
-      expect(QrScanResultType.detect('HTTP://EXAMPLE.COM'), QrScanResultType.url);
-      expect(QrScanResultType.detect('https://example.com/path?q=1'), QrScanResultType.url);
+      expect(
+        QrScanResultType.detect('https://example.com'),
+        QrScanResultType.url,
+      );
+      expect(
+        QrScanResultType.detect('http://example.com'),
+        QrScanResultType.url,
+      );
+      expect(
+        QrScanResultType.detect('HTTP://EXAMPLE.COM'),
+        QrScanResultType.url,
+      );
+      expect(
+        QrScanResultType.detect('https://example.com/path?q=1'),
+        QrScanResultType.url,
+      );
     });
 
     test('detectResultType returns text for plain text', () {
       expect(QrScanResultType.detect('Hello World'), QrScanResultType.text);
       expect(QrScanResultType.detect('12345'), QrScanResultType.text);
-      expect(QrScanResultType.detect('some random text'), QrScanResultType.text);
+      expect(
+        QrScanResultType.detect('some random text'),
+        QrScanResultType.text,
+      );
     });
 
     test('detectResultType returns text for empty string', () {
@@ -23,7 +38,10 @@ void main() {
     });
 
     test('detectResultType returns url for ftp URLs', () {
-      expect(QrScanResultType.detect('ftp://files.example.com'), QrScanResultType.url);
+      expect(
+        QrScanResultType.detect('ftp://files.example.com'),
+        QrScanResultType.url,
+      );
     });
   });
 
@@ -48,8 +66,9 @@ void main() {
       expect(find.byType(QrScannerLivePage), findsOneWidget);
     });
 
-    testWidgets('QrScanResultSheet displays URL result with action buttons',
-        (tester) async {
+    testWidgets('QrScanResultSheet displays URL result with action buttons', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -80,8 +99,7 @@ void main() {
       expect(find.byIcon(Icons.qr_code_scanner), findsOneWidget);
     });
 
-    testWidgets('QrScanResultSheet displays plain text result',
-        (tester) async {
+    testWidgets('QrScanResultSheet displays plain text result', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -102,8 +120,9 @@ void main() {
       expect(find.text('Hello World'), findsOneWidget);
     });
 
-    testWidgets('QrScanResultSheet copy button triggers callback',
-        (tester) async {
+    testWidgets('QrScanResultSheet copy button triggers callback', (
+      tester,
+    ) async {
       bool copied = false;
 
       await tester.pumpWidget(
@@ -129,8 +148,9 @@ void main() {
       expect(copied, isTrue);
     });
 
-    testWidgets('QrScanResultSheet rescan button triggers callback',
-        (tester) async {
+    testWidgets('QrScanResultSheet rescan button triggers callback', (
+      tester,
+    ) async {
       bool rescanned = false;
 
       await tester.pumpWidget(
@@ -162,11 +182,7 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('zh'),
-          home: Scaffold(
-            body: CameraPermissionDeniedView(
-              onRetry: () {},
-            ),
-          ),
+          home: Scaffold(body: CameraPermissionDeniedView(onRetry: () {})),
         ),
       );
       await tester.pumpAndSettle();
@@ -178,8 +194,9 @@ void main() {
       expect(find.byIcon(Icons.refresh), findsOneWidget);
     });
 
-    testWidgets('CameraPermissionDeniedView retry triggers callback',
-        (tester) async {
+    testWidgets('CameraPermissionDeniedView retry triggers callback', (
+      tester,
+    ) async {
       bool retried = false;
 
       await tester.pumpWidget(
@@ -188,9 +205,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('zh'),
           home: Scaffold(
-            body: CameraPermissionDeniedView(
-              onRetry: () => retried = true,
-            ),
+            body: CameraPermissionDeniedView(onRetry: () => retried = true),
           ),
         ),
       );
@@ -217,9 +232,7 @@ void main() {
             body: SizedBox(
               width: 300,
               height: 300,
-              child: CustomPaint(
-                painter: painter,
-              ),
+              child: CustomPaint(painter: painter),
             ),
           ),
         ),

@@ -13,10 +13,7 @@ bool isMobilePlatform() {
 /// Fallback UI shown when a tool requires hardware not available on the
 /// current platform (Web, macOS, Linux, Windows).
 class PlatformUnsupportedView extends StatelessWidget {
-  const PlatformUnsupportedView({
-    super.key,
-    this.toolName = '',
-  });
+  const PlatformUnsupportedView({super.key, this.toolName = ''});
 
   final String toolName;
 
@@ -25,9 +22,7 @@ class PlatformUnsupportedView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(toolName),
-      ),
+      appBar: AppBar(title: Text(toolName)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -40,17 +35,12 @@ class PlatformUnsupportedView extends StatelessWidget {
                 color: theme.colorScheme.outline,
               ),
               const SizedBox(height: 16),
-              Text(
-                '此功能需要行動裝置',
-                style: theme.textTheme.titleLarge,
-              ),
+              Text('此功能需要行動裝置', style: theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               Text(
                 '此工具需要手機的硬體感測器，\n目前的平台不支援。',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: theme.colorScheme.outline,
-                ),
+                style: TextStyle(color: theme.colorScheme.outline),
               ),
             ],
           ),

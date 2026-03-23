@@ -80,8 +80,9 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
     setState(() {
       _selectedCategory = category;
       _sourceUnit = category.units[0];
-      _targetUnit =
-          category.units.length > 1 ? category.units[1] : category.units[0];
+      _targetUnit = category.units.length > 1
+          ? category.units[1]
+          : category.units[0];
     });
     _updateResult();
   }
@@ -138,7 +139,8 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              if (_result.isNotEmpty && _result != l10n.unitConverterInvalidNumber)
+              if (_result.isNotEmpty &&
+                  _result != l10n.unitConverterInvalidNumber)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
@@ -176,8 +178,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 value: _selectedCategory.id,
                 items: allCategories
                     .map(
-                      (c) =>
-                          DropdownMenuItem(value: c.id, child: Text(c.name)),
+                      (c) => DropdownMenuItem(value: c.id, child: Text(c.name)),
                     )
                     .toList(),
                 onChanged: (id) {
@@ -235,9 +236,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                           width: 2,
                         ),
                       ),
-                      floatingLabelStyle: TextStyle(
-                        color: DT.brandPrimary,
-                      ),
+                      floatingLabelStyle: TextStyle(color: DT.brandPrimary),
                     ),
                   ),
                 ],
@@ -257,10 +256,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                   color: DT.brandPrimary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.swap_vert,
-                  color: DT.brandPrimary,
-                ),
+                child: Icon(Icons.swap_vert, color: DT.brandPrimary),
               ),
             ),
           ),
@@ -276,10 +272,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 value: _targetUnit.id,
                 items: _selectedCategory.units
                     .map(
-                      (u) => DropdownMenuItem(
-                        value: u.id,
-                        child: Text(u.name),
-                      ),
+                      (u) => DropdownMenuItem(value: u.id, child: Text(u.name)),
                     )
                     .toList(),
                 onChanged: (id) {

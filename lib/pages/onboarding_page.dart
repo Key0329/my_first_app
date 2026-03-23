@@ -84,9 +84,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   return AnimatedContainer(
                     key: Key('dot_$index'),
                     duration: DT.durationMedium,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: DT.spaceXs,
-                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: DT.spaceXs),
                     width: isActive ? 24.0 : 8.0,
                     height: 8.0,
                     decoration: BoxDecoration(
@@ -211,11 +209,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.rocket_launch_rounded,
-            size: 80,
-            color: DT.brandPrimary,
-          ),
+          Icon(Icons.rocket_launch_rounded, size: 80, color: DT.brandPrimary),
           const SizedBox(height: DT.space3xl),
 
           Text(
@@ -291,11 +285,7 @@ class _FeatureRow extends StatelessWidget {
             color: DT.brandPrimary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(DT.radiusSm),
           ),
-          child: Icon(
-            icon,
-            color: DT.brandPrimary,
-            size: DT.iconSize,
-          ),
+          child: Icon(icon, color: DT.brandPrimary, size: DT.iconSize),
         ),
         const SizedBox(width: DT.spaceLg),
         Expanded(

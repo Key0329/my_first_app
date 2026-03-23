@@ -111,8 +111,7 @@ void main() {
     group('總額一致性驗證（第一人 + 其餘人 = 總額）', () {
       void expectTotalConsistency(int total, int count) {
         final result = calculateSplitBill(total: total, count: count);
-        final computed =
-            result.firstPersonAmount + result.base * (count - 1);
+        final computed = result.firstPersonAmount + result.base * (count - 1);
         expect(
           computed,
           equals(total),

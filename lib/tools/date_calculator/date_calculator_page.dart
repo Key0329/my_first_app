@@ -39,7 +39,9 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
   // ── Mode 2: Add/Subtract Days ──
   DateTime _addSubBase = DateTime.now();
-  final TextEditingController _daysController = TextEditingController(text: '0');
+  final TextEditingController _daysController = TextEditingController(
+    text: '0',
+  );
   bool _isSubtract = false;
 
   // ── Mode 3: Business Days ──
@@ -88,10 +90,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
   DateTime get _addSubResult {
     final days = int.tryParse(_daysController.text) ?? 0;
-    return DateCalculatorLogic.addDays(
-      _addSubBase,
-      _isSubtract ? -days : days,
-    );
+    return DateCalculatorLogic.addDays(_addSubBase, _isSubtract ? -days : days);
   }
 
   BusinessDaysResult get _bizResult =>
@@ -117,7 +116,10 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           children: [
             Text(l10n.tool_date_calculator_interval_label, style: labelStyle),
             const SizedBox(height: 8),
-            Text(l10n.tool_date_calculator_result_days(r.totalDays), style: whiteStyle),
+            Text(
+              l10n.tool_date_calculator_result_days(r.totalDays),
+              style: whiteStyle,
+            ),
             const SizedBox(height: 4),
             Text(
               '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
@@ -151,7 +153,10 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           children: [
             Text(l10n.tool_date_calculator_business_label, style: labelStyle),
             const SizedBox(height: 8),
-            Text(l10n.tool_date_calculator_result_business_days(r.businessDays), style: whiteStyle),
+            Text(
+              l10n.tool_date_calculator_result_business_days(r.businessDays),
+              style: whiteStyle,
+            ),
             const SizedBox(height: 4),
             Text(
               '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
@@ -179,10 +184,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           children: [
             Text(
               '${_formatDate(_intervalStart)} ~ ${_formatDate(_intervalEnd)}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 14, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -198,10 +200,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             const SizedBox(height: 8),
             Text(
               '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
-              style: const TextStyle(
-                fontSize: 13,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 13, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -209,16 +208,15 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
       case 1:
         final result = _addSubResult;
         final days = int.tryParse(_daysController.text) ?? 0;
-        final op = _isSubtract ? l10n.tool_date_calculator_subtract : l10n.tool_date_calculator_add;
+        final op = _isSubtract
+            ? l10n.tool_date_calculator_subtract
+            : l10n.tool_date_calculator_add;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${_formatDate(_addSubBase)} $op ${l10n.tool_date_calculator_result_days(days)}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 14, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -234,10 +232,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             const SizedBox(height: 8),
             Text(
               _weekdayName(result),
-              style: const TextStyle(
-                fontSize: 13,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 13, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -249,10 +244,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           children: [
             Text(
               '${_formatDate(_bizStart)} ~ ${_formatDate(_bizEnd)}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 14, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -268,10 +260,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             const SizedBox(height: 8),
             Text(
               '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
-              style: const TextStyle(
-                fontSize: 13,
-                color: resultTextColor,
-              ),
+              style: const TextStyle(fontSize: 13, color: resultTextColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -290,7 +279,9 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
       case 1:
         final result = _addSubResult;
         final days = int.tryParse(_daysController.text) ?? 0;
-        final op = _isSubtract ? l10n.tool_date_calculator_subtract : l10n.tool_date_calculator_add;
+        final op = _isSubtract
+            ? l10n.tool_date_calculator_subtract
+            : l10n.tool_date_calculator_add;
         return '${_formatDate(_addSubBase)} $op ${l10n.tool_date_calculator_result_days(days)} = ${_formatDate(result)} (${_weekdayName(result)})\n\nhttps://spectra.app/tools/date-calculator';
       case 2:
         final r = _bizResult;
@@ -308,10 +299,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 
     final xFile = await ShareCardGenerator.capture(_shareCardKey);
     if (xFile != null) {
-      await Share.shareXFiles(
-        [xFile],
-        text: _shareText,
-      );
+      await Share.shareXFiles([xFile], text: _shareText);
     }
   }
 
@@ -341,7 +329,10 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
             bottom: false,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
                 child: _buildHeaderContent(),
               ),
             ),
@@ -373,7 +364,9 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
           child: TabBar(
             controller: _tabController,
             labelColor: _toolColor,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+            unselectedLabelColor: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant,
             indicatorColor: _toolColor,
             tabs: [
               Tab(text: l10n.tool_date_calculator_tab_interval),
@@ -521,13 +514,17 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
                       setState(() => _isSubtract = values.first);
                     },
                     style: ButtonStyle(
-                      foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      foregroundColor: WidgetStateProperty.resolveWith((
+                        states,
+                      ) {
                         if (states.contains(WidgetState.selected)) {
                           return Colors.white;
                         }
                         return null;
                       }),
-                      backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      backgroundColor: WidgetStateProperty.resolveWith((
+                        states,
+                      ) {
                         if (states.contains(WidgetState.selected)) {
                           return _toolColor;
                         }
@@ -598,10 +595,7 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _DatePickerTile extends StatelessWidget {
-  const _DatePickerTile({
-    required this.date,
-    required this.onTap,
-  });
+  const _DatePickerTile({required this.date, required this.onTap});
 
   final DateTime date;
   final VoidCallback onTap;

@@ -27,9 +27,7 @@ Future<bool> showConfirmDialog({
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: colorScheme.error,
-            ),
+            style: TextButton.styleFrom(foregroundColor: colorScheme.error),
             child: Text(confirmLabel ?? l10n.commonConfirm),
           ),
         ],

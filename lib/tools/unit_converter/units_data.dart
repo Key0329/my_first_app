@@ -109,28 +109,16 @@ final _area = UnitCategory(
   id: 'area',
   name: '面積',
   units: [
-    const UnitDefinition(
-      id: 'cm2',
-      name: '平方公分 (cm²)',
-      toBaseFactor: 0.0001,
-    ),
+    const UnitDefinition(id: 'cm2', name: '平方公分 (cm²)', toBaseFactor: 0.0001),
     const UnitDefinition(id: 'm2', name: '平方公尺 (m²)', toBaseFactor: 1),
-    const UnitDefinition(
-      id: 'km2',
-      name: '平方公里 (km²)',
-      toBaseFactor: 1000000,
-    ),
+    const UnitDefinition(id: 'km2', name: '平方公里 (km²)', toBaseFactor: 1000000),
     const UnitDefinition(id: 'ha', name: '公頃 (ha)', toBaseFactor: 10000),
     const UnitDefinition(
       id: 'ft2',
       name: '平方英尺 (ft²)',
       toBaseFactor: 0.09290304,
     ),
-    const UnitDefinition(
-      id: 'ac',
-      name: '英畝 (ac)',
-      toBaseFactor: 4046.8564224,
-    ),
+    const UnitDefinition(id: 'ac', name: '英畝 (ac)', toBaseFactor: 4046.8564224),
     const UnitDefinition(
       id: 'ping',
       name: '坪',

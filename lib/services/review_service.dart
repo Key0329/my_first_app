@@ -21,8 +21,7 @@ class ReviewService {
   @visibleForTesting
   InAppReview? inAppReviewOverride;
 
-  InAppReview get _inAppReview =>
-      inAppReviewOverride ?? InAppReview.instance;
+  InAppReview get _inAppReview => inAppReviewOverride ?? InAppReview.instance;
 
   /// 記錄一次工具使用，並在達到閾值時嘗試觸發評分對話框。
   Future<void> recordToolUseAndPrompt() async {

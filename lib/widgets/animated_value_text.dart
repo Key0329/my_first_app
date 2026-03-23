@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 /// 當 [value] 改變時，使用 [AnimatedSwitcher] 讓舊值向上滑出+淡出，
 /// 新值從下方滑入+淡入，過渡時長 200ms。
 class AnimatedValueText extends StatelessWidget {
-  const AnimatedValueText({
-    super.key,
-    required this.value,
-    this.style,
-  });
+  const AnimatedValueText({super.key, required this.value, this.style});
 
   /// 要顯示的文字。
   final String value;
@@ -33,11 +29,7 @@ class AnimatedValueText extends StatelessWidget {
           ),
         );
       },
-      child: Text(
-        value,
-        key: ValueKey<String>(value),
-        style: style,
-      ),
+      child: Text(value, key: ValueKey<String>(value), style: style),
     );
   }
 }

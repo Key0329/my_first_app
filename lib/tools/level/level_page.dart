@@ -70,14 +70,15 @@ class _LevelPageState extends State<LevelPage>
 
   void _startListening() {
     try {
-      _subscription = accelerometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 50),
-      ).listen(
-        _onAccelerometerEvent,
-        onError: (_) {
-          if (mounted) setState(() => _sensorError = true);
-        },
-      );
+      _subscription =
+          accelerometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 50),
+          ).listen(
+            _onAccelerometerEvent,
+            onError: (_) {
+              if (mounted) setState(() => _sensorError = true);
+            },
+          );
     } catch (_) {
       if (mounted) setState(() => _sensorError = true);
     }
@@ -411,8 +412,10 @@ class _BubbleLevelPainter extends CustomPainter {
       ..color = Colors.white.withValues(alpha: 0.4)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(
-      Offset(bubbleCenter.dx - bubbleRadius * 0.25,
-          bubbleCenter.dy - bubbleRadius * 0.25),
+      Offset(
+        bubbleCenter.dx - bubbleRadius * 0.25,
+        bubbleCenter.dy - bubbleRadius * 0.25,
+      ),
       bubbleRadius * 0.35,
       highlightPaint,
     );

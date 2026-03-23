@@ -34,10 +34,7 @@ class ShareButton extends StatelessWidget {
     );
 
     if (shareFiles != null && shareFiles!.isNotEmpty) {
-      await Share.shareXFiles(
-        shareFiles!,
-        text: shareText,
-      );
+      await Share.shareXFiles(shareFiles!, text: shareText);
     } else if (shareText != null) {
       await Share.share(shareText!);
     }

@@ -42,8 +42,11 @@ void main() {
     test('each tool has 1-2 recommendations', () {
       for (final tool in allTools) {
         final recs = getRecommendations(tool.id);
-        expect(recs.length, inInclusiveRange(1, 2),
-            reason: '${tool.id} should have 1-2 recommendations');
+        expect(
+          recs.length,
+          inInclusiveRange(1, 2),
+          reason: '${tool.id} should have 1-2 recommendations',
+        );
       }
     });
 

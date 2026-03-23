@@ -53,10 +53,7 @@ void main() {
     });
 
     test('arbitrary color #FF5733', () {
-      expect(
-        colorToHex(const Color.fromARGB(255, 255, 87, 51)),
-        '#FF5733',
-      );
+      expect(colorToHex(const Color.fromARGB(255, 255, 87, 51)), '#FF5733');
     });
   });
 

@@ -61,8 +61,7 @@ class _ToolboxAppState extends State<ToolboxApp> {
           routes: [
             GoRoute(
               path: '/tools',
-              builder: (context, state) =>
-                  HomePage(settings: widget.settings),
+              builder: (context, state) => HomePage(settings: widget.settings),
             ),
             GoRoute(
               path: '/favorites',
@@ -77,17 +76,19 @@ class _ToolboxAppState extends State<ToolboxApp> {
           ],
         ),
         // Tool routes — auto-generated from allTools registry
-        ...allTools.map((tool) => GoRoute(
-              path: tool.routePath,
-              pageBuilder: (context, state) => CustomTransitionPage(
-                key: state.pageKey,
-                child: tool.pageBuilder(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-              ),
-            )),
+        ...allTools.map(
+          (tool) => GoRoute(
+            path: tool.routePath,
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: tool.pageBuilder(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+            ),
+          ),
+        ),
       ],
     );
   }

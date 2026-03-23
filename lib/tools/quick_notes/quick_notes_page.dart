@@ -147,7 +147,11 @@ class _QuickNotesPageState extends State<QuickNotesPage> {
               // ── 搜尋欄 ──
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                    DT.spaceLg, DT.spaceLg, DT.spaceLg, DT.spaceSm),
+                  DT.spaceLg,
+                  DT.spaceLg,
+                  DT.spaceLg,
+                  DT.spaceSm,
+                ),
                 child: TextField(
                   controller: _searchController,
                   onChanged: (v) => setState(() => _searchQuery = v),
@@ -204,12 +208,15 @@ class _QuickNotesPageState extends State<QuickNotesPage> {
           children: [
             Icon(Icons.note_add, size: 64, color: Colors.grey.shade400),
             const SizedBox(height: DT.spaceLg),
-            Text(l10n.quickNotesEmpty,
-                style: TextStyle(
-                    fontSize: 18, color: Colors.grey.shade500)),
+            Text(
+              l10n.quickNotesEmpty,
+              style: TextStyle(fontSize: 18, color: Colors.grey.shade500),
+            ),
             const SizedBox(height: DT.spaceSm),
-            Text(l10n.quickNotesEmptyHint,
-                style: TextStyle(color: Colors.grey.shade400)),
+            Text(
+              l10n.quickNotesEmptyHint,
+              style: TextStyle(color: Colors.grey.shade400),
+            ),
           ],
         ),
       );
@@ -217,7 +224,11 @@ class _QuickNotesPageState extends State<QuickNotesPage> {
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(
-          DT.spaceLg, DT.spaceSm, DT.spaceLg, 80),
+        DT.spaceLg,
+        DT.spaceSm,
+        DT.spaceLg,
+        80,
+      ),
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes[index];
@@ -288,8 +299,7 @@ class _QuickNotesPageState extends State<QuickNotesPage> {
                     ),
                   ],
                 ),
-                if (note.content.isNotEmpty &&
-                    note.title.isNotEmpty) ...[
+                if (note.content.isNotEmpty && note.title.isNotEmpty) ...[
                   const SizedBox(height: DT.spaceXs),
                   Text(
                     note.preview,

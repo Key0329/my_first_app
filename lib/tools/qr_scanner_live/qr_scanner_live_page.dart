@@ -112,9 +112,9 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
     await Clipboard.setData(ClipboardData(text: _scanResult!));
     if (mounted) {
       final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.tool_qr_scanner_live_copied)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.tool_qr_scanner_live_copied)));
     }
   }
 
@@ -213,8 +213,7 @@ class _QrScannerLivePageState extends State<QrScannerLivePage>
           CameraPermissionDeniedView(onRetry: _retryPermission),
 
         // 一般錯誤覆蓋
-        if (_hasError && !_permissionDenied)
-          _buildErrorView(),
+        if (_hasError && !_permissionDenied) _buildErrorView(),
       ],
     );
   }
@@ -379,7 +378,9 @@ class QrScanResultSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(DT.radiusSm),
                   ),
                   child: Text(
-                    resultType == QrScanResultType.url ? l10n.tool_qr_scanner_live_type_url : l10n.tool_qr_scanner_live_type_text,
+                    resultType == QrScanResultType.url
+                        ? l10n.tool_qr_scanner_live_type_url
+                        : l10n.tool_qr_scanner_live_type_text,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -472,10 +473,7 @@ class QrScanResultSheet extends StatelessWidget {
 
 /// 相機權限被拒絕時顯示的引導畫面。
 class CameraPermissionDeniedView extends StatelessWidget {
-  const CameraPermissionDeniedView({
-    super.key,
-    required this.onRetry,
-  });
+  const CameraPermissionDeniedView({super.key, required this.onRetry});
 
   final VoidCallback onRetry;
 

@@ -59,11 +59,9 @@ class _CompassPageState extends State<CompassPage>
       duration: const Duration(milliseconds: 300),
     );
     _headingTween = Tween<double>(begin: 0, end: 0);
-    _headingAnimation =
-        _headingTween.animate(CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOut,
-    ));
+    _headingAnimation = _headingTween.animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
+    );
     _headingAnimation.addListener(() {
       setState(() {
         _displayHeading = _headingAnimation.value;
@@ -74,17 +72,18 @@ class _CompassPageState extends State<CompassPage>
 
   void _startListening() {
     try {
-      _subscription = magnetometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 60),
-      ).listen(
-        _onMagnetometerEvent,
-        onError: (_) {
-          if (mounted) {
-            setState(() => _unsupported = true);
-          }
-        },
-        cancelOnError: true,
-      );
+      _subscription =
+          magnetometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 60),
+          ).listen(
+            _onMagnetometerEvent,
+            onError: (_) {
+              if (mounted) {
+                setState(() => _unsupported = true);
+              }
+            },
+            cancelOnError: true,
+          );
 
       // If we receive no data within 3 seconds, assume unsupported.
       Future.delayed(const Duration(seconds: 3), () {
@@ -102,8 +101,7 @@ class _CompassPageState extends State<CompassPage>
 
     // Calculate heading from magnetometer x/y.
     // atan2 returns radians; convert to degrees.
-    double heading =
-        math.atan2(event.y, event.x) * (180 / math.pi);
+    double heading = math.atan2(event.y, event.x) * (180 / math.pi);
     // Normalise to 0-360.
     heading = (heading + 360) % 360;
 
@@ -147,9 +145,7 @@ class _CompassPageState extends State<CompassPage>
         heroTag: 'tool_hero_compass',
         headerFlex: 3,
         bodyFlex: 2,
-        headerChild: SafeArea(
-          child: _buildUnsupportedHeader(theme),
-        ),
+        headerChild: SafeArea(child: _buildUnsupportedHeader(theme)),
         bodyChild: Padding(
           padding: const EdgeInsets.all(DT.toolBodyPadding),
           child: Column(
@@ -445,10 +441,7 @@ class _CompassPainter extends CustomPainter {
       // Centre the label on position.
       textPainter.paint(
         canvas,
-        Offset(
-          pos.dx - textPainter.width / 2,
-          pos.dy - textPainter.height / 2,
-        ),
+        Offset(pos.dx - textPainter.width / 2, pos.dy - textPainter.height / 2),
       );
     }
 

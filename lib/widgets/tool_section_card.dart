@@ -4,11 +4,7 @@ import '../theme/design_tokens.dart';
 /// 工具頁面中的區段卡片，使用品牌色淡底、無邊框、圓角容器。
 /// 可選的 [label] 會以品牌色文字顯示於內容上方。
 class ToolSectionCard extends StatelessWidget {
-  const ToolSectionCard({
-    super.key,
-    required this.child,
-    this.label,
-  });
+  const ToolSectionCard({super.key, required this.child, this.label});
 
   final Widget child;
   final String? label;

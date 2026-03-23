@@ -16,8 +16,9 @@ class FavoritesPage extends StatelessWidget {
     return ListenableBuilder(
       listenable: settings,
       builder: (context, _) {
-        final favoriteTools =
-            allTools.where((tool) => settings.isFavorite(tool.id)).toList();
+        final favoriteTools = allTools
+            .where((tool) => settings.isFavorite(tool.id))
+            .toList();
 
         if (favoriteTools.isEmpty) {
           return _EmptyState();
@@ -39,8 +40,10 @@ class FavoritesPage extends StatelessWidget {
               tool: tool,
               isFavorite: true,
               onTap: () {
-                AnalyticsService.instance
-                    .logToolOpen(toolId: tool.id, source: 'favorites');
+                AnalyticsService.instance.logToolOpen(
+                  toolId: tool.id,
+                  source: 'favorites',
+                );
                 context.push(tool.routePath);
               },
               onLongPress: () => settings.toggleFavorite(tool.id),
@@ -66,18 +69,16 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             l10n.favoritesEmpty,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: outline),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: outline),
           ),
           const SizedBox(height: 8),
           Text(
             l10n.favoritesEmptyHint,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: outline),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: outline),
           ),
         ],
       ),

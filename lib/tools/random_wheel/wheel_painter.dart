@@ -144,8 +144,10 @@ class WheelPainter extends CustomPainter {
     // 每個扇形可用的弧長（在 textRadiusRatio 處），用於限制文字最大寬度
     final textRadius = radius * _textRadiusRatio;
     // 弧長 ≈ 2 * textRadius * sin(sweepAngle / 2)，取略保守的值
-    final maxTextWidth =
-        (2 * textRadius * math.sin(sweepAngle / 2)).clamp(0, radius * 0.9);
+    final maxTextWidth = (2 * textRadius * math.sin(sweepAngle / 2)).clamp(
+      0,
+      radius * 0.9,
+    );
 
     for (int i = 0; i < count; i++) {
       // 扇形中心角

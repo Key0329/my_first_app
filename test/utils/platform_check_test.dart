@@ -19,9 +19,7 @@ void main() {
   group('PlatformUnsupportedView', () {
     testWidgets('renders fallback UI with tool name', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: PlatformUnsupportedView(toolName: '水平儀'),
-        ),
+        const MaterialApp(home: PlatformUnsupportedView(toolName: '水平儀')),
       );
 
       expect(find.text('水平儀'), findsOneWidget);
@@ -31,9 +29,7 @@ void main() {
 
     testWidgets('renders without tool name', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: PlatformUnsupportedView(),
-        ),
+        const MaterialApp(home: PlatformUnsupportedView()),
       );
 
       expect(find.text('此功能需要行動裝置'), findsOneWidget);
