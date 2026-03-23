@@ -20,6 +20,7 @@ import 'package:my_first_app/tools/currency_converter/currency_converter_page.da
 import 'package:my_first_app/tools/random_wheel/random_wheel_page.dart';
 import 'package:my_first_app/tools/word_counter/word_counter_page.dart';
 import 'package:my_first_app/tools/pomodoro/pomodoro_page.dart';
+import 'package:my_first_app/tools/quick_notes/quick_notes_page.dart';
 
 /// 工具分類，用於首頁 Tab 篩選。
 enum ToolCategory {
@@ -237,5 +238,14 @@ final List<ToolItem> allTools = [
     routePath: '/tools/pomodoro',
     category: ToolCategory.life,
     pageBuilder: () => const PomodoroPage(),
+  ),
+  ToolItem(
+    id: 'quick_notes',
+    nameKey: 'tool_quick_notes',
+    fallbackName: '快速筆記',
+    icon: Icons.note_alt_outlined,
+    routePath: '/tools/quick-notes',
+    category: ToolCategory.life,
+    pageBuilder: () => const QuickNotesPage(),
   ),
 ];

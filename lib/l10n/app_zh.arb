@@ -737,5 +737,50 @@
   "pomodoroWorkComplete": "工作時間結束，休息一下吧！",
   "@pomodoroWorkComplete": { "description": "Work phase complete message" },
   "pomodoroBreakComplete": "休息結束，繼續加油！",
-  "@pomodoroBreakComplete": { "description": "Break phase complete message" }
+  "@pomodoroBreakComplete": { "description": "Break phase complete message" },
+
+  "toolQuickNotes": "快速筆記",
+  "@toolQuickNotes": { "description": "Tool name: Quick Notes" },
+  "quickNotesTitle": "快速筆記",
+  "@quickNotesTitle": { "description": "Quick notes page title" },
+  "quickNotesEmpty": "還沒有筆記",
+  "@quickNotesEmpty": { "description": "Empty state message" },
+  "quickNotesEmptyHint": "點擊右下角按鈕開始記錄",
+  "@quickNotesEmptyHint": { "description": "Empty state hint" },
+  "quickNotesSearchHint": "搜尋筆記...",
+  "@quickNotesSearchHint": { "description": "Search field hint" },
+  "quickNotesNewNote": "新增筆記",
+  "@quickNotesNewNote": { "description": "New note tooltip" },
+  "quickNotesEditNote": "編輯筆記",
+  "@quickNotesEditNote": { "description": "Edit note page title" },
+  "quickNotesTitleHint": "標題（選填）",
+  "@quickNotesTitleHint": { "description": "Note title hint" },
+  "quickNotesContentHint": "開始記錄...",
+  "@quickNotesContentHint": { "description": "Note content hint" },
+  "quickNotesDeleteTitle": "刪除筆記",
+  "@quickNotesDeleteTitle": { "description": "Delete confirmation title" },
+  "quickNotesDeleteMessage": "確定要刪除這則筆記嗎？此操作無法復原。",
+  "@quickNotesDeleteMessage": { "description": "Delete confirmation message" },
+  "quickNotesUpdated": "剛剛",
+  "@quickNotesUpdated": { "description": "Just now time label" },
+  "quickNotesMinutesAgo": "{minutes} 分鐘前",
+  "@quickNotesMinutesAgo": {
+    "description": "Minutes ago label",
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "quickNotesHoursAgo": "{hours} 小時前",
+  "@quickNotesHoursAgo": {
+    "description": "Hours ago label",
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "quickNotesDaysAgo": "{days} 天前",
+  "@quickNotesDaysAgo": {
+    "description": "Days ago label",
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "quickNotesCount": "{count} 則筆記",
+  "@quickNotesCount": {
+    "description": "Note count",
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

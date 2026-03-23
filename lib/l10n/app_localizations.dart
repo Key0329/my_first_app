@@ -2005,6 +2005,102 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'休息結束，繼續加油！'**
   String get pomodoroBreakComplete;
+
+  /// Tool name: Quick Notes
+  ///
+  /// In zh, this message translates to:
+  /// **'快速筆記'**
+  String get toolQuickNotes;
+
+  /// Quick notes page title
+  ///
+  /// In zh, this message translates to:
+  /// **'快速筆記'**
+  String get quickNotesTitle;
+
+  /// Empty state message
+  ///
+  /// In zh, this message translates to:
+  /// **'還沒有筆記'**
+  String get quickNotesEmpty;
+
+  /// Empty state hint
+  ///
+  /// In zh, this message translates to:
+  /// **'點擊右下角按鈕開始記錄'**
+  String get quickNotesEmptyHint;
+
+  /// Search field hint
+  ///
+  /// In zh, this message translates to:
+  /// **'搜尋筆記...'**
+  String get quickNotesSearchHint;
+
+  /// New note tooltip
+  ///
+  /// In zh, this message translates to:
+  /// **'新增筆記'**
+  String get quickNotesNewNote;
+
+  /// Edit note page title
+  ///
+  /// In zh, this message translates to:
+  /// **'編輯筆記'**
+  String get quickNotesEditNote;
+
+  /// Note title hint
+  ///
+  /// In zh, this message translates to:
+  /// **'標題（選填）'**
+  String get quickNotesTitleHint;
+
+  /// Note content hint
+  ///
+  /// In zh, this message translates to:
+  /// **'開始記錄...'**
+  String get quickNotesContentHint;
+
+  /// Delete confirmation title
+  ///
+  /// In zh, this message translates to:
+  /// **'刪除筆記'**
+  String get quickNotesDeleteTitle;
+
+  /// Delete confirmation message
+  ///
+  /// In zh, this message translates to:
+  /// **'確定要刪除這則筆記嗎？此操作無法復原。'**
+  String get quickNotesDeleteMessage;
+
+  /// Just now time label
+  ///
+  /// In zh, this message translates to:
+  /// **'剛剛'**
+  String get quickNotesUpdated;
+
+  /// Minutes ago label
+  ///
+  /// In zh, this message translates to:
+  /// **'{minutes} 分鐘前'**
+  String quickNotesMinutesAgo(int minutes);
+
+  /// Hours ago label
+  ///
+  /// In zh, this message translates to:
+  /// **'{hours} 小時前'**
+  String quickNotesHoursAgo(int hours);
+
+  /// Days ago label
+  ///
+  /// In zh, this message translates to:
+  /// **'{days} 天前'**
+  String quickNotesDaysAgo(int days);
+
+  /// Note count
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 則筆記'**
+  String quickNotesCount(int count);
 }
 
 class _AppLocalizationsDelegate

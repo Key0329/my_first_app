@@ -352,5 +352,22 @@
   "pomodoroSettings": "Settings",
   "pomodoroPhaseComplete": "Phase Complete",
   "pomodoroWorkComplete": "Work session done. Take a break!",
-  "pomodoroBreakComplete": "Break over. Let's get back to work!"
+  "pomodoroBreakComplete": "Break over. Let's get back to work!",
+
+  "toolQuickNotes": "Quick Notes",
+  "quickNotesTitle": "Quick Notes",
+  "quickNotesEmpty": "No notes yet",
+  "quickNotesEmptyHint": "Tap the button below to start",
+  "quickNotesSearchHint": "Search notes...",
+  "quickNotesNewNote": "New Note",
+  "quickNotesEditNote": "Edit Note",
+  "quickNotesTitleHint": "Title (optional)",
+  "quickNotesContentHint": "Start writing...",
+  "quickNotesDeleteTitle": "Delete Note",
+  "quickNotesDeleteMessage": "Are you sure you want to delete this note? This cannot be undone.",
+  "quickNotesUpdated": "Just now",
+  "quickNotesMinutesAgo": "{minutes} min ago",
+  "quickNotesHoursAgo": "{hours} hr ago",
+  "quickNotesDaysAgo": "{days} days ago",
+  "quickNotesCount": "{count} notes"
 }

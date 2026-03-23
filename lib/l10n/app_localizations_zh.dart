@@ -1006,4 +1006,60 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pomodoroBreakComplete => '休息結束，繼續加油！';
+
+  @override
+  String get toolQuickNotes => '快速筆記';
+
+  @override
+  String get quickNotesTitle => '快速筆記';
+
+  @override
+  String get quickNotesEmpty => '還沒有筆記';
+
+  @override
+  String get quickNotesEmptyHint => '點擊右下角按鈕開始記錄';
+
+  @override
+  String get quickNotesSearchHint => '搜尋筆記...';
+
+  @override
+  String get quickNotesNewNote => '新增筆記';
+
+  @override
+  String get quickNotesEditNote => '編輯筆記';
+
+  @override
+  String get quickNotesTitleHint => '標題（選填）';
+
+  @override
+  String get quickNotesContentHint => '開始記錄...';
+
+  @override
+  String get quickNotesDeleteTitle => '刪除筆記';
+
+  @override
+  String get quickNotesDeleteMessage => '確定要刪除這則筆記嗎？此操作無法復原。';
+
+  @override
+  String get quickNotesUpdated => '剛剛';
+
+  @override
+  String quickNotesMinutesAgo(int minutes) {
+    return '$minutes 分鐘前';
+  }
+
+  @override
+  String quickNotesHoursAgo(int hours) {
+    return '$hours 小時前';
+  }
+
+  @override
+  String quickNotesDaysAgo(int days) {
+    return '$days 天前';
+  }
+
+  @override
+  String quickNotesCount(int count) {
+    return '$count 則筆記';
+  }
 }

@@ -1022,4 +1022,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pomodoroBreakComplete => 'Break over. Let\'s get back to work!';
+
+  @override
+  String get toolQuickNotes => 'Quick Notes';
+
+  @override
+  String get quickNotesTitle => 'Quick Notes';
+
+  @override
+  String get quickNotesEmpty => 'No notes yet';
+
+  @override
+  String get quickNotesEmptyHint => 'Tap the button below to start';
+
+  @override
+  String get quickNotesSearchHint => 'Search notes...';
+
+  @override
+  String get quickNotesNewNote => 'New Note';
+
+  @override
+  String get quickNotesEditNote => 'Edit Note';
+
+  @override
+  String get quickNotesTitleHint => 'Title (optional)';
+
+  @override
+  String get quickNotesContentHint => 'Start writing...';
+
+  @override
+  String get quickNotesDeleteTitle => 'Delete Note';
+
+  @override
+  String get quickNotesDeleteMessage =>
+      'Are you sure you want to delete this note? This cannot be undone.';
+
+  @override
+  String get quickNotesUpdated => 'Just now';
+
+  @override
+  String quickNotesMinutesAgo(int minutes) {
+    return '$minutes min ago';
+  }
+
+  @override
+  String quickNotesHoursAgo(int hours) {
+    return '$hours hr ago';
+  }
+
+  @override
+  String quickNotesDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String quickNotesCount(int count) {
+    return '$count notes';
+  }
 }

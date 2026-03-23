@@ -185,12 +185,12 @@
 - [x] 白噪音播放（結合現有 audioplayers）
 - [x] 專注統計
 
-### Change #17: `tool-quick-notes`
+### ~~Change #17: `tool-quick-notes`~~ ✅ archived 2026-03-23
 
 > 預估：2 天 | 依賴：#7 tool-registry
 
-- [ ] 快速筆記建立/編輯/刪除
-- [ ] 本地持久化
+- [x] 快速筆記建立/編輯/刪除
+- [x] 本地持久化
 
 ### Change #18: `tool-invoice-checker`
 
@@ -345,7 +345,7 @@
 | ~~14~~ | ~~`enhance-life-tools`~~ ✅ | 4 | 2d | #1 |
 | ~~15~~ | ~~`tool-word-counter`~~ ✅ | 5 | 1d | #7 |
 | ~~16~~ | ~~`tool-pomodoro`~~ ✅ | 5 | 3d | #7 |
-| 17 | `tool-quick-notes` | 5 | 2d | #7 |
+| ~~17~~ | ~~`tool-quick-notes`~~ ✅ | 5 | 2d | #7 |
 | 18 | `tool-invoice-checker` | 5 | 2d | #7 |
 | 19 | `tool-translator` | 5 | 2d | #7 |
 | 20 | `growth-engine` | 5 | 3d | #6 |
