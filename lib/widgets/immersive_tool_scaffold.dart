@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/theme/design_tokens.dart';
 
 import 'tool_recommendation_bar.dart';
 
@@ -122,15 +123,26 @@ class ImmersiveToolScaffold extends StatelessWidget {
 
     return Hero(
       tag: heroTag!,
-      // 飛行期間只顯示漸層背景，避免 headerChild 內容在過渡動畫中被擠壓閃爍
+      // 飛行期間漸層背景 + borderRadius 從圓角卡片過渡到矩形 header
       flightShuttleBuilder:
           (flightContext, animation, direction, fromContext, toContext) {
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: gradientColors,
+            final borderRadius =
+                BorderRadiusTween(
+                  begin: BorderRadius.circular(DT.radiusLg),
+                  end: BorderRadius.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: DT.curveStandard),
+                );
+            return AnimatedBuilder(
+              animation: borderRadius,
+              builder: (context, _) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius.value,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: gradientColors,
+                  ),
                 ),
               ),
             );

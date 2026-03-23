@@ -260,23 +260,23 @@
 
 ## Phase 7 — 設計系統成熟化（持續進行，可穿插於任何 Phase）
 
-### Change #25: `design-system-v2`
+### ~~Change #25: `design-system-v2`~~ ✅ archived 2026-03-23
 
 > 合併：7.1 Token 補齊 + 7.4 Accessibility | 預估：3 天
 > 依賴：#1 fix-quality-baseline
 
 **Design Token 補齊：**
-- [ ] 完整 Typography Scale（Display/Headline/Title/Body/Caption）
-- [ ] Shadow/Elevation Token
-- [ ] Semantic Color Token（三層架構）
-- [ ] Animation Curve Token
-- [ ] Iconography 尺寸規範
+- [x] 完整 Typography Scale（Display/Headline/Title/Body/Caption）
+- [x] Shadow/Elevation Token
+- [x] Semantic Color Token（三層架構）
+- [x] Animation Curve Token
+- [x] Iconography 尺寸規範
 
 **Accessibility：**
-- [ ] 全工具 Semantics 標註
-- [ ] 數值變化 liveRegion
-- [ ] Slider semanticFormatterCallback
-- [ ] 色彩對比度全面驗證
+- [x] 全工具 Semantics 標註
+- [x] 數值變化 liveRegion
+- [x] Slider semanticFormatterCallback
+- [x] 色彩對比度全面驗證
 
 ### Change #26: `ux-polish`
 
@@ -348,7 +348,7 @@
 | 22 | `freemium-paywall` | 6 | 3d | #9 |
 | 23 | `pro-plus-features` | 6 | 3d | #22 |
 | 24 | `architecture-scaling` | 6 | 5d | #7, #9 |
-| 25 | `design-system-v2` | 7 | 3d | #1 |
+| ~~25~~ | ~~`design-system-v2`~~ ✅ | 7 | 3d | #1 |
 | 26 | `ux-polish` | 7 | 3d | #25 |
 | 27 | `brand-visual-upgrade` | 7 | 2d | #25 |
 

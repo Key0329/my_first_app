@@ -5,6 +5,7 @@ import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
+import 'package:my_first_app/widgets/hero_moment.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/share_card_generator.dart';
 import 'package:my_first_app/widgets/share_card_template.dart';
@@ -188,11 +189,14 @@ class _BmiGauge extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedValueText(
-                  value: result.bmi.toStringAsFixed(1),
-                  style: textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: result.category.color,
+                HeroMoment(
+                  value: result.bmi,
+                  child: AnimatedValueText(
+                    value: result.bmi.toStringAsFixed(1),
+                    style: textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: result.category.color,
+                    ),
                   ),
                 ),
                 Text(
@@ -542,12 +546,15 @@ class _ResultContent extends StatelessWidget {
           child: Semantics(
             liveRegion: true,
             value: 'BMI ${result.bmi.toStringAsFixed(1)}',
-            child: AnimatedValueText(
-              value: result.bmi.toStringAsFixed(1),
-              style: TextStyle(
-                fontSize: DT.fontToolResult,
-                fontWeight: FontWeight.bold,
-                color: categoryColor,
+            child: HeroMoment(
+              value: result.bmi,
+              child: AnimatedValueText(
+                value: result.bmi.toStringAsFixed(1),
+                style: TextStyle(
+                  fontSize: DT.fontToolResult,
+                  fontWeight: FontWeight.bold,
+                  color: categoryColor,
+                ),
               ),
             ),
           ),

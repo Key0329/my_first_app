@@ -8,44 +8,35 @@ TBD - created by archiving change 'design-overhaul-bento'. Update Purpose after 
 
 ### Requirement: Home page tool search
 
-The home page SHALL provide a functional search feature accessible via the search icon button. When the user taps the search icon, a search interface SHALL open allowing the user to type a query. The search SHALL filter tools by matching against tool names (in the current locale) and category names. Results SHALL be displayed as a list of matching tools. Tapping a search result SHALL navigate to that tool's page. An empty query SHALL show suggestions or recent tools.
+The home page SHALL provide a functional search feature accessible via a placeholder search bar displayed below the title area. The search bar SHALL be a full-width rounded container with a search icon and localized hint text. When the user taps the search bar, a search interface SHALL open allowing the user to type a query. The search SHALL filter tools by matching against tool names (in the current locale) and category names. Results SHALL be displayed as a list of matching tools. Tapping a search result SHALL navigate to that tool's page. An empty query SHALL show suggestions or recent tools.
 
 #### Scenario: User searches for a tool by name
 
-- **WHEN** user taps the search icon and types "計算"
-- **THEN** the search results SHALL show "計算機" and "BMI 計算機" as matching tools
+- **WHEN** user taps the search bar and types "計算"
+- **THEN** the search results SHALL show tools whose name contains "計算" in the current locale
 
-#### Scenario: User taps a search result
+#### Scenario: Search bar is visually prominent
 
-- **WHEN** user taps a tool in the search results
-- **THEN** the app SHALL navigate to that tool's page
+- **WHEN** the home page loads
+- **THEN** a full-width search bar with hint text SHALL be visible below the title area
 
-#### Scenario: No matching tools
-
-- **WHEN** user types a query that matches no tools
-- **THEN** the search interface SHALL display a "no results found" message
 
 <!-- @trace
-source: critical-fixes
-updated: 2026-03-22
+source: ux-polish
+updated: 2026-03-23
 code:
-  - lib/pages/tool_search_delegate.dart
-  - lib/tools/screen_ruler/screen_ruler_page.dart
-  - lib/tools/compass/compass_page.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/flashlight/flashlight_page.dart
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/tools/currency_converter/currency_converter_page.dart
+  - lib/widgets/shimmer_loading.dart
   - lib/pages/home_page.dart
-  - lib/tools/calculator/calculator_page.dart
-  - .mcp.json
-  - lib/tools/color_picker/color_picker_page.dart
-  - lib/tools/level/level_page.dart
-  - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/utils/platform_check.dart
+  - lib/widgets/hero_moment.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - lib/widgets/confetti_effect.dart
+  - lib/widgets/tool_card.dart
 tests:
-  - test/pages/tool_search_test.dart
-  - test/tools/stopwatch_timer_widget_test.dart
-  - test/tools/calculator_page_test.dart
-  - test/utils/platform_check_test.dart
+  - test/widgets/hero_moment_test.dart
+  - test/widgets/shimmer_loading_test.dart
+  - test/widgets/confetti_effect_test.dart
 -->
 
 ---

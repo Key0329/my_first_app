@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/confetti_effect.dart';
 
 class ToolCard extends StatefulWidget {
   const ToolCard({
@@ -27,6 +28,7 @@ class _ToolCardState extends State<ToolCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _heartAnimController;
   late Animation<double> _heartScaleAnimation;
+  final _confettiKey = GlobalKey<ConfettiOverlayState>();
 
   @override
   void initState() {
@@ -60,6 +62,9 @@ class _ToolCardState extends State<ToolCard>
   }
 
   void _onHeartTap() {
+    if (!widget.isFavorite) {
+      _confettiKey.currentState?.fire();
+    }
     _heartAnimController.forward(from: 0.0);
     widget.onFavoriteToggle();
   }
@@ -129,32 +134,35 @@ class _ToolCardState extends State<ToolCard>
                     ),
                   ],
                 ),
-                // 右上角愛心按鈕（含 AnimatedScale）
+                // 右上角愛心按鈕（含 AnimatedScale + Confetti）
                 Positioned(
                   top: -8,
                   right: -8,
-                  child: ScaleTransition(
-                    scale: _heartScaleAnimation,
-                    child: Semantics(
-                      label: widget.isFavorite
-                          ? AppLocalizations.of(context)!.a11yRemoveFavorite
-                          : AppLocalizations.of(context)!.a11yAddFavorite,
-                      button: true,
-                      child: IconButton(
-                        icon: Icon(
-                          widget.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: widget.isFavorite
-                              ? DT.brandPrimary
-                              : DT.subtitle(b),
-                          size: 20,
-                        ),
-                        onPressed: _onHeartTap,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(
-                          minWidth: 32,
-                          minHeight: 32,
+                  child: ConfettiOverlay(
+                    key: _confettiKey,
+                    child: ScaleTransition(
+                      scale: _heartScaleAnimation,
+                      child: Semantics(
+                        label: widget.isFavorite
+                            ? AppLocalizations.of(context)!.a11yRemoveFavorite
+                            : AppLocalizations.of(context)!.a11yAddFavorite,
+                        button: true,
+                        child: IconButton(
+                          icon: Icon(
+                            widget.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: widget.isFavorite
+                                ? DT.brandPrimary
+                                : DT.subtitle(b),
+                            size: 20,
+                          ),
+                          onPressed: _onHeartTap,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
                         ),
                       ),
                     ),

@@ -726,3 +726,60 @@ tests:
   - test/tools/compass_logic_test.dart
   - test/tools/stopwatch_timer_widget_test.dart
 -->
+
+---
+### Requirement: Tab switch animation on home page
+
+When the user switches between category tabs on the home page, the tool grid content SHALL animate with an AnimatedSwitcher transition. The outgoing content SHALL fade out while the incoming content fades in with a horizontal slide direction. The animation duration SHALL match DT.durationMedium and use DT.curveDecelerate for enter and DT.curveAccelerate for exit.
+
+#### Scenario: Tab switch triggers animation
+
+- **WHEN** user taps a different category tab
+- **THEN** the tool grid content SHALL transition with a fade-slide animation using DT.durationMedium
+
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-23
+code:
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/tools/currency_converter/currency_converter_page.dart
+  - lib/widgets/shimmer_loading.dart
+  - lib/pages/home_page.dart
+  - lib/widgets/hero_moment.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - lib/widgets/confetti_effect.dart
+  - lib/widgets/tool_card.dart
+tests:
+  - test/widgets/hero_moment_test.dart
+  - test/widgets/shimmer_loading_test.dart
+  - test/widgets/confetti_effect_test.dart
+-->
+
+---
+### Requirement: Shimmer skeleton animation timing
+
+The shimmer loading skeleton on the home page SHALL use a continuous horizontal gradient sweep animation cycling every 1.5 seconds. The gradient SHALL move from left to right across the skeleton placeholders. The animation SHALL use a linear curve for smooth continuous motion.
+
+#### Scenario: Shimmer animation cycles continuously
+
+- **WHEN** the shimmer skeleton is displayed
+- **THEN** the gradient highlight SHALL sweep from left to right every 1.5 seconds
+
+<!-- @trace
+source: ux-polish
+updated: 2026-03-23
+code:
+  - lib/tools/bmi_calculator/bmi_calculator_page.dart
+  - lib/tools/currency_converter/currency_converter_page.dart
+  - lib/widgets/shimmer_loading.dart
+  - lib/pages/home_page.dart
+  - lib/widgets/hero_moment.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - lib/widgets/confetti_effect.dart
+  - lib/widgets/tool_card.dart
+tests:
+  - test/widgets/hero_moment_test.dart
+  - test/widgets/shimmer_loading_test.dart
+  - test/widgets/confetti_effect_test.dart
+-->

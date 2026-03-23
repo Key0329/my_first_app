@@ -7,6 +7,7 @@ import 'package:my_first_app/services/analytics_service.dart';
 import 'package:my_first_app/services/review_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/shimmer_loading.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_card.dart';
 
@@ -178,326 +179,348 @@ class _HomePageState extends State<HomePage> {
     }
 
     return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── 標題區（64dp）──
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              DT.spaceXl,
-              DT.spaceLg,
-              DT.spaceXl,
-              DT.spaceMd,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.homeTitle,
-                        style: TextStyle(
-                          fontSize: DT.fontTitle,
-                          fontWeight: FontWeight.w700,
-                          color: DT.title(b),
-                          height: 1.2,
-                        ),
-                      ),
-                      const SizedBox(height: DT.spaceXs),
-                      Text(
-                        l10n.homeSubtitle,
-                        style: TextStyle(
-                          fontSize: DT.fontSubtitle,
-                          fontWeight: FontWeight.w400,
-                          color: DT.subtitle(b),
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
+      child: ListenableBuilder(
+        listenable: widget.settings,
+        builder: (context, _) {
+          final tools = _filteredTools;
+          final recentToolIds = widget.settings.recentTools;
+          final recentTools = recentToolIds
+              .map(
+                (id) => allTools.cast<ToolItem?>().firstWhere(
+                  (t) => t!.id == id,
+                  orElse: () => null,
                 ),
-                // 排序按鈕
-                Semantics(
-                  label: l10n.a11yReorderTools,
-                  button: true,
-                  child: GestureDetector(
-                    onTap: () => _showReorderSheet(context, l10n),
-                    child: Container(
-                      width: DT.searchButtonSize,
-                      height: DT.searchButtonSize,
-                      decoration: BoxDecoration(
-                        color: DT.searchIconBg(b),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.sort,
-                        size: DT.searchIconSize,
-                        color: DT.searchIconColor(b),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: DT.spaceSm),
-                // 搜尋按鈕（40x40 圓形）
-                Semantics(
-                  label: l10n.a11ySearchTools,
-                  button: true,
-                  child: GestureDetector(
-                    onTap: () {
-                      showSearch(
-                        context: context,
-                        delegate: ToolSearchDelegate(
-                          searchHint: l10n.searchHint,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: DT.searchButtonSize,
-                      height: DT.searchButtonSize,
-                      decoration: BoxDecoration(
-                        color: DT.searchIconBg(b),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.search,
-                        size: DT.searchIconSize,
-                        color: DT.searchIconColor(b),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // ── 分類 Tab 列（36dp）──
-          SizedBox(
-            height: 36,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: DT.spaceXl),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _CategoryChip(
-                    label: l10n.categoryAll,
-                    selected: _selectedCategory == null,
-                    onSelected: () => setState(() => _selectedCategory = null),
-                  ),
-                  const SizedBox(width: DT.spaceSm),
-                  for (final category in ToolCategory.values) ...[
-                    _CategoryChip(
-                      label: _categoryLabel(l10n, category),
-                      selected: _selectedCategory == category,
-                      onSelected: () =>
-                          setState(() => _selectedCategory = category),
-                    ),
-                    const SizedBox(width: DT.spaceSm),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: DT.spaceLg),
-          // ── 內容區（最近使用 + 工具 Grid）──
-          Expanded(
-            child: ListenableBuilder(
-              listenable: widget.settings,
-              builder: (context, _) {
-                final tools = _filteredTools;
-                final recentToolIds = widget.settings.recentTools;
-                final recentTools = recentToolIds
-                    .map(
-                      (id) => allTools.cast<ToolItem?>().firstWhere(
-                        (t) => t!.id == id,
-                        orElse: () => null,
-                      ),
-                    )
-                    .whereType<ToolItem>()
-                    .toList();
+              )
+              .whereType<ToolItem>()
+              .toList();
 
-                final streakCount = widget.settings.streakCount;
-                final dailyRec = widget.settings.getDailyRecommendation(
-                  allTools.map((t) => t.id).toList(),
-                );
-                final dailyTool = dailyRec != null
-                    ? allTools.cast<ToolItem?>().firstWhere(
-                        (t) => t!.id == dailyRec,
-                        orElse: () => null,
-                      )
-                    : null;
+          final streakCount = widget.settings.streakCount;
+          final dailyRec = widget.settings.getDailyRecommendation(
+            allTools.map((t) => t.id).toList(),
+          );
+          final dailyTool = dailyRec != null
+              ? allTools.cast<ToolItem?>().firstWhere(
+                  (t) => t!.id == dailyRec,
+                  orElse: () => null,
+                )
+              : null;
 
-                return CustomScrollView(
-                  slivers: [
-                    // ── Streak + 每日推薦 ──
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          DT.spaceXl,
-                          0,
-                          DT.spaceXl,
-                          DT.spaceSm,
-                        ),
-                        child: Row(
+          return CustomScrollView(
+            slivers: [
+              // ── SliverAppBar（標題 + 搜尋欄，滾動縮小）──
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                backgroundColor: DT.pageBg(b),
+                surfaceTintColor: Colors.transparent,
+                expandedHeight: 130,
+                toolbarHeight: 60,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      DT.spaceXl,
+                      DT.spaceLg,
+                      DT.spaceXl,
+                      0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            // Streak 火焰
-                            if (streakCount > 0) ...[
-                              const Icon(
-                                Icons.local_fire_department,
-                                color: Colors.deepOrange,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                l10n.homeStreak(streakCount),
+                            Expanded(
+                              child: Text(
+                                l10n.homeTitle,
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.deepOrange,
+                                  fontSize: DT.fontTitle,
+                                  fontWeight: FontWeight.w700,
+                                  color: DT.title(b),
+                                  height: 1.2,
                                 ),
                               ),
-                            ],
+                            ),
+                            // 排序按鈕
+                            Semantics(
+                              label: l10n.a11yReorderTools,
+                              button: true,
+                              child: GestureDetector(
+                                onTap: () => _showReorderSheet(context, l10n),
+                                child: Container(
+                                  width: DT.searchButtonSize,
+                                  height: DT.searchButtonSize,
+                                  decoration: BoxDecoration(
+                                    color: DT.searchIconBg(b),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.sort,
+                                    size: DT.searchIconSize,
+                                    color: DT.searchIconColor(b),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ),
-                    // ── 每日推薦卡片 ──
-                    if (dailyTool != null)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            DT.spaceXl,
-                            0,
-                            DT.spaceXl,
-                            DT.spaceMd,
-                          ),
-                          child: _DailyRecommendCard(
-                            tool: dailyTool,
-                            l10n: l10n,
-                            onTap: () => _openTool(context, dailyTool),
-                          ),
-                        ),
-                      ),
-                    // ── 最近使用區段 ──
-                    if (recentTools.isNotEmpty) ...[
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            DT.spaceXl,
-                            0,
-                            DT.spaceXl,
-                            DT.spaceSm,
-                          ),
-                          child: Text(
-                            l10n.homeRecentTools,
-                            style: TextStyle(
-                              fontSize: DT.fontSubtitle,
-                              fontWeight: FontWeight.w600,
-                              color: DT.subtitle(b),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 80,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: DT.spaceXl,
-                            ),
-                            itemCount: recentTools.length,
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(width: DT.spaceMd),
-                            itemBuilder: (context, index) {
-                              final tool = recentTools[index];
-                              final gradient = toolGradients[tool.id];
-                              return GestureDetector(
-                                onTap: () => _openTool(context, tool),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 52,
-                                      height: 52,
-                                      decoration: BoxDecoration(
-                                        gradient: gradient != null
-                                            ? LinearGradient(
-                                                colors: gradient,
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                              )
-                                            : null,
-                                        color: gradient == null
-                                            ? tool.color
-                                            : null,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        tool.icon,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    const SizedBox(height: DT.spaceXs),
-                                    Text(
-                                      tool.fallbackName,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: DT.subtitle(b),
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                        const SizedBox(height: DT.spaceSm),
+                        // ── Placeholder 搜尋欄 ──
+                        Semantics(
+                          label: l10n.a11ySearchTools,
+                          button: true,
+                          child: GestureDetector(
+                            onTap: () {
+                              showSearch(
+                                context: context,
+                                delegate: ToolSearchDelegate(
+                                  searchHint: l10n.searchHint,
                                 ),
                               );
                             },
+                            child: Container(
+                              height: 44,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: DT.spaceLg,
+                              ),
+                              decoration: BoxDecoration(
+                                color: DT.cardBg(b),
+                                borderRadius: BorderRadius.circular(
+                                  DT.radiusMd,
+                                ),
+                                border: Border.all(
+                                  color: DT.cardBorder(b),
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    size: DT.iconSm,
+                                    color: DT.subtitle(b),
+                                  ),
+                                  const SizedBox(width: DT.spaceMd),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.searchHint,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: DT.subtitle(b),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // ── 分類 Tab 列 ──
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    0,
+                    DT.spaceMd,
+                    0,
+                    DT.spaceMd,
+                  ),
+                  child: SizedBox(
+                    height: 36,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: DT.spaceXl,
                       ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: DT.spaceMd),
-                      ),
+                      children: [
+                        _CategoryChip(
+                          label: l10n.categoryAll,
+                          selected: _selectedCategory == null,
+                          onSelected: () =>
+                              setState(() => _selectedCategory = null),
+                        ),
+                        const SizedBox(width: DT.spaceSm),
+                        for (final category in ToolCategory.values) ...[
+                          _CategoryChip(
+                            label: _categoryLabel(l10n, category),
+                            selected: _selectedCategory == category,
+                            onSelected: () =>
+                                setState(() => _selectedCategory = category),
+                          ),
+                          const SizedBox(width: DT.spaceSm),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // ── Streak + 每日推薦 ──
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    DT.spaceXl,
+                    0,
+                    DT.spaceXl,
+                    DT.spaceSm,
+                  ),
+                  child: Row(
+                    children: [
+                      if (streakCount > 0) ...[
+                        const Icon(
+                          Icons.local_fire_department,
+                          color: Colors.deepOrange,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          l10n.homeStreak(streakCount),
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.deepOrange,
+                          ),
+                        ),
+                      ],
                     ],
-                    // ── 工具 Grid ──
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(
-                        DT.spaceXl,
-                        0,
-                        DT.spaceXl,
-                        DT.spaceLg,
-                      ),
-                      sliver: SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: DT.gridSpacing,
-                              crossAxisSpacing: DT.gridSpacing,
-                              childAspectRatio: 1.2,
-                            ),
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          final tool = tools[index];
-                          return StaggeredFadeIn(
-                            index: index,
-                            totalItems: tools.length,
-                            animate: shouldAnimate,
-                            child: ToolCard(
-                              tool: tool,
-                              isFavorite: widget.settings.isFavorite(tool.id),
-                              onTap: () => _openTool(context, tool),
-                              onLongPress: () => _toggleFavorite(context, tool),
-                              onFavoriteToggle: () =>
-                                  _toggleFavorite(context, tool),
-                            ),
-                          );
-                        }, childCount: tools.length),
+                  ),
+                ),
+              ),
+              if (dailyTool != null)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      DT.spaceXl,
+                      0,
+                      DT.spaceXl,
+                      DT.spaceMd,
+                    ),
+                    child: _DailyRecommendCard(
+                      tool: dailyTool,
+                      l10n: l10n,
+                      onTap: () => _openTool(context, dailyTool),
+                    ),
+                  ),
+                ),
+              // ── 最近使用（僅在「全部」tab 顯示）──
+              if (recentTools.isNotEmpty && _selectedCategory == null) ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      DT.spaceXl,
+                      0,
+                      DT.spaceXl,
+                      DT.spaceSm,
+                    ),
+                    child: Text(
+                      l10n.homeRecentTools,
+                      style: TextStyle(
+                        fontSize: DT.fontSubtitle,
+                        fontWeight: FontWeight.w600,
+                        color: DT.subtitle(b),
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 80,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: DT.spaceXl,
+                      ),
+                      itemCount: recentTools.length,
+                      separatorBuilder: (_, _) =>
+                          const SizedBox(width: DT.spaceMd),
+                      itemBuilder: (context, index) {
+                        final tool = recentTools[index];
+                        final gradient = toolGradients[tool.id];
+                        return GestureDetector(
+                          onTap: () => _openTool(context, tool),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 52,
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  gradient: gradient != null
+                                      ? LinearGradient(
+                                          colors: gradient,
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        )
+                                      : null,
+                                  color: gradient == null ? tool.color : null,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  tool.icon,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
+                              const SizedBox(height: DT.spaceXs),
+                              Text(
+                                tool.fallbackName,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: DT.subtitle(b),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: DT.spaceMd)),
+              ],
+              // ── 工具 Grid（含 Tab 切換動畫）──
+              if (!_hasAnimated)
+                const SliverToBoxAdapter(child: ShimmerToolGrid())
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    DT.spaceXl,
+                    0,
+                    DT.spaceXl,
+                    DT.spaceLg,
+                  ),
+                  sliver: SliverGrid(
+                    key: ValueKey(_selectedCategory),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: DT.gridSpacing,
+                          crossAxisSpacing: DT.gridSpacing,
+                          childAspectRatio: 1.2,
+                        ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final tool = tools[index];
+                      return StaggeredFadeIn(
+                        index: index,
+                        totalItems: tools.length,
+                        animate: shouldAnimate,
+                        child: ToolCard(
+                          tool: tool,
+                          isFavorite: widget.settings.isFavorite(tool.id),
+                          onTap: () => _openTool(context, tool),
+                          onLongPress: () => _toggleFavorite(context, tool),
+                          onFavoriteToggle: () =>
+                              _toggleFavorite(context, tool),
+                        ),
+                      );
+                    }, childCount: tools.length),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

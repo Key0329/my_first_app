@@ -3,6 +3,7 @@ import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
 import 'package:my_first_app/widgets/bouncing_button.dart';
+import 'package:my_first_app/widgets/hero_moment.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -288,14 +289,17 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
               Semantics(
                 liveRegion: true,
                 value: _result.isEmpty ? '-' : '$_result $_toCurrency',
-                child: AnimatedValueText(
-                  key: const Key('conversion_result'),
-                  value: _isLoading
-                      ? l10n.tool_currency_converter_loading
-                      : (_result.isEmpty ? '-' : _result),
-                  style: theme.textTheme.displaySmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                child: HeroMoment(
+                  value: _result.isEmpty ? null : _result,
+                  child: AnimatedValueText(
+                    key: const Key('conversion_result'),
+                    value: _isLoading
+                        ? l10n.tool_currency_converter_loading
+                        : (_result.isEmpty ? '-' : _result),
+                    style: theme.textTheme.displaySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
