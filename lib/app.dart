@@ -100,8 +100,12 @@ class _ToolboxAppState extends State<ToolboxApp> {
       builder: (context, _) {
         return MaterialApp.router(
           title: '工具箱 Pro',
-          theme: AppTheme.light(),
-          darkTheme: AppTheme.dark(),
+          theme: AppTheme.light(
+            accentColor: widget.settings.themeService.accentColorValue,
+          ),
+          darkTheme: AppTheme.dark(
+            accentColor: widget.settings.themeService.accentColorValue,
+          ),
           themeMode: widget.settings.themeMode,
           locale: widget.settings.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

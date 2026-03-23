@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
 class AppTheme {
-  static ThemeData light() {
+  static ThemeData light({Color? accentColor}) {
+    final seed = accentColor ?? DT.brandPrimary;
     final scheme = ColorScheme.fromSeed(
-      seedColor: DT.brandPrimary,
+      seedColor: seed,
       brightness: Brightness.light,
-    ).copyWith(surface: DT.lightPageBg, primary: DT.brandPrimary);
+    ).copyWith(surface: DT.lightPageBg, primary: seed);
 
     return ThemeData(
       useMaterial3: true,
@@ -49,14 +50,15 @@ class AppTheme {
     );
   }
 
-  static ThemeData dark() {
+  static ThemeData dark({Color? accentColor}) {
+    final seed = accentColor ?? DT.brandPrimary;
     final scheme =
         ColorScheme.fromSeed(
-          seedColor: DT.brandPrimary,
+          seedColor: seed,
           brightness: Brightness.dark,
         ).copyWith(
           surface: DT.darkPageBg,
-          primary: DT.brandPrimary,
+          primary: seed,
           surfaceContainerLowest: DT.darkCardBg,
           surfaceContainerLow: DT.darkCardBg,
           surfaceContainer: DT.darkCardBg,

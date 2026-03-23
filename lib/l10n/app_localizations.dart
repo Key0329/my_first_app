@@ -2149,6 +2149,66 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'我在用工具箱 Pro，超好用！'**
   String get shareHookDefault;
+
+  /// Accent color setting title
+  ///
+  /// In zh, this message translates to:
+  /// **'主題色'**
+  String get settingsAccentColor;
+
+  /// Purple accent
+  ///
+  /// In zh, this message translates to:
+  /// **'紫色'**
+  String get accentColorPurple;
+
+  /// Blue accent
+  ///
+  /// In zh, this message translates to:
+  /// **'藍色'**
+  String get accentColorBlue;
+
+  /// Green accent
+  ///
+  /// In zh, this message translates to:
+  /// **'綠色'**
+  String get accentColorGreen;
+
+  /// Red accent
+  ///
+  /// In zh, this message translates to:
+  /// **'紅色'**
+  String get accentColorRed;
+
+  /// Orange accent
+  ///
+  /// In zh, this message translates to:
+  /// **'橘色'**
+  String get accentColorOrange;
+
+  /// Pink accent
+  ///
+  /// In zh, this message translates to:
+  /// **'粉色'**
+  String get accentColorPink;
+
+  /// Reorder tools button tooltip
+  ///
+  /// In zh, this message translates to:
+  /// **'排列工具'**
+  String get homeReorderTools;
+
+  /// Reorder bottom sheet title
+  ///
+  /// In zh, this message translates to:
+  /// **'排列工具順序'**
+  String get reorderToolsTitle;
+
+  /// Reorder hint text
+  ///
+  /// In zh, this message translates to:
+  /// **'長按拖曳以調整順序'**
+  String get reorderToolsHint;
 }
 
 class _AppLocalizationsDelegate

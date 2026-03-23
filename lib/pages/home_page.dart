@@ -23,11 +23,25 @@ class _HomePageState extends State<HomePage> {
   ToolCategory? _selectedCategory;
   bool _hasAnimated = false;
 
-  List<ToolItem> get _filteredTools {
-    if (_selectedCategory == null) return allTools;
-    return allTools
-        .where((tool) => tool.category == _selectedCategory)
+  List<ToolItem> get _orderedTools {
+    final orderedIds = widget.settings.getOrderedToolIds(
+      allTools.map((t) => t.id).toList(),
+    );
+    return orderedIds
+        .map(
+          (id) => allTools.cast<ToolItem?>().firstWhere(
+            (t) => t!.id == id,
+            orElse: () => null,
+          ),
+        )
+        .whereType<ToolItem>()
         .toList();
+  }
+
+  List<ToolItem> get _filteredTools {
+    final ordered = _orderedTools;
+    if (_selectedCategory == null) return ordered;
+    return ordered.where((tool) => tool.category == _selectedCategory).toList();
   }
 
   void _openTool(BuildContext context, ToolItem tool) {
@@ -48,6 +62,96 @@ class _HomePageState extends State<HomePage> {
         ),
         duration: const Duration(seconds: 2),
       ),
+    );
+  }
+
+  void _showReorderSheet(BuildContext context, AppLocalizations l10n) {
+    final orderedTools = List<ToolItem>.from(_orderedTools);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.7,
+              minChildSize: 0.4,
+              maxChildSize: 0.9,
+              expand: false,
+              builder: (ctx, scrollController) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(DT.spaceLg),
+                      child: Column(
+                        children: [
+                          Text(
+                            l10n.reorderToolsTitle,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: DT.spaceXs),
+                          Text(
+                            l10n.reorderToolsHint,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ReorderableListView.builder(
+                        scrollController: scrollController,
+                        itemCount: orderedTools.length,
+                        onReorder: (oldIndex, newIndex) {
+                          setSheetState(() {
+                            if (newIndex > oldIndex) newIndex--;
+                            final item = orderedTools.removeAt(oldIndex);
+                            orderedTools.insert(newIndex, item);
+                          });
+                          widget.settings.setToolOrder(
+                            orderedTools.map((t) => t.id).toList(),
+                          );
+                        },
+                        itemBuilder: (ctx, index) {
+                          final tool = orderedTools[index];
+                          final gradient = toolGradients[tool.id];
+                          return ListTile(
+                            key: ValueKey(tool.id),
+                            leading: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                gradient: gradient != null
+                                    ? LinearGradient(colors: gradient)
+                                    : null,
+                                color: gradient == null ? tool.color : null,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                tool.icon,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                            title: Text(tool.fallbackName),
+                            trailing: const Icon(Icons.drag_handle),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 
@@ -113,6 +217,24 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                // 排序按鈕
+                GestureDetector(
+                  onTap: () => _showReorderSheet(context, l10n),
+                  child: Container(
+                    width: DT.searchButtonSize,
+                    height: DT.searchButtonSize,
+                    decoration: BoxDecoration(
+                      color: DT.searchIconBg(b),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.sort,
+                      size: DT.searchIconSize,
+                      color: DT.searchIconColor(b),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: DT.spaceSm),
                 // 搜尋按鈕（40x40 圓形）
                 GestureDetector(
                   onTap: () {

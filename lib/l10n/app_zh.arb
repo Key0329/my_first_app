@@ -808,5 +808,26 @@
   "shareHookPassword": "我用工具箱產生了超強密碼，你也來試試！🔐",
   "@shareHookPassword": { "description": "Password generator share hook" },
   "shareHookDefault": "我在用工具箱 Pro，超好用！",
-  "@shareHookDefault": { "description": "Default share hook" }
+  "@shareHookDefault": { "description": "Default share hook" },
+
+  "settingsAccentColor": "主題色",
+  "@settingsAccentColor": { "description": "Accent color setting title" },
+  "accentColorPurple": "紫色",
+  "@accentColorPurple": { "description": "Purple accent" },
+  "accentColorBlue": "藍色",
+  "@accentColorBlue": { "description": "Blue accent" },
+  "accentColorGreen": "綠色",
+  "@accentColorGreen": { "description": "Green accent" },
+  "accentColorRed": "紅色",
+  "@accentColorRed": { "description": "Red accent" },
+  "accentColorOrange": "橘色",
+  "@accentColorOrange": { "description": "Orange accent" },
+  "accentColorPink": "粉色",
+  "@accentColorPink": { "description": "Pink accent" },
+  "homeReorderTools": "排列工具",
+  "@homeReorderTools": { "description": "Reorder tools button tooltip" },
+  "reorderToolsTitle": "排列工具順序",
+  "@reorderToolsTitle": { "description": "Reorder bottom sheet title" },
+  "reorderToolsHint": "長按拖曳以調整順序",
+  "@reorderToolsHint": { "description": "Reorder hint text" }
 }

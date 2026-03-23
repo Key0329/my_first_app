@@ -1110,4 +1110,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareHookDefault => 'I\'m using Toolbox Pro, it\'s awesome!';
+
+  @override
+  String get settingsAccentColor => 'Accent Color';
+
+  @override
+  String get accentColorPurple => 'Purple';
+
+  @override
+  String get accentColorBlue => 'Blue';
+
+  @override
+  String get accentColorGreen => 'Green';
+
+  @override
+  String get accentColorRed => 'Red';
+
+  @override
+  String get accentColorOrange => 'Orange';
+
+  @override
+  String get accentColorPink => 'Pink';
+
+  @override
+  String get homeReorderTools => 'Reorder Tools';
+
+  @override
+  String get reorderToolsTitle => 'Reorder Tools';
+
+  @override
+  String get reorderToolsHint => 'Long press and drag to reorder';
 }

@@ -8,6 +8,7 @@ class UserPreferencesService extends ChangeNotifier {
   static const _maxRecentTools = 5;
   static const _keyStreakCount = 'streak_count';
   static const _keyStreakLastDate = 'streak_last_date';
+  static const _keyToolOrder = 'tool_order';
 
   final SharedPreferences _prefs;
 
@@ -15,18 +16,21 @@ class UserPreferencesService extends ChangeNotifier {
   List<String> _recentTools = [];
   int _streakCount = 0;
   String _streakLastDate = '';
+  List<String> _toolOrder = [];
 
   UserPreferencesService(this._prefs);
 
   bool get hasCompletedOnboarding => _hasCompletedOnboarding;
   List<String> get recentTools => List.unmodifiable(_recentTools);
   int get streakCount => _streakCount;
+  List<String> get toolOrder => List.unmodifiable(_toolOrder);
 
   void loadFromPrefs() {
     _hasCompletedOnboarding = _prefs.getBool(_keyOnboarding) ?? false;
     _recentTools = _prefs.getStringList(_keyRecentTools) ?? [];
     _streakCount = _prefs.getInt(_keyStreakCount) ?? 0;
     _streakLastDate = _prefs.getString(_keyStreakLastDate) ?? '';
+    _toolOrder = _prefs.getStringList(_keyToolOrder) ?? [];
   }
 
   Future<void> completeOnboarding() async {
@@ -50,6 +54,33 @@ class UserPreferencesService extends ChangeNotifier {
     _recentTools.clear();
     notifyListeners();
     await _prefs.remove(_keyRecentTools);
+  }
+
+  // ── 工具排序 ──
+
+  /// 根據儲存的排序重新排列工具 ID 列表。不在排序中的 ID 附加到尾部。
+  List<String> getOrderedToolIds(List<String> allToolIds) {
+    if (_toolOrder.isEmpty) return allToolIds;
+
+    final ordered = <String>[];
+    for (final id in _toolOrder) {
+      if (allToolIds.contains(id)) {
+        ordered.add(id);
+      }
+    }
+    // 新工具附加到尾部
+    for (final id in allToolIds) {
+      if (!ordered.contains(id)) {
+        ordered.add(id);
+      }
+    }
+    return ordered;
+  }
+
+  Future<void> setToolOrder(List<String> order) async {
+    _toolOrder = List.from(order);
+    notifyListeners();
+    await _prefs.setStringList(_keyToolOrder, _toolOrder);
   }
 
   // ── Streak 追蹤 ──

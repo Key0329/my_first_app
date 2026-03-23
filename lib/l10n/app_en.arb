@@ -378,5 +378,16 @@
   "shareHookNoise": "I measured {value} dB. How loud is yours?",
   "shareHookSplitBill": "Bill's all split! Check who owes what 💰",
   "shareHookPassword": "Just generated a super strong password with Toolbox Pro! 🔐",
-  "shareHookDefault": "I'm using Toolbox Pro, it's awesome!"
+  "shareHookDefault": "I'm using Toolbox Pro, it's awesome!",
+
+  "settingsAccentColor": "Accent Color",
+  "accentColorPurple": "Purple",
+  "accentColorBlue": "Blue",
+  "accentColorGreen": "Green",
+  "accentColorRed": "Red",
+  "accentColorOrange": "Orange",
+  "accentColorPink": "Pink",
+  "homeReorderTools": "Reorder Tools",
+  "reorderToolsTitle": "Reorder Tools",
+  "reorderToolsHint": "Long press and drag to reorder"
 }

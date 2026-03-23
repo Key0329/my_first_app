@@ -59,6 +59,12 @@ class AppSettings extends ChangeNotifier {
   String? getDailyRecommendation(List<String> allToolIds) =>
       userPreferencesService.getDailyRecommendation(allToolIds);
 
+  List<String> getOrderedToolIds(List<String> allToolIds) =>
+      userPreferencesService.getOrderedToolIds(allToolIds);
+
+  Future<void> setToolOrder(List<String> order) =>
+      userPreferencesService.setToolOrder(order);
+
   Future<void> toggleFavorite(String toolId) =>
       favoritesService.toggleFavorite(toolId);
 

@@ -217,13 +217,13 @@
 - [x] 使用連續天數 Streak
 - [ ] 智慧通知（匯率波動、週五分帳提醒）— 留待後續
 
-### Change #21: `personalization`
+### ~~Change #21: `personalization`~~ ✅ archived 2026-03-23
 
 > 預估：3 天 | 依賴：#9 services-refactor
 
-- [ ] 工具排序 / 拖曳排列
-- [ ] 自訂 App Icon 樣式
-- [ ] 自訂品牌色主題
+- [x] 工具排序 / 拖曳排列
+- [ ] 自訂 App Icon 樣式 — 留待後續（需 native 層）
+- [x] 自訂品牌色主題
 
 ---
 
@@ -344,7 +344,7 @@
 | ~~18~~ | ~~`tool-invoice-checker`~~ ⏭️ | 5 | 2d | #7 |
 | ~~19~~ | ~~`tool-translator`~~ ⏭️ | 5 | 2d | #7 |
 | ~~20~~ | ~~`growth-engine`~~ ✅ | 5 | 3d | #6 |
-| 21 | `personalization` | 5 | 3d | #9 |
+| ~~21~~ | ~~`personalization`~~ ✅ | 5 | 3d | #9 |
 | 22 | `freemium-paywall` | 6 | 3d | #9 |
 | 23 | `pro-plus-features` | 6 | 3d | #22 |
 | 24 | `architecture-scaling` | 6 | 5d | #7, #9 |

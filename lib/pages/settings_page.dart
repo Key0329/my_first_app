@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/services/settings_service.dart';
+import 'package:my_first_app/services/theme_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
@@ -48,6 +49,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       _buildThemeModeSelector(),
                       const SizedBox(height: DT.spaceLg),
                       _buildLanguageSelector(),
+                      const SizedBox(height: DT.spaceLg),
+                      _buildAccentColorSelector(),
                     ],
                   ),
                 ),
@@ -185,6 +188,77 @@ class _SettingsPageState extends State<SettingsPage> {
               widget.settings.setLocale(locale);
             },
           ),
+        ),
+      ],
+    );
+  }
+
+  // ── 品牌色選擇 ──
+  Widget _buildAccentColorSelector() {
+    final b = Theme.of(context).brightness;
+    final l10n = AppLocalizations.of(context)!;
+    final current = widget.settings.themeService.accentColor;
+
+    String colorName(AccentColorOption opt) {
+      switch (opt) {
+        case AccentColorOption.purple:
+          return l10n.accentColorPurple;
+        case AccentColorOption.blue:
+          return l10n.accentColorBlue;
+        case AccentColorOption.green:
+          return l10n.accentColorGreen;
+        case AccentColorOption.red:
+          return l10n.accentColorRed;
+        case AccentColorOption.orange:
+          return l10n.accentColorOrange;
+        case AccentColorOption.pink:
+          return l10n.accentColorPink;
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.settingsAccentColor,
+          style: TextStyle(
+            fontSize: DT.fontToolLabel,
+            fontWeight: FontWeight.w500,
+            color: DT.title(b),
+          ),
+        ),
+        const SizedBox(height: DT.spaceSm),
+        Wrap(
+          spacing: DT.spaceMd,
+          runSpacing: DT.spaceSm,
+          children: AccentColorOption.values.map((opt) {
+            final isSelected = opt == current;
+            return Tooltip(
+              message: colorName(opt),
+              child: GestureDetector(
+                onTap: () => widget.settings.themeService.setAccentColor(opt),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: opt.color,
+                    shape: BoxShape.circle,
+                    border: isSelected
+                        ? Border.all(
+                            color: b == Brightness.dark
+                                ? Colors.white
+                                : Colors.black87,
+                            width: 2.5,
+                          )
+                        : null,
+                  ),
+                  child: isSelected
+                      ? const Icon(Icons.check, color: Colors.white, size: 18)
+                      : null,
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );

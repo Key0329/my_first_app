@@ -1092,4 +1092,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareHookDefault => '我在用工具箱 Pro，超好用！';
+
+  @override
+  String get settingsAccentColor => '主題色';
+
+  @override
+  String get accentColorPurple => '紫色';
+
+  @override
+  String get accentColorBlue => '藍色';
+
+  @override
+  String get accentColorGreen => '綠色';
+
+  @override
+  String get accentColorRed => '紅色';
+
+  @override
+  String get accentColorOrange => '橘色';
+
+  @override
+  String get accentColorPink => '粉色';
+
+  @override
+  String get homeReorderTools => '排列工具';
+
+  @override
+  String get reorderToolsTitle => '排列工具順序';
+
+  @override
+  String get reorderToolsHint => '長按拖曳以調整順序';
 }
