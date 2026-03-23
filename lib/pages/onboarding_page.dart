@@ -3,15 +3,7 @@ import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
 /// 三頁式 Onboarding 引導頁面。
-///
-/// 使用 [PageView] 實作左右滑動，包含：
-/// - 第 1 頁：歡迎頁（App Logo、歡迎標題、簡介）
-/// - 第 2 頁：功能介紹頁（工具箱、收藏、設定三大功能）
-/// - 第 3 頁：開始使用頁（含「開始使用」按鈕）
-///
-/// 所有頁面皆顯示「跳過」按鈕，點擊後呼叫 [onComplete]。
 class OnboardingPage extends StatefulWidget {
-  /// 當使用者完成 onboarding（點擊「跳過」或「開始使用」）時呼叫。
   final VoidCallback onComplete;
 
   const OnboardingPage({super.key, required this.onComplete});
@@ -20,18 +12,50 @@ class OnboardingPage extends StatefulWidget {
   State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _OnboardingPageState extends State<OnboardingPage> {
+class _OnboardingPageState extends State<OnboardingPage>
+    with TickerProviderStateMixin {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  // 每頁的動畫 controller（只播一次）
+  late final List<AnimationController> _pageAnimControllers;
+  final _pageAnimated = [false, false, false];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageAnimControllers = List.generate(
+      3,
+      (_) => AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 800),
+      ),
+    );
+    // 第一頁立即播放
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _triggerPageAnimation(0);
+    });
+  }
 
   @override
   void dispose() {
     _pageController.dispose();
+    for (final c in _pageAnimControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 
   void _onPageChanged(int page) {
     setState(() => _currentPage = page);
+    _triggerPageAnimation(page);
+  }
+
+  void _triggerPageAnimation(int page) {
+    if (!_pageAnimated[page]) {
+      _pageAnimated[page] = true;
+      _pageAnimControllers[page].forward();
+    }
   }
 
   @override
@@ -67,9 +91,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 controller: _pageController,
                 onPageChanged: _onPageChanged,
                 children: [
-                  _buildWelcomePage(theme, l10n),
-                  _buildFeaturesPage(theme, l10n),
-                  _buildGetStartedPage(theme, l10n),
+                  _WelcomePage(
+                    theme: theme,
+                    l10n: l10n,
+                    controller: _pageAnimControllers[0],
+                  ),
+                  _FeaturesPage(
+                    theme: theme,
+                    l10n: l10n,
+                    controller: _pageAnimControllers[1],
+                  ),
+                  _GetStartedPage(
+                    theme: theme,
+                    l10n: l10n,
+                    controller: _pageAnimControllers[2],
+                    onComplete: widget.onComplete,
+                  ),
                 ],
               ),
             ),
@@ -102,96 +139,160 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
     );
   }
+}
 
-  // ── 第 1 頁：歡迎頁 ──
-  Widget _buildWelcomePage(ThemeData theme, AppLocalizations l10n) {
+// ── 第 1 頁：歡迎頁（Logo 彈入 + 文字滑入）──
+class _WelcomePage extends StatelessWidget {
+  const _WelcomePage({
+    required this.theme,
+    required this.l10n,
+    required this.controller,
+  });
+
+  final ThemeData theme;
+  final AppLocalizations l10n;
+  final AnimationController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final logoScale = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
+    );
+    final textSlide = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.25, 0.75, curve: Curves.easeOut),
+    );
+    final textFade = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.25, 0.65, curve: Curves.easeIn),
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // App Logo
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [DT.brandPrimary, DT.brandPrimaryLight],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          // Logo 彈入
+          ScaleTransition(
+            scale: Tween<double>(begin: 0.0, end: 1.0).animate(logoScale),
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [DT.brandPrimary, DT.brandPrimaryLight],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(DT.radiusLg),
               ),
-              borderRadius: BorderRadius.circular(DT.radiusLg),
-            ),
-            child: const Icon(
-              Icons.build_rounded,
-              size: 48,
-              color: Colors.white,
+              child: const Icon(
+                Icons.build_rounded,
+                size: 48,
+                color: Colors.white,
+              ),
             ),
           ),
           const SizedBox(height: DT.space3xl),
 
-          // 歡迎標題
-          Text(
-            l10n.onboardingWelcomeTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontSize: DT.fontTitle,
-              fontWeight: FontWeight.bold,
+          // 文字滑入
+          SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.3),
+              end: Offset.zero,
+            ).animate(textSlide),
+            child: FadeTransition(
+              opacity: textFade,
+              child: Column(
+                children: [
+                  Text(
+                    l10n.onboardingWelcomeTitle,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontSize: DT.fontTitle,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: DT.spaceLg),
+                  Text(
+                    l10n.onboardingWelcomeDesc,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: DT.fontSubtitle,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: DT.spaceLg),
-
-          // App 描述
-          Text(
-            l10n.onboardingWelcomeDesc,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontSize: DT.fontSubtitle,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),
     );
   }
+}
 
-  // ── 第 2 頁：功能介紹頁 ──
-  Widget _buildFeaturesPage(ThemeData theme, AppLocalizations l10n) {
+// ── 第 2 頁：功能介紹頁（交錯淡入）──
+class _FeaturesPage extends StatelessWidget {
+  const _FeaturesPage({
+    required this.theme,
+    required this.l10n,
+    required this.controller,
+  });
+
+  final ThemeData theme;
+  final AppLocalizations l10n;
+  final AnimationController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    // 標題
+    final titleFade = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.0, 0.3, curve: Curves.easeIn),
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            l10n.onboardingFeaturesTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontSize: DT.fontTitle,
-              fontWeight: FontWeight.bold,
+          FadeTransition(
+            opacity: titleFade,
+            child: Text(
+              l10n.onboardingFeaturesTitle,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontSize: DT.fontTitle,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: DT.space3xl),
 
-          // 工具箱
-          _FeatureRow(
+          // 三行交錯動畫
+          _AnimatedFeatureRow(
+            controller: controller,
+            delay: 0.1,
             icon: Icons.handyman_rounded,
             title: l10n.onboardingFeatureTools,
             description: l10n.onboardingFeatureToolsDesc,
             theme: theme,
           ),
           const SizedBox(height: DT.space2xl),
-
-          // 收藏
-          _FeatureRow(
+          _AnimatedFeatureRow(
+            controller: controller,
+            delay: 0.3,
             icon: Icons.favorite_rounded,
             title: l10n.onboardingFeatureFavorites,
             description: l10n.onboardingFeatureFavoritesDesc,
             theme: theme,
           ),
           const SizedBox(height: DT.space2xl),
-
-          // 設定
-          _FeatureRow(
+          _AnimatedFeatureRow(
+            controller: controller,
+            delay: 0.5,
             icon: Icons.settings_rounded,
             title: l10n.onboardingFeatureSettings,
             description: l10n.onboardingFeatureSettingsDesc,
@@ -201,59 +302,174 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
     );
   }
+}
 
-  // ── 第 3 頁：開始使用頁 ──
-  Widget _buildGetStartedPage(ThemeData theme, AppLocalizations l10n) {
+// ── 第 3 頁：開始使用頁（火箭上升 + 按鈕淡入）──
+class _GetStartedPage extends StatelessWidget {
+  const _GetStartedPage({
+    required this.theme,
+    required this.l10n,
+    required this.controller,
+    required this.onComplete,
+  });
+
+  final ThemeData theme;
+  final AppLocalizations l10n;
+  final AnimationController controller;
+  final VoidCallback onComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    final rocketSlide = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+    );
+    final rocketScale = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack),
+    );
+    final textFade = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.2, 0.6, curve: Curves.easeIn),
+    );
+    final buttonFade = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.4, 0.8, curve: Curves.easeIn),
+    );
+    final buttonScale = CurvedAnimation(
+      parent: controller,
+      curve: const Interval(0.4, 0.8, curve: Curves.easeOutBack),
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: DT.space3xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.rocket_launch_rounded, size: 80, color: DT.brandPrimary),
-          const SizedBox(height: DT.space3xl),
-
-          Text(
-            l10n.onboardingReadyTitle,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontSize: DT.fontTitle,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: DT.spaceLg),
-
-          Text(
-            l10n.onboardingReadyDesc,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontSize: DT.fontSubtitle,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: DT.space3xl),
-
-          // 「開始使用」按鈕
-          SizedBox(
-            width: double.infinity,
-            height: DT.toolButtonHeight,
-            child: FilledButton(
-              onPressed: widget.onComplete,
-              style: FilledButton.styleFrom(
-                backgroundColor: DT.brandPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(DT.toolButtonRadius),
-                ),
+          // 火箭上升
+          SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.5),
+              end: Offset.zero,
+            ).animate(rocketSlide),
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.8, end: 1.0).animate(rocketScale),
+              child: Icon(
+                Icons.rocket_launch_rounded,
+                size: 80,
+                color: DT.brandPrimary,
               ),
-              child: Text(
-                l10n.onboardingStart,
-                style: const TextStyle(
-                  fontSize: DT.fontToolButton,
-                  fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: DT.space3xl),
+
+          // 文字淡入
+          FadeTransition(
+            opacity: textFade,
+            child: Column(
+              children: [
+                Text(
+                  l10n.onboardingReadyTitle,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: DT.fontTitle,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: DT.spaceLg),
+                Text(
+                  l10n.onboardingReadyDesc,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: DT.fontSubtitle,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: DT.space3xl),
+
+          // 按鈕淡入 + 縮放
+          FadeTransition(
+            opacity: buttonFade,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.8, end: 1.0).animate(buttonScale),
+              child: SizedBox(
+                width: double.infinity,
+                height: DT.toolButtonHeight,
+                child: FilledButton(
+                  onPressed: onComplete,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: DT.brandPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(DT.toolButtonRadius),
+                    ),
+                  ),
+                  child: Text(
+                    l10n.onboardingStart,
+                    style: const TextStyle(
+                      fontSize: DT.fontToolButton,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── 帶交錯動畫的功能列 ──
+class _AnimatedFeatureRow extends StatelessWidget {
+  const _AnimatedFeatureRow({
+    required this.controller,
+    required this.delay,
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.theme,
+  });
+
+  final AnimationController controller;
+  final double delay;
+  final IconData icon;
+  final String title;
+  final String description;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    final end = (delay + 0.4).clamp(0.0, 1.0);
+    final slide = CurvedAnimation(
+      parent: controller,
+      curve: Interval(delay, end, curve: Curves.easeOut),
+    );
+    final fade = CurvedAnimation(
+      parent: controller,
+      curve: Interval(
+        delay,
+        (delay + 0.3).clamp(0.0, 1.0),
+        curve: Curves.easeIn,
+      ),
+    );
+
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0.3, 0),
+        end: Offset.zero,
+      ).animate(slide),
+      child: FadeTransition(
+        opacity: fade,
+        child: _FeatureRow(
+          icon: icon,
+          title: title,
+          description: description,
+          theme: theme,
+        ),
       ),
     );
   }

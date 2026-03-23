@@ -278,23 +278,23 @@
 - [x] Slider semanticFormatterCallback
 - [x] 色彩對比度全面驗證
 
-### Change #26: `ux-polish`
+### ~~Change #26: `ux-polish`~~ ✅ archived 2026-03-23
 
 > 合併：7.2 首頁體驗 + 7.3 微互動 | 預估：3 天
 > 依賴：#25 design-system-v2
 
 **首頁體驗：**
-- [ ] 搜尋改為 placeholder 搜尋欄
-- [ ] Tab 切換加過渡動畫
-- [ ] 最近使用只在「全部」tab 顯示
-- [ ] 常用工具置頂大卡片 + 其餘 3 欄小格
+- [x] 搜尋改為 placeholder 搜尋欄
+- [x] Tab 切換加過渡動畫
+- [x] 最近使用只在「全部」tab 顯示
+- [ ] 常用工具置頂大卡片 + 其餘 3 欄小格 — 留待後續（保持統一 2 欄避免過度複雜）
 
 **微互動：**
-- [ ] Hero 飛行動畫優化（icon 容器展開為 header）
-- [ ] 收藏 confetti 粒子效果
-- [ ] 首頁 Shimmer 載入
-- [ ] 標題區滾動縮小（SliverAppBar 風格）
-- [ ] 結果展示「Hero Moment」+ 慶祝動畫
+- [x] Hero 飛行動畫優化（icon 容器展開為 header）
+- [x] 收藏 confetti 粒子效果
+- [x] 首頁 Shimmer 載入
+- [x] 標題區滾動縮小（SliverAppBar 風格）
+- [x] 結果展示「Hero Moment」+ 慶祝動畫
 
 ### Change #27: `brand-visual-upgrade`
 
@@ -349,7 +349,7 @@
 | 23 | `pro-plus-features` | 6 | 3d | #22 |
 | 24 | `architecture-scaling` | 6 | 5d | #7, #9 |
 | ~~25~~ | ~~`design-system-v2`~~ ✅ | 7 | 3d | #1 |
-| 26 | `ux-polish` | 7 | 3d | #25 |
+| ~~26~~ | ~~`ux-polish`~~ ✅ | 7 | 3d | #25 |
 | 27 | `brand-visual-upgrade` | 7 | 2d | #25 |
 
 **合計：27 changes ≈ 60 工作天 ≈ 16 週**
