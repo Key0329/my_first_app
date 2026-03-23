@@ -180,14 +180,28 @@ class ImmersiveToolScaffold extends StatelessWidget {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: toolId != null
-                  ? Column(
-                      children: [
-                        Expanded(child: bodyChild),
-                        ToolRecommendationBar(toolId: toolId!),
-                      ],
-                    )
-                  : bodyChild,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  Widget content = toolId != null
+                      ? Column(
+                          children: [
+                            Expanded(child: bodyChild),
+                            ToolRecommendationBar(toolId: toolId!),
+                          ],
+                        )
+                      : bodyChild;
+                  // 寬螢幕（> 900dp）時限寬 600dp 並置中
+                  if (constraints.maxWidth > 900) {
+                    content = Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 600),
+                        child: content,
+                      ),
+                    );
+                  }
+                  return content;
+                },
+              ),
             ),
           ),
         ],

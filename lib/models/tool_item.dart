@@ -22,7 +22,7 @@ import 'package:my_first_app/tools/word_counter/word_counter_page.dart';
 import 'package:my_first_app/tools/pomodoro/pomodoro_page.dart';
 import 'package:my_first_app/tools/quick_notes/quick_notes_page.dart';
 
-/// 工具分類，用於首頁 Tab 篩選。
+/// 工具分類，用於首頁 Tab 篩選（保留向下相容）。
 enum ToolCategory {
   calculate('計算'),
   measure('測量'),
@@ -32,14 +32,32 @@ enum ToolCategory {
   final String label;
 }
 
+/// 多標籤分類系統，每個工具可有 1-3 個 tag。
+enum ToolTag { calculate, measure, life, productivity, finance }
+
 class ToolItem {
   final String id;
   final String nameKey;
   final String fallbackName;
   final IconData icon;
   final String routePath;
-  final ToolCategory category;
+  final Set<ToolTag> tags;
   final Widget Function() pageBuilder;
+
+  /// 向下相容：回傳主要分類（tags 的第一個元素對應的 ToolCategory）。
+  ToolCategory get category {
+    final first = tags.first;
+    switch (first) {
+      case ToolTag.calculate:
+      case ToolTag.finance:
+        return ToolCategory.calculate;
+      case ToolTag.measure:
+        return ToolCategory.measure;
+      case ToolTag.life:
+      case ToolTag.productivity:
+        return ToolCategory.life;
+    }
+  }
 
   /// 工具色彩，自動從 [toolGradients] 的第一色取得，確保色彩一致性。
   Color get color => toolGradients[id]?.first ?? DT.brandPrimary;
@@ -50,7 +68,7 @@ class ToolItem {
     required this.fallbackName,
     required this.icon,
     required this.routePath,
-    required this.category,
+    required this.tags,
     required this.pageBuilder,
   });
 }
@@ -63,7 +81,7 @@ final List<ToolItem> allTools = [
     fallbackName: '計算機',
     icon: Icons.calculate,
     routePath: '/tools/calculator',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate, ToolTag.finance},
     pageBuilder: () => const CalculatorPage(),
   ),
   ToolItem(
@@ -72,7 +90,7 @@ final List<ToolItem> allTools = [
     fallbackName: '單位換算',
     icon: Icons.swap_horiz,
     routePath: '/tools/unit-converter',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate},
     pageBuilder: () => const UnitConverterPage(),
   ),
   ToolItem(
@@ -81,7 +99,7 @@ final List<ToolItem> allTools = [
     fallbackName: 'BMI 計算機',
     icon: Icons.monitor_heart,
     routePath: '/tools/bmi-calculator',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate, ToolTag.life},
     pageBuilder: () => const BmiCalculatorPage(),
   ),
   ToolItem(
@@ -90,7 +108,7 @@ final List<ToolItem> allTools = [
     fallbackName: 'AA 制分帳',
     icon: Icons.groups,
     routePath: '/tools/split-bill',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate, ToolTag.finance},
     pageBuilder: () => const SplitBillPage(),
   ),
   ToolItem(
@@ -99,7 +117,7 @@ final List<ToolItem> allTools = [
     fallbackName: '日期計算機',
     icon: Icons.date_range,
     routePath: '/tools/date-calculator',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate, ToolTag.productivity},
     pageBuilder: () => const DateCalculatorPage(),
   ),
   // ── 測量 ──
@@ -109,7 +127,7 @@ final List<ToolItem> allTools = [
     fallbackName: '水平儀',
     icon: Icons.straighten,
     routePath: '/tools/level',
-    category: ToolCategory.measure,
+    tags: {ToolTag.measure},
     pageBuilder: () => const LevelPage(),
   ),
   ToolItem(
@@ -118,7 +136,7 @@ final List<ToolItem> allTools = [
     fallbackName: '指南針',
     icon: Icons.explore,
     routePath: '/tools/compass',
-    category: ToolCategory.measure,
+    tags: {ToolTag.measure},
     pageBuilder: () => const CompassPage(),
   ),
   ToolItem(
@@ -127,7 +145,7 @@ final List<ToolItem> allTools = [
     fallbackName: '量角器',
     icon: Icons.architecture,
     routePath: '/tools/protractor',
-    category: ToolCategory.measure,
+    tags: {ToolTag.measure},
     pageBuilder: () => const ProtractorPage(),
   ),
   ToolItem(
@@ -136,7 +154,7 @@ final List<ToolItem> allTools = [
     fallbackName: '螢幕尺規',
     icon: Icons.square_foot,
     routePath: '/tools/screen-ruler',
-    category: ToolCategory.measure,
+    tags: {ToolTag.measure},
     pageBuilder: () => const ScreenRulerPage(),
   ),
   ToolItem(
@@ -145,7 +163,7 @@ final List<ToolItem> allTools = [
     fallbackName: '噪音計',
     icon: Icons.mic,
     routePath: '/tools/noise-meter',
-    category: ToolCategory.measure,
+    tags: {ToolTag.measure},
     pageBuilder: () => const NoiseMeterPage(),
   ),
   // ── 生活 ──
@@ -155,7 +173,7 @@ final List<ToolItem> allTools = [
     fallbackName: '手電筒',
     icon: Icons.flashlight_on,
     routePath: '/tools/flashlight',
-    category: ToolCategory.life,
+    tags: {ToolTag.life},
     pageBuilder: () => const FlashlightPage(),
   ),
   ToolItem(
@@ -164,7 +182,7 @@ final List<ToolItem> allTools = [
     fallbackName: '碼錶',
     icon: Icons.timer,
     routePath: '/tools/stopwatch-timer',
-    category: ToolCategory.life,
+    tags: {ToolTag.life, ToolTag.productivity},
     pageBuilder: () => const StopwatchTimerPage(),
   ),
   ToolItem(
@@ -173,7 +191,7 @@ final List<ToolItem> allTools = [
     fallbackName: '密碼產生器',
     icon: Icons.lock,
     routePath: '/tools/password-generator',
-    category: ToolCategory.life,
+    tags: {ToolTag.life, ToolTag.productivity},
     pageBuilder: () => const PasswordGeneratorPage(),
   ),
   ToolItem(
@@ -182,7 +200,7 @@ final List<ToolItem> allTools = [
     fallbackName: '色彩擷取',
     icon: Icons.colorize,
     routePath: '/tools/color-picker',
-    category: ToolCategory.life,
+    tags: {ToolTag.life},
     pageBuilder: () => const ColorPickerPage(),
   ),
   ToolItem(
@@ -191,7 +209,7 @@ final List<ToolItem> allTools = [
     fallbackName: 'QR Code 產生器',
     icon: Icons.qr_code,
     routePath: '/tools/qr-generator',
-    category: ToolCategory.life,
+    tags: {ToolTag.life},
     pageBuilder: () => const QrGeneratorPage(),
   ),
   ToolItem(
@@ -200,7 +218,7 @@ final List<ToolItem> allTools = [
     fallbackName: 'QR 掃描',
     icon: Icons.qr_code_scanner,
     routePath: '/tools/qr-scanner-live',
-    category: ToolCategory.life,
+    tags: {ToolTag.life},
     pageBuilder: () => const QrScannerLivePage(),
   ),
   ToolItem(
@@ -209,7 +227,7 @@ final List<ToolItem> allTools = [
     fallbackName: '匯率換算',
     icon: Icons.currency_exchange,
     routePath: '/tools/currency-converter',
-    category: ToolCategory.calculate,
+    tags: {ToolTag.calculate, ToolTag.finance},
     pageBuilder: () => const CurrencyConverterPage(),
   ),
   ToolItem(
@@ -218,7 +236,7 @@ final List<ToolItem> allTools = [
     fallbackName: '隨機決定器',
     icon: Icons.casino,
     routePath: '/tools/random-wheel',
-    category: ToolCategory.life,
+    tags: {ToolTag.life},
     pageBuilder: () => const RandomWheelPage(),
   ),
   ToolItem(
@@ -227,7 +245,7 @@ final List<ToolItem> allTools = [
     fallbackName: '文字計數器',
     icon: Icons.text_fields,
     routePath: '/tools/word-counter',
-    category: ToolCategory.life,
+    tags: {ToolTag.life, ToolTag.productivity},
     pageBuilder: () => const WordCounterPage(),
   ),
   ToolItem(
@@ -236,7 +254,7 @@ final List<ToolItem> allTools = [
     fallbackName: '番茄鐘',
     icon: Icons.timer_outlined,
     routePath: '/tools/pomodoro',
-    category: ToolCategory.life,
+    tags: {ToolTag.productivity, ToolTag.life},
     pageBuilder: () => const PomodoroPage(),
   ),
   ToolItem(
@@ -245,7 +263,7 @@ final List<ToolItem> allTools = [
     fallbackName: '快速筆記',
     icon: Icons.note_alt_outlined,
     routePath: '/tools/quick-notes',
-    category: ToolCategory.life,
+    tags: {ToolTag.productivity, ToolTag.life},
     pageBuilder: () => const QuickNotesPage(),
   ),
 ];

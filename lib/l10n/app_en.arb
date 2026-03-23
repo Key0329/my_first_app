@@ -397,5 +397,11 @@
   "a11yRemoveFavorite": "Remove from favorites",
   "a11yMinutes": "{count} minutes",
   "a11yCm": "{value} centimeters",
-  "a11yKg": "{value} kilograms"
+  "a11yKg": "{value} kilograms",
+
+  "tagCalculate": "Calculate",
+  "tagMeasure": "Measure",
+  "tagLife": "Life",
+  "tagProductivity": "Productivity",
+  "tagFinance": "Finance"
 }

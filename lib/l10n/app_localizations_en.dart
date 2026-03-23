@@ -1167,4 +1167,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String a11yKg(int value) {
     return '$value kilograms';
   }
+
+  @override
+  String get tagCalculate => 'Calculate';
+
+  @override
+  String get tagMeasure => 'Measure';
+
+  @override
+  String get tagLife => 'Life';
+
+  @override
+  String get tagProductivity => 'Productivity';
+
+  @override
+  String get tagFinance => 'Finance';
 }

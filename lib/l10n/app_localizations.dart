@@ -2251,6 +2251,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'{value} 公斤'**
   String a11yKg(int value);
+
+  /// Tool tag: calculate
+  ///
+  /// In zh, this message translates to:
+  /// **'計算'**
+  String get tagCalculate;
+
+  /// Tool tag: measure
+  ///
+  /// In zh, this message translates to:
+  /// **'測量'**
+  String get tagMeasure;
+
+  /// Tool tag: life
+  ///
+  /// In zh, this message translates to:
+  /// **'生活'**
+  String get tagLife;
+
+  /// Tool tag: productivity
+  ///
+  /// In zh, this message translates to:
+  /// **'生產力'**
+  String get tagProductivity;
+
+  /// Tool tag: finance
+  ///
+  /// In zh, this message translates to:
+  /// **'財務'**
+  String get tagFinance;
 }
 
 class _AppLocalizationsDelegate

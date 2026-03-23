@@ -844,5 +844,16 @@
   "a11yCm": "{value} 公分",
   "@a11yCm": { "description": "Accessibility: centimeters", "placeholders": { "value": { "type": "int" } } },
   "a11yKg": "{value} 公斤",
-  "@a11yKg": { "description": "Accessibility: kilograms", "placeholders": { "value": { "type": "int" } } }
+  "@a11yKg": { "description": "Accessibility: kilograms", "placeholders": { "value": { "type": "int" } } },
+
+  "tagCalculate": "計算",
+  "@tagCalculate": { "description": "Tool tag: calculate" },
+  "tagMeasure": "測量",
+  "@tagMeasure": { "description": "Tool tag: measure" },
+  "tagLife": "生活",
+  "@tagLife": { "description": "Tool tag: life" },
+  "tagProductivity": "生產力",
+  "@tagProductivity": { "description": "Tool tag: productivity" },
+  "tagFinance": "財務",
+  "@tagFinance": { "description": "Tool tag: finance" }
 }

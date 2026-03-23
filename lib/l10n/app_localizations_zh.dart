@@ -1149,4 +1149,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String a11yKg(int value) {
     return '$value 公斤';
   }
+
+  @override
+  String get tagCalculate => '計算';
+
+  @override
+  String get tagMeasure => '測量';
+
+  @override
+  String get tagLife => '生活';
+
+  @override
+  String get tagProductivity => '生產力';
+
+  @override
+  String get tagFinance => '財務';
 }

@@ -31,7 +31,7 @@ void main() {
         fallbackName: '測試',
         icon: Icons.star,
         routePath: '/tools/test',
-        category: ToolCategory.life,
+        tags: {ToolTag.life},
         pageBuilder: () => const SizedBox(),
       );
 

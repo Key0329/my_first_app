@@ -8,55 +8,36 @@ TBD - created by archiving change 'homepage-redesign-indigo'. Update Purpose aft
 
 ### Requirement: Uniform two-column grid layout
 
-The home page SHALL display all tools in a uniform 2-column GridView with equal-sized cards. Each card SHALL have a fixed aspect ratio of approximately 1:1. The grid SHALL have 12px spacing between items.
+The home page SHALL display tools in a responsive grid layout using SliverGrid within a CustomScrollView. The grid column count SHALL be determined by the available width: 2 columns for less than 600dp, 3 columns for 600-900dp, and 4 columns for greater than 900dp. The grid SHALL maintain consistent spacing using DT.gridSpacing for both main axis and cross axis spacing. The childAspectRatio SHALL be 1.2. Tools SHALL be filterable by tag selection from the category tab bar.
 
-#### Scenario: Home page displays uniform grid
+#### Scenario: Grid renders with correct column count on phone
 
-- **WHEN** user navigates to the Tools tab
-- **THEN** all tools SHALL be displayed in a uniform 2-column grid with equal-sized cards
+- **WHEN** the home page renders on a phone with width less than 600dp
+- **THEN** the tool grid SHALL display in 2 columns with DT.gridSpacing spacing
+
+#### Scenario: Grid filters tools by selected tag
+
+- **WHEN** user selects a tag tab
+- **THEN** the grid SHALL display only tools whose tags contain the selected tag
 
 
 <!-- @trace
-source: homepage-redesign-indigo
-updated: 2026-03-21
+source: architecture-scaling
+updated: 2026-03-23
 code:
-  - lib/tools/random_wheel/wheel_painter.dart
-  - lib/tools/random_wheel/random_wheel_page.dart
-  - lib/widgets/tool_card.dart
-  - pubspec.yaml
+  - lib/models/tool_item.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/widgets/confetti_effect.dart
   - lib/l10n/app_localizations.dart
   - lib/l10n/app_localizations_zh.dart
-  - lib/tools/split_bill/split_bill_page.dart
-  - lib/pages/favorites_page.dart
-  - lib/l10n/app_en.arb
-  - lib/widgets/bento_grid.dart
-  - android/app/src/main/AndroidManifest.xml
-  - pubspec.lock
-  - lib/widgets/app_scaffold.dart
-  - lib/tools/invoice_checker/invoice_parser.dart
-  - lib/tools/invoice_checker/invoice_checker_page.dart
-  - lib/l10n/app_localizations_en.dart
-  - lib/tools/screen_ruler/screen_ruler_page.dart
   - lib/l10n/app_zh.arb
-  - lib/app.dart
+  - lib/widgets/app_scaffold.dart
+  - lib/l10n/app_en.arb
   - lib/pages/home_page.dart
-  - lib/models/tool_item.dart
-  - lib/tools/bmi_calculator/bmi_calculator_page.dart
-  - lib/theme/design_tokens.dart
-  - lib/tools/bmi_calculator/bmi_logic.dart
-  - lib/theme/app_theme.dart
-  - lib/tools/screen_ruler/ruler_painter.dart
-  - lib/tools/invoice_checker/invoice_api.dart
 tests:
-  - test/tools/bmi_calculator_logic_test.dart
-  - test/widgets/bento_grid_test.dart
-  - test/tools/split_bill_test.dart
-  - test/tools/invoice_checker_test.dart
-  - test/models/tool_item_test.dart
   - test/widgets/tool_card_test.dart
-  - test/pages/home_page_test.dart
-  - test/widget_test.dart
-  - test/pages/favorites_page_test.dart
+  - test/models/tool_item_test.dart
 -->
 
 ---

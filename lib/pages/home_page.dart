@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ToolCategory? _selectedCategory;
+  ToolTag? _selectedTag;
   bool _hasAnimated = false;
 
   List<ToolItem> get _orderedTools {
@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   List<ToolItem> get _filteredTools {
     final ordered = _orderedTools;
-    if (_selectedCategory == null) return ordered;
-    return ordered.where((tool) => tool.category == _selectedCategory).toList();
+    if (_selectedTag == null) return ordered;
+    return ordered.where((tool) => tool.tags.contains(_selectedTag)).toList();
   }
 
   void _openTool(BuildContext context, ToolItem tool) {
@@ -156,14 +156,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  String _categoryLabel(AppLocalizations l10n, ToolCategory category) {
-    switch (category) {
-      case ToolCategory.calculate:
-        return l10n.categoryCalculate;
-      case ToolCategory.measure:
-        return l10n.categoryMeasure;
-      case ToolCategory.life:
-        return l10n.categoryLife;
+  String _tagLabel(AppLocalizations l10n, ToolTag tag) {
+    switch (tag) {
+      case ToolTag.calculate:
+        return l10n.tagCalculate;
+      case ToolTag.measure:
+        return l10n.tagMeasure;
+      case ToolTag.life:
+        return l10n.tagLife;
+      case ToolTag.productivity:
+        return l10n.tagProductivity;
+      case ToolTag.finance:
+        return l10n.tagFinance;
     }
   }
 
@@ -171,6 +175,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final b = Theme.of(context).brightness;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final gridCrossAxisCount = screenWidth > 900
+        ? 4
+        : screenWidth > 600
+        ? 3
+        : 2;
     final shouldAnimate = !_hasAnimated;
     if (!_hasAnimated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -337,17 +347,16 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         _CategoryChip(
                           label: l10n.categoryAll,
-                          selected: _selectedCategory == null,
-                          onSelected: () =>
-                              setState(() => _selectedCategory = null),
+                          selected: _selectedTag == null,
+                          onSelected: () => setState(() => _selectedTag = null),
                         ),
                         const SizedBox(width: DT.spaceSm),
-                        for (final category in ToolCategory.values) ...[
+                        for (final tag in ToolTag.values) ...[
                           _CategoryChip(
-                            label: _categoryLabel(l10n, category),
-                            selected: _selectedCategory == category,
+                            label: _tagLabel(l10n, tag),
+                            selected: _selectedTag == tag,
                             onSelected: () =>
-                                setState(() => _selectedCategory = category),
+                                setState(() => _selectedTag = tag),
                           ),
                           const SizedBox(width: DT.spaceSm),
                         ],
@@ -404,7 +413,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               // ── 最近使用（僅在「全部」tab 顯示）──
-              if (recentTools.isNotEmpty && _selectedCategory == null) ...[
+              if (recentTools.isNotEmpty && _selectedTag == null) ...[
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(
@@ -492,10 +501,10 @@ class _HomePageState extends State<HomePage> {
                     DT.spaceLg,
                   ),
                   sliver: SliverGrid(
-                    key: ValueKey(_selectedCategory),
+                    key: ValueKey(_selectedTag),
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 220,
                           mainAxisSpacing: DT.gridSpacing,
                           crossAxisSpacing: DT.gridSpacing,
                           childAspectRatio: 1.2,

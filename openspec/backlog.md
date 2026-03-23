@@ -296,13 +296,13 @@
 - [x] 標題區滾動縮小（SliverAppBar 風格）
 - [x] 結果展示「Hero Moment」+ 慶祝動畫
 
-### Change #27: `brand-visual-upgrade`
+### ~~Change #27: `brand-visual-upgrade`~~ ✅ archived 2026-03-23
 
 > 預估：2 天 | 依賴：#25 design-system-v2
 
-- [ ] App Icon 設計（幾何稜鏡 + 品牌漸層）
-- [ ] Splash Screen 品牌化
-- [ ] Onboarding 視覺升級（Lottie 動畫）
+- [x] App Icon 設計（品牌漸層 + 工具圖案）
+- [x] Splash Screen 品牌化（flutter_native_splash）
+- [x] Onboarding 視覺升級（純 Flutter 動畫：彈入、交錯、上升）
 
 ---
 
@@ -350,7 +350,7 @@
 | 24 | `architecture-scaling` | 6 | 5d | #7, #9 |
 | ~~25~~ | ~~`design-system-v2`~~ ✅ | 7 | 3d | #1 |
 | ~~26~~ | ~~`ux-polish`~~ ✅ | 7 | 3d | #25 |
-| 27 | `brand-visual-upgrade` | 7 | 2d | #25 |
+| ~~27~~ | ~~`brand-visual-upgrade`~~ ✅ | 7 | 2d | #25 |
 
 **合計：27 changes ≈ 60 工作天 ≈ 16 週**
 

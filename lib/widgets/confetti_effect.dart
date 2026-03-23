@@ -117,27 +117,28 @@ class ConfettiOverlayState extends State<ConfettiOverlay>
 
   @override
   Widget build(BuildContext context) {
+    if (!_isActive) return widget.child;
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         widget.child,
-        if (_isActive)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: RepaintBoundary(
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, _) {
-                    return CustomPaint(
-                      painter: _ConfettiPainter(
-                        particles: _particles,
-                        progress: _controller.value,
-                      ),
-                    );
-                  },
-                ),
+        Positioned.fill(
+          child: IgnorePointer(
+            child: RepaintBoundary(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return CustomPaint(
+                    painter: _ConfettiPainter(
+                      particles: _particles,
+                      progress: _controller.value,
+                    ),
+                  );
+                },
               ),
             ),
           ),
+        ),
       ],
     );
   }

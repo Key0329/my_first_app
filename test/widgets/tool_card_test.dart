@@ -11,7 +11,7 @@ final _testTool = ToolItem(
   fallbackName: '測試工具',
   icon: Icons.build,
   routePath: '/tools/test',
-  category: ToolCategory.life,
+  tags: {ToolTag.life},
   pageBuilder: () => const SizedBox(),
 );
 
