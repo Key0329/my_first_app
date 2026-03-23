@@ -251,33 +251,36 @@ class _LevelPageState extends State<LevelPage>
   }
 
   Widget _buildAngleChip(String label, double angle, ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.outline,
+    return Semantics(
+      value: '角度 ${angle.toStringAsFixed(1)}°',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.outline,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '${angle.toStringAsFixed(1)}\u00B0',
-            style: const TextStyle(
-              fontFamily: 'monospace',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 4),
+            Text(
+              '${angle.toStringAsFixed(1)}\u00B0',
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

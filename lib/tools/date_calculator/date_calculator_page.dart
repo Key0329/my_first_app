@@ -111,60 +111,72 @@ class _DateCalculatorPageState extends State<DateCalculatorPage>
     switch (_tabController.index) {
       case 0:
         final r = _intervalResult;
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(l10n.tool_date_calculator_interval_label, style: labelStyle),
-            const SizedBox(height: 8),
-            Text(
-              l10n.tool_date_calculator_result_days(r.totalDays),
-              style: whiteStyle,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
+        return Semantics(
+          liveRegion: true,
+          value: l10n.tool_date_calculator_result_days(r.totalDays),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.tool_date_calculator_interval_label, style: labelStyle),
+              const SizedBox(height: 8),
+              Text(
+                l10n.tool_date_calculator_result_days(r.totalDays),
+                style: whiteStyle,
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                '${l10n.tool_date_calculator_result_weeks(r.weeks, r.remainingDays)} / ${l10n.tool_date_calculator_result_months(r.months, r.monthRemainingDays)}',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
+          ),
         );
       case 1:
         final result = _addSubResult;
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(l10n.tool_date_calculator_target_date, style: labelStyle),
-            const SizedBox(height: 8),
-            Text(_formatDate(result), style: whiteStyle),
-            const SizedBox(height: 4),
-            Text(
-              _weekdayName(result),
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
+        return Semantics(
+          liveRegion: true,
+          value: '${_formatDate(result)} ${_weekdayName(result)}',
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.tool_date_calculator_target_date, style: labelStyle),
+              const SizedBox(height: 8),
+              Text(_formatDate(result), style: whiteStyle),
+              const SizedBox(height: 4),
+              Text(
+                _weekdayName(result),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       case 2:
         final r = _bizResult;
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(l10n.tool_date_calculator_business_label, style: labelStyle),
-            const SizedBox(height: 8),
-            Text(
-              l10n.tool_date_calculator_result_business_days(r.businessDays),
-              style: whiteStyle,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
+        return Semantics(
+          liveRegion: true,
+          value: l10n.tool_date_calculator_result_business_days(r.businessDays),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.tool_date_calculator_business_label, style: labelStyle),
+              const SizedBox(height: 8),
+              Text(
+                l10n.tool_date_calculator_result_business_days(r.businessDays),
+                style: whiteStyle,
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                '${l10n.tool_date_calculator_result_calendar_days(r.calendarDays)} / ${l10n.tool_date_calculator_result_weekend_days(r.weekendDays)}',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
+          ),
         );
       default:
         return const SizedBox.shrink();

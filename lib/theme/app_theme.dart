@@ -9,10 +9,25 @@ class AppTheme {
       brightness: Brightness.light,
     ).copyWith(surface: DT.lightPageBg, primary: seed);
 
+    const b = Brightness.light;
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: DT.lightPageBg,
+      textTheme: TextTheme(
+        displayLarge: DT.displayLarge(b),
+        displayMedium: DT.displayMedium(b),
+        headlineLarge: DT.headlineLarge(b),
+        headlineMedium: DT.headlineMedium(b),
+        titleLarge: DT.titleLarge(b),
+        titleMedium: DT.titleMedium(b),
+        bodyLarge: DT.bodyLarge(b),
+        bodyMedium: DT.bodyMedium(b),
+        bodySmall: DT.bodySmall(b),
+        labelLarge: DT.labelLarge(b),
+        labelMedium: DT.labelMedium(b),
+        labelSmall: DT.labelSmall(b),
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -66,10 +81,25 @@ class AppTheme {
           surfaceContainerHighest: DT.darkCardBg,
         );
 
+    const b = Brightness.dark;
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: DT.darkPageBg,
+      textTheme: TextTheme(
+        displayLarge: DT.displayLarge(b),
+        displayMedium: DT.displayMedium(b),
+        headlineLarge: DT.headlineLarge(b),
+        headlineMedium: DT.headlineMedium(b),
+        titleLarge: DT.titleLarge(b),
+        titleMedium: DT.titleMedium(b),
+        bodyLarge: DT.bodyLarge(b),
+        bodyMedium: DT.bodyMedium(b),
+        bodySmall: DT.bodySmall(b),
+        labelLarge: DT.labelLarge(b),
+        labelMedium: DT.labelMedium(b),
+        labelSmall: DT.labelSmall(b),
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,

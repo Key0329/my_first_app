@@ -389,5 +389,13 @@
   "accentColorPink": "Pink",
   "homeReorderTools": "Reorder Tools",
   "reorderToolsTitle": "Reorder Tools",
-  "reorderToolsHint": "Long press and drag to reorder"
+  "reorderToolsHint": "Long press and drag to reorder",
+
+  "a11ySearchTools": "Search tools",
+  "a11yReorderTools": "Reorder tools",
+  "a11yAddFavorite": "Add to favorites",
+  "a11yRemoveFavorite": "Remove from favorites",
+  "a11yMinutes": "{count} minutes",
+  "a11yCm": "{value} centimeters",
+  "a11yKg": "{value} kilograms"
 }

@@ -1140,4 +1140,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reorderToolsHint => 'Long press and drag to reorder';
+
+  @override
+  String get a11ySearchTools => 'Search tools';
+
+  @override
+  String get a11yReorderTools => 'Reorder tools';
+
+  @override
+  String get a11yAddFavorite => 'Add to favorites';
+
+  @override
+  String get a11yRemoveFavorite => 'Remove from favorites';
+
+  @override
+  String a11yMinutes(int count) {
+    return '$count minutes';
+  }
+
+  @override
+  String a11yCm(int value) {
+    return '$value centimeters';
+  }
+
+  @override
+  String a11yKg(int value) {
+    return '$value kilograms';
+  }
 }

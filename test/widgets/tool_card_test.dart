@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/widgets/tool_card.dart';
 
@@ -18,6 +19,8 @@ final _testTool = ToolItem(
 Widget _wrap(Widget child, {ThemeData? theme}) {
   return MaterialApp(
     theme: theme,
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(body: SizedBox(width: 200, height: 200, child: child)),
   );
 }

@@ -272,39 +272,44 @@ class _FlashlightPageState extends State<FlashlightPage> {
   Widget _buildToggleButton(ThemeData theme, ColorScheme colorScheme) {
     final isActive = _isOn || _isSosActive;
 
-    return GestureDetector(
-      onTap: _isTorchAvailable && !_isSosActive ? _toggleFlashlight : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        width: 180,
-        height: 180,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isActive
-              ? Colors.amber.shade300
-              : colorScheme.surfaceContainerHighest,
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: Colors.amber.shade200.withValues(alpha: 0.6),
-                    blurRadius: 40,
-                    spreadRadius: 10,
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                  ),
-                ],
-        ),
-        child: Icon(
-          isActive ? Icons.flashlight_on : Icons.flashlight_off,
-          size: 72,
-          color: isActive
-              ? Colors.orange.shade900
-              : colorScheme.onSurfaceVariant,
+    return Semantics(
+      label: 'flashlight on/off',
+      hint: 'double tap to toggle',
+      toggled: isActive,
+      child: GestureDetector(
+        onTap: _isTorchAvailable && !_isSosActive ? _toggleFlashlight : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: 180,
+          height: 180,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isActive
+                ? Colors.amber.shade300
+                : colorScheme.surfaceContainerHighest,
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: Colors.amber.shade200.withValues(alpha: 0.6),
+                      blurRadius: 40,
+                      spreadRadius: 10,
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    ),
+                  ],
+          ),
+          child: Icon(
+            isActive ? Icons.flashlight_on : Icons.flashlight_off,
+            size: 72,
+            color: isActive
+                ? Colors.orange.shade900
+                : colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

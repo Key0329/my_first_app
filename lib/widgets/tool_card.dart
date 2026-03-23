@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/models/tool_item.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 
@@ -121,12 +122,7 @@ class _ToolCardState extends State<ToolCard>
                     // 工具名稱
                     Text(
                       widget.tool.fallbackName,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                        color: DT.toolName(b),
-                        height: 1.2,
-                      ),
+                      style: DT.titleMedium(b).copyWith(height: 1.2),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -139,21 +135,27 @@ class _ToolCardState extends State<ToolCard>
                   right: -8,
                   child: ScaleTransition(
                     scale: _heartScaleAnimation,
-                    child: IconButton(
-                      icon: Icon(
-                        widget.isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: widget.isFavorite
-                            ? DT.brandPrimary
-                            : DT.subtitle(b),
-                        size: 20,
-                      ),
-                      onPressed: _onHeartTap,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
+                    child: Semantics(
+                      label: widget.isFavorite
+                          ? AppLocalizations.of(context)!.a11yRemoveFavorite
+                          : AppLocalizations.of(context)!.a11yAddFavorite,
+                      button: true,
+                      child: IconButton(
+                        icon: Icon(
+                          widget.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: widget.isFavorite
+                              ? DT.brandPrimary
+                              : DT.subtitle(b),
+                          size: 20,
+                        ),
+                        onPressed: _onHeartTap,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
                       ),
                     ),
                   ),

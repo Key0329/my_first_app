@@ -218,42 +218,52 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 // 排序按鈕
-                GestureDetector(
-                  onTap: () => _showReorderSheet(context, l10n),
-                  child: Container(
-                    width: DT.searchButtonSize,
-                    height: DT.searchButtonSize,
-                    decoration: BoxDecoration(
-                      color: DT.searchIconBg(b),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.sort,
-                      size: DT.searchIconSize,
-                      color: DT.searchIconColor(b),
+                Semantics(
+                  label: l10n.a11yReorderTools,
+                  button: true,
+                  child: GestureDetector(
+                    onTap: () => _showReorderSheet(context, l10n),
+                    child: Container(
+                      width: DT.searchButtonSize,
+                      height: DT.searchButtonSize,
+                      decoration: BoxDecoration(
+                        color: DT.searchIconBg(b),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.sort,
+                        size: DT.searchIconSize,
+                        color: DT.searchIconColor(b),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(width: DT.spaceSm),
                 // 搜尋按鈕（40x40 圓形）
-                GestureDetector(
-                  onTap: () {
-                    showSearch(
-                      context: context,
-                      delegate: ToolSearchDelegate(searchHint: l10n.searchHint),
-                    );
-                  },
-                  child: Container(
-                    width: DT.searchButtonSize,
-                    height: DT.searchButtonSize,
-                    decoration: BoxDecoration(
-                      color: DT.searchIconBg(b),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.search,
-                      size: DT.searchIconSize,
-                      color: DT.searchIconColor(b),
+                Semantics(
+                  label: l10n.a11ySearchTools,
+                  button: true,
+                  child: GestureDetector(
+                    onTap: () {
+                      showSearch(
+                        context: context,
+                        delegate: ToolSearchDelegate(
+                          searchHint: l10n.searchHint,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: DT.searchButtonSize,
+                      height: DT.searchButtonSize,
+                      decoration: BoxDecoration(
+                        color: DT.searchIconBg(b),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.search,
+                        size: DT.searchIconSize,
+                        color: DT.searchIconColor(b),
+                      ),
                     ),
                   ),
                 ),

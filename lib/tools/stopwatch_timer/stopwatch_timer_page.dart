@@ -632,39 +632,45 @@ class _TimerTabState extends State<_TimerTab> with WidgetsBindingObserver {
 
   Widget _buildCountdownDisplay(ThemeData theme) {
     final isFinished = _state == _TimerState.finished;
+    final remainingMinutes = _remaining.inMinutes;
+    final remainingSeconds = _remaining.inSeconds.remainder(60);
 
     return Column(
       children: [
         // Progress ring — 保持不變
-        SizedBox(
-          width: 200,
-          height: 200,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: CircularProgressIndicator(
-                  value: _totalDuration.inMilliseconds > 0
-                      ? _remaining.inMilliseconds /
-                            _totalDuration.inMilliseconds
-                      : 0,
-                  strokeWidth: 8,
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  color: isFinished
-                      ? theme.colorScheme.error
-                      : theme.colorScheme.primary,
+        Semantics(
+          value:
+              '$remainingMinutes minutes $remainingSeconds seconds remaining',
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: CircularProgressIndicator(
+                    value: _totalDuration.inMilliseconds > 0
+                        ? _remaining.inMilliseconds /
+                              _totalDuration.inMilliseconds
+                        : 0,
+                    strokeWidth: 8,
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    color: isFinished
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.primary,
+                  ),
                 ),
-              ),
-              Text(
-                formatDuration(_remaining),
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                  color: isFinished ? theme.colorScheme.error : null,
+                Text(
+                  formatDuration(_remaining),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                    color: isFinished ? theme.colorScheme.error : null,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         if (isFinished) ...[

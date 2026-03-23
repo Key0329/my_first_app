@@ -829,5 +829,20 @@
   "reorderToolsTitle": "排列工具順序",
   "@reorderToolsTitle": { "description": "Reorder bottom sheet title" },
   "reorderToolsHint": "長按拖曳以調整順序",
-  "@reorderToolsHint": { "description": "Reorder hint text" }
+  "@reorderToolsHint": { "description": "Reorder hint text" },
+
+  "a11ySearchTools": "搜尋工具",
+  "@a11ySearchTools": { "description": "Accessibility label for search button" },
+  "a11yReorderTools": "排列工具順序",
+  "@a11yReorderTools": { "description": "Accessibility label for sort button" },
+  "a11yAddFavorite": "加入收藏",
+  "@a11yAddFavorite": { "description": "Accessibility label for add favorite" },
+  "a11yRemoveFavorite": "移除收藏",
+  "@a11yRemoveFavorite": { "description": "Accessibility label for remove favorite" },
+  "a11yMinutes": "{count} 分鐘",
+  "@a11yMinutes": { "description": "Accessibility: minutes", "placeholders": { "count": { "type": "int" } } },
+  "a11yCm": "{value} 公分",
+  "@a11yCm": { "description": "Accessibility: centimeters", "placeholders": { "value": { "type": "int" } } },
+  "a11yKg": "{value} 公斤",
+  "@a11yKg": { "description": "Accessibility: kilograms", "placeholders": { "value": { "type": "int" } } }
 }

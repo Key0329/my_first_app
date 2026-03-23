@@ -23,6 +23,7 @@ class ToolSectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(DT.toolSectionRadius),
+        boxShadow: DT.shadowMd(brightness),
       ),
       child: Padding(
         padding: const EdgeInsets.all(DT.toolSectionPadding),
@@ -33,11 +34,12 @@ class ToolSectionCard extends StatelessWidget {
                 children: [
                   Text(
                     label!,
-                    style: TextStyle(
-                      fontSize: DT.fontToolLabel,
-                      color: labelColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: DT
+                        .labelLarge(brightness)
+                        .copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: labelColor,
+                        ),
                   ),
                   const SizedBox(height: DT.spaceSm),
                   child,

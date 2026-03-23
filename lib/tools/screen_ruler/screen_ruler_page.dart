@@ -365,28 +365,37 @@ class _ScreenRulerPageState extends State<ScreenRulerPage> {
   Widget _buildRulerHeader(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SafeArea(
-      bottom: false,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'PPI',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: Colors.white70,
-                letterSpacing: 1.2,
+    // 計算目前滾動偏移量對應的 mm 值
+    final mmValue = _calibratedPpi! > 0
+        ? (_scrollOffset / (_calibratedPpi! / 25.4)).abs()
+        : 0.0;
+
+    return Semantics(
+      liveRegion: true,
+      value: '${mmValue.toStringAsFixed(1)} mm',
+      child: SafeArea(
+        bottom: false,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'PPI',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: Colors.white70,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
-            Text(
-              _calibratedPpi!.toStringAsFixed(1),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'monospace',
+              Text(
+                _calibratedPpi!.toStringAsFixed(1),
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

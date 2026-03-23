@@ -2209,6 +2209,48 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'長按拖曳以調整順序'**
   String get reorderToolsHint;
+
+  /// Accessibility label for search button
+  ///
+  /// In zh, this message translates to:
+  /// **'搜尋工具'**
+  String get a11ySearchTools;
+
+  /// Accessibility label for sort button
+  ///
+  /// In zh, this message translates to:
+  /// **'排列工具順序'**
+  String get a11yReorderTools;
+
+  /// Accessibility label for add favorite
+  ///
+  /// In zh, this message translates to:
+  /// **'加入收藏'**
+  String get a11yAddFavorite;
+
+  /// Accessibility label for remove favorite
+  ///
+  /// In zh, this message translates to:
+  /// **'移除收藏'**
+  String get a11yRemoveFavorite;
+
+  /// Accessibility: minutes
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 分鐘'**
+  String a11yMinutes(int count);
+
+  /// Accessibility: centimeters
+  ///
+  /// In zh, this message translates to:
+  /// **'{value} 公分'**
+  String a11yCm(int value);
+
+  /// Accessibility: kilograms
+  ///
+  /// In zh, this message translates to:
+  /// **'{value} 公斤'**
+  String a11yKg(int value);
 }
 
 class _AppLocalizationsDelegate

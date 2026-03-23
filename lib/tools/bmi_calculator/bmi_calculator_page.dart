@@ -488,6 +488,7 @@ class _SliderRow extends StatelessWidget {
             divisions: divisions,
             activeColor: activeColor,
             onChanged: onChanged,
+            semanticFormatterCallback: (v) => displayText,
           ),
         ),
       ],
@@ -538,12 +539,16 @@ class _ResultContent extends StatelessWidget {
       children: [
         // BMI 數值（動畫過渡）
         Center(
-          child: AnimatedValueText(
-            value: result.bmi.toStringAsFixed(1),
-            style: TextStyle(
-              fontSize: DT.fontToolResult,
-              fontWeight: FontWeight.bold,
-              color: categoryColor,
+          child: Semantics(
+            liveRegion: true,
+            value: 'BMI ${result.bmi.toStringAsFixed(1)}',
+            child: AnimatedValueText(
+              value: result.bmi.toStringAsFixed(1),
+              style: TextStyle(
+                fontSize: DT.fontToolResult,
+                fontWeight: FontWeight.bold,
+                color: categoryColor,
+              ),
             ),
           ),
         ),

@@ -393,11 +393,15 @@ class QrScanResultSheet extends StatelessWidget {
                 const SizedBox(height: DT.spaceSm),
 
                 // 結果文字
-                SelectableText(
-                  result,
-                  style: TextStyle(
-                    fontSize: DT.fontToolLabel,
-                    color: colorScheme.onSurface,
+                Semantics(
+                  liveRegion: true,
+                  value: result,
+                  child: SelectableText(
+                    result,
+                    style: TextStyle(
+                      fontSize: DT.fontToolLabel,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                 ),
               ],

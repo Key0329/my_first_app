@@ -113,14 +113,18 @@ class _WheelResultOverlayState extends State<WheelResultOverlay>
                 ),
               ),
               const SizedBox(height: DT.spaceLg),
-              Text(
-                widget.result,
-                style: const TextStyle(
-                  fontSize: DT.fontToolResult,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Semantics(
+                liveRegion: true,
+                value: widget.result,
+                child: Text(
+                  widget.result,
+                  style: const TextStyle(
+                    fontSize: DT.fontToolResult,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: DT.space2xl),
               SizedBox(

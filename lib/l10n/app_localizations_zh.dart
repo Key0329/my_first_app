@@ -1122,4 +1122,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reorderToolsHint => '長按拖曳以調整順序';
+
+  @override
+  String get a11ySearchTools => '搜尋工具';
+
+  @override
+  String get a11yReorderTools => '排列工具順序';
+
+  @override
+  String get a11yAddFavorite => '加入收藏';
+
+  @override
+  String get a11yRemoveFavorite => '移除收藏';
+
+  @override
+  String a11yMinutes(int count) {
+    return '$count 分鐘';
+  }
+
+  @override
+  String a11yCm(int value) {
+    return '$value 公分';
+  }
+
+  @override
+  String a11yKg(int value) {
+    return '$value 公斤';
+  }
 }

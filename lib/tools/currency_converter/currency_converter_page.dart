@@ -285,14 +285,18 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              AnimatedValueText(
-                key: const Key('conversion_result'),
-                value: _isLoading
-                    ? l10n.tool_currency_converter_loading
-                    : (_result.isEmpty ? '-' : _result),
-                style: theme.textTheme.displaySmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              Semantics(
+                liveRegion: true,
+                value: _result.isEmpty ? '-' : '$_result $_toCurrency',
+                child: AnimatedValueText(
+                  key: const Key('conversion_result'),
+                  value: _isLoading
+                      ? l10n.tool_currency_converter_loading
+                      : (_result.isEmpty ? '-' : _result),
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               if (_result.isNotEmpty)

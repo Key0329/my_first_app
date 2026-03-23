@@ -520,7 +520,9 @@ class _SplitBillPageState extends State<SplitBillPage> {
           ),
           const SizedBox(height: DT.spaceSm),
           Semantics(
+            liveRegion: true,
             label: l10n.splitBillPerPersonSemantic(perPersonStr),
+            value: '\$$perPersonStr',
             child: AnimatedValueText(
               value: '\$$perPersonStr',
               style: theme.textTheme.displaySmall?.copyWith(

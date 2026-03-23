@@ -416,6 +416,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
           divisions: max - min,
           activeColor: _toolColor,
           onChanged: _timer.state == PomodoroState.idle ? onChanged : null,
+          semanticFormatterCallback: (v) => l10n.a11yMinutes(v.round()),
         ),
       ],
     );

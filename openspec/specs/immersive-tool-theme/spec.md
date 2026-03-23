@@ -8,7 +8,7 @@ TBD - created by archiving change 'design-overhaul-bento'. Update Purpose after 
 
 ### Requirement: ImmersiveToolScaffold shared base widget
 
-All 15 tool pages SHALL use an ImmersiveToolScaffold widget as their base layout. This scaffold SHALL provide a two-section layout: an upper header area with gradient background using the tool's color, and a lower body area with a rounded-corner surface container. The AppBar SHALL be transparent and overlay the gradient header. The body area SHALL use `DT.toolBodyPadding` for outer padding and SHALL organize content using ToolSectionCard containers.
+All tool pages SHALL use an ImmersiveToolScaffold widget as their base layout. This scaffold SHALL provide a two-section layout: an upper header area with gradient background using the tool's color, and a lower body area with a rounded-corner surface container. The AppBar SHALL be transparent and overlay the gradient header. The body area SHALL use `DT.toolBodyPadding` for outer padding and SHALL organize content using ToolSectionCard containers. In light mode, ToolSectionCard SHALL apply `DT.shadowMd` for visual depth. In dark mode, ToolSectionCard SHALL continue using border-only styling without shadows.
 
 #### Scenario: Tool page renders with immersive layout
 
@@ -20,39 +20,50 @@ All 15 tool pages SHALL use an ImmersiveToolScaffold widget as their base layout
 - **WHEN** user views a tool page
 - **THEN** the AppBar SHALL be transparent with the tool title and back button visible over the gradient background
 
+#### Scenario: ToolSectionCard has shadow in light mode
+
+- **WHEN** a ToolSectionCard renders in light mode
+- **THEN** the card container SHALL apply DT.shadowMd BoxShadow for visual depth
+
+#### Scenario: ToolSectionCard has no shadow in dark mode
+
+- **WHEN** a ToolSectionCard renders in dark mode
+- **THEN** the card container SHALL NOT apply any BoxShadow and SHALL rely on border styling only
+
 
 <!-- @trace
-source: tool-pages-bento-redesign
-updated: 2026-03-22
+source: design-system-v2
+updated: 2026-03-23
 code:
-  - lib/theme/design_tokens.dart
-  - lib/tools/noise_meter/noise_meter_page.dart
-  - lib/tools/protractor/protractor_page.dart
-  - lib/tools/compass/compass_page.dart
-  - lib/widgets/animated_value_text.dart
-  - CLAUDE.md
-  - lib/tools/split_bill/split_bill_page.dart
-  - lib/tools/calculator/calculator_page.dart
-  - lib/tools/random_wheel/random_wheel_page.dart
   - lib/tools/bmi_calculator/bmi_calculator_page.dart
-  - lib/widgets/tool_section_card.dart
-  - lib/tools/qr_generator/qr_generator_page.dart
-  - lib/tools/level/level_page.dart
   - lib/tools/stopwatch_timer/stopwatch_timer_page.dart
-  - lib/tools/color_picker/color_picker_page.dart
   - lib/tools/screen_ruler/screen_ruler_page.dart
+  - lib/pages/settings_page.dart
+  - lib/l10n/app_localizations_en.dart
+  - lib/widgets/tool_recommendation_bar.dart
+  - lib/theme/design_tokens.dart
   - lib/tools/password_generator/password_generator_page.dart
-  - lib/tools/unit_converter/unit_converter_page.dart
-  - lib/widgets/tool_gradient_button.dart
+  - lib/tools/random_wheel/wheel_result_overlay.dart
+  - lib/l10n/app_localizations_zh.dart
+  - lib/tools/word_counter/word_counter_page.dart
+  - lib/tools/currency_converter/currency_converter_page.dart
   - lib/tools/flashlight/flashlight_page.dart
-  - lib/widgets/immersive_tool_scaffold.dart
+  - lib/pages/home_page.dart
+  - lib/tools/level/level_page.dart
+  - lib/widgets/tool_card.dart
+  - lib/tools/pomodoro/pomodoro_page.dart
+  - lib/tools/qr_scanner_live/qr_scanner_live_page.dart
+  - lib/l10n/app_localizations.dart
+  - lib/theme/app_theme.dart
+  - lib/l10n/app_zh.arb
+  - lib/l10n/app_en.arb
+  - lib/tools/date_calculator/date_calculator_page.dart
+  - lib/widgets/tool_section_card.dart
+  - lib/tools/split_bill/split_bill_page.dart
 tests:
-  - test/widgets/animated_value_text_test.dart
-  - test/widgets/tool_section_card_test.dart
-  - test/widgets/bouncing_button_test.dart
-  - test/widgets/tool_gradient_button_test.dart
-  - test/theme/design_tokens_test.dart
-  - test/tools/password_generator_test.dart
+  - test/widgets/tool_card_test.dart
+  - test/theme/design_tokens_v2_test.dart
+  - test/theme/color_contrast_test.dart
 -->
 
 ---

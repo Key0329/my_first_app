@@ -121,14 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.settingsThemeMode,
-          style: TextStyle(
-            fontSize: DT.fontToolLabel,
-            fontWeight: FontWeight.w500,
-            color: DT.title(b),
-          ),
-        ),
+        Text(l10n.settingsThemeMode, style: DT.labelLarge(b)),
         const SizedBox(height: DT.spaceSm),
         SizedBox(
           width: double.infinity,
@@ -164,14 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.settingsLanguage,
-          style: TextStyle(
-            fontSize: DT.fontToolLabel,
-            fontWeight: FontWeight.w500,
-            color: DT.title(b),
-          ),
-        ),
+        Text(l10n.settingsLanguage, style: DT.labelLarge(b)),
         const SizedBox(height: DT.spaceSm),
         SizedBox(
           width: double.infinity,
@@ -219,14 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.settingsAccentColor,
-          style: TextStyle(
-            fontSize: DT.fontToolLabel,
-            fontWeight: FontWeight.w500,
-            color: DT.title(b),
-          ),
-        ),
+        Text(l10n.settingsAccentColor, style: DT.labelLarge(b)),
         const SizedBox(height: DT.spaceSm),
         Wrap(
           spacing: DT.spaceMd,
@@ -316,10 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Icon(icon, size: 20, color: DT.subtitle(b)),
             const SizedBox(width: DT.spaceMd),
-            Text(
-              label,
-              style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
-            ),
+            Text(label, style: DT.bodyMedium(b)),
           ],
         ),
       ),
@@ -338,15 +314,9 @@ class _SettingsPageState extends State<SettingsPage> {
         children: [
           Icon(icon, size: 20, color: DT.subtitle(b)),
           const SizedBox(width: DT.spaceMd),
-          Text(
-            label,
-            style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
-          ),
+          Text(label, style: DT.bodyMedium(b)),
           const Spacer(),
-          Text(
-            value,
-            style: TextStyle(fontSize: DT.fontToolLabel, color: DT.subtitle(b)),
-          ),
+          Text(value, style: DT.bodyMedium(b).copyWith(color: DT.subtitle(b))),
         ],
       ),
     );
@@ -367,10 +337,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Icon(icon, size: 20, color: DT.subtitle(b)),
             const SizedBox(width: DT.spaceMd),
-            Text(
-              label,
-              style: TextStyle(fontSize: DT.fontToolLabel, color: DT.title(b)),
-            ),
+            Text(label, style: DT.bodyMedium(b)),
             const Spacer(),
             Icon(Icons.chevron_right, size: 20, color: DT.subtitle(b)),
           ],

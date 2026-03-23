@@ -309,25 +309,29 @@ class PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
                 color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SelectableText(
-                      _password,
-                      style: const TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 16,
-                        letterSpacing: 1.2,
-                        color: Colors.white,
+              child: Semantics(
+                label: 'generated password',
+                value: _password,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SelectableText(
+                        _password,
+                        style: const TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 16,
+                          letterSpacing: 1.2,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.copy, color: Colors.white),
-                    tooltip: l10n.commonCopy,
-                    onPressed: _copyToClipboard,
-                  ),
-                ],
+                    IconButton(
+                      icon: const Icon(Icons.copy, color: Colors.white),
+                      tooltip: l10n.commonCopy,
+                      onPressed: _copyToClipboard,
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 12),

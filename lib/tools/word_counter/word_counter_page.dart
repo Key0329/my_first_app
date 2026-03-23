@@ -246,33 +246,37 @@ class _WordCounterPageState extends State<WordCounterPage> {
         horizontal: DT.spaceSm,
         vertical: DT.spaceMd,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              item.value,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: _toolColor,
+      child: Semantics(
+        liveRegion: true,
+        value: '${item.label} ${item.value}',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                item.value,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: _toolColor,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: DT.spaceXs),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              item.label,
-              style: TextStyle(
-                fontSize: 11,
-                color: isDark ? Colors.white70 : Colors.black54,
+            const SizedBox(height: DT.spaceXs),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isDark ? Colors.white70 : Colors.black54,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

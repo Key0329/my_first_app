@@ -31,11 +31,12 @@ class ToolRecommendationBar extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.recommendationTitle,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.outline,
-            ),
+            style: DT
+                .labelMedium(Theme.of(context).brightness)
+                .copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.outline,
+                ),
           ),
           const SizedBox(height: DT.spaceXs),
           Row(

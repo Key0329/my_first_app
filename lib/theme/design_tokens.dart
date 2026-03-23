@@ -70,13 +70,13 @@ abstract final class DT {
   static const lightCardBg = Color(0xFFFFFFFF);
   static const lightCardBorder = Color(0xFFEEEEEE);
   static const lightTitle = Color(0xFF1A1A2E);
-  static const lightSubtitle = Color(0xFF8888A0);
+  static const lightSubtitle = Color(0xFF6B6B82);
   static const lightTagActiveBg = Color(0xFF6C5CE7);
   static const lightTagActiveText = Color(0xFFFFFFFF);
   static const lightTagInactiveBg = Color(0xFFF0EDFF);
   static const lightTagInactiveText = Color(0xFF6C5CE7);
   static const lightNavActive = Color(0xFF6C5CE7);
-  static const lightNavInactive = Color(0xFFAAAAAA);
+  static const lightNavInactive = Color(0xFF757575);
   static const lightNavBg = Color(0xFFFFFFFF);
   static const lightNavBorder = Color(0xFFEEEEEE);
 
@@ -94,6 +94,95 @@ abstract final class DT {
   static const darkNavInactive = Color(0xFF8888AA);
   static const darkNavBg = Color(0xFF16213E);
   static const darkNavBorder = Color(0xFF2A2A4E);
+
+  // ── Typography Scale ──
+  static TextStyle displayLarge(Brightness b) =>
+      TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: title(b));
+  static TextStyle displayMedium(Brightness b) =>
+      TextStyle(fontSize: 26, fontWeight: FontWeight.w600, color: title(b));
+  static TextStyle headlineLarge(Brightness b) =>
+      TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: title(b));
+  static TextStyle headlineMedium(Brightness b) =>
+      TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: title(b));
+  static TextStyle titleLarge(Brightness b) =>
+      TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: title(b));
+  static TextStyle titleMedium(Brightness b) =>
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: title(b));
+  static TextStyle bodyLarge(Brightness b) =>
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: title(b));
+  static TextStyle bodyMedium(Brightness b) =>
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: title(b));
+  static TextStyle bodySmall(Brightness b) =>
+      TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: subtitle(b));
+  static TextStyle labelLarge(Brightness b) =>
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: title(b));
+  static TextStyle labelMedium(Brightness b) =>
+      TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: title(b));
+  static TextStyle labelSmall(Brightness b) =>
+      TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: subtitle(b));
+
+  // ── Shadow / Elevation Token ──
+  static List<BoxShadow> shadowNone(Brightness b) => const [];
+  static List<BoxShadow> shadowSm(Brightness b) => b == Brightness.dark
+      ? const []
+      : const [
+          BoxShadow(
+            color: Color(0x14000000),
+            blurRadius: 4,
+            offset: Offset(0, 1),
+          ),
+        ];
+  static List<BoxShadow> shadowMd(Brightness b) => b == Brightness.dark
+      ? const []
+      : const [
+          BoxShadow(
+            color: Color(0x1F000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ];
+  static List<BoxShadow> shadowLg(Brightness b) => b == Brightness.dark
+      ? const []
+      : const [
+          BoxShadow(
+            color: Color(0x29000000),
+            blurRadius: 16,
+            offset: Offset(0, 4),
+          ),
+        ];
+
+  // ── Semantic Color Token ──
+  static const lightSuccess = Color(0xFF0D8F63);
+  static const lightError = Color(0xFFEF4444);
+  static const lightWarning = Color(0xFFF59E0B);
+  static const lightInfo = Color(0xFF3B82F6);
+
+  static const darkSuccess = Color(0xFF34D399);
+  static const darkError = Color(0xFFF87171);
+  static const darkWarning = Color(0xFFFBBF24);
+  static const darkInfo = Color(0xFF60A5FA);
+
+  static Color success(Brightness b) =>
+      b == Brightness.dark ? darkSuccess : lightSuccess;
+  static Color error(Brightness b) =>
+      b == Brightness.dark ? darkError : lightError;
+  static Color warning(Brightness b) =>
+      b == Brightness.dark ? darkWarning : lightWarning;
+  static Color info(Brightness b) =>
+      b == Brightness.dark ? darkInfo : lightInfo;
+
+  // ── Animation Curve Token ──
+  static const curveStandard = Curves.easeInOut;
+  static const curveDecelerate = Curves.easeOut;
+  static const curveAccelerate = Curves.easeIn;
+  static const curveSpring = Curves.elasticOut;
+
+  // ── Iconography 尺寸標準化 ──
+  static const iconXs = 16.0;
+  static const iconSm = 20.0;
+  static const iconMd = 24.0;
+  static const iconLg = 32.0;
+  static const iconXl = 48.0;
 
   // ── Brightness helpers ──
   static Color pageBg(Brightness b) =>
