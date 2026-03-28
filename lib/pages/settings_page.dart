@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
+import 'package:my_first_app/pages/paywall_screen.dart';
+import 'package:my_first_app/services/in_app_purchase_service.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/services/theme_service.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
 import 'package:my_first_app/widgets/staggered_fade_in.dart';
 import 'package:my_first_app/widgets/tool_section_card.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   final AppSettings settings;
@@ -33,13 +37,23 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ListenableBuilder(
         listenable: widget.settings,
         builder: (context, _) {
+          final isPro = context.watch<ProService>().isPro;
           return ListView(
             padding: const EdgeInsets.all(DT.spaceLg),
             children: [
-              // ── 外觀區塊 ──
+              // ── Pro 升級卡片 ──
               StaggeredFadeIn(
                 index: 0,
-                totalItems: 3,
+                totalItems: 4,
+                animate: shouldAnimate,
+                child: _buildProCard(context, isPro),
+              ),
+              const SizedBox(height: DT.spaceMd),
+
+              // ── 外觀區塊 ──
+              StaggeredFadeIn(
+                index: 1,
+                totalItems: 5,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
                   label: l10n.settingsAppearance,
@@ -59,8 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
               // ── 資料區塊 ──
               StaggeredFadeIn(
-                index: 1,
-                totalItems: 3,
+                index: 2,
+                totalItems: 5,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
                   label: l10n.settingsData,
@@ -76,10 +90,22 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const SizedBox(height: DT.spaceMd),
 
+              // ── 進階功能區塊（Widget Pro gating in settings）──
+              StaggeredFadeIn(
+                index: 3,
+                totalItems: 5,
+                animate: shouldAnimate,
+                child: ToolSectionCard(
+                  label: '進階功能',
+                  child: _buildWidgetSetupEntry(context, isPro),
+                ),
+              ),
+              const SizedBox(height: DT.spaceMd),
+
               // ── 關於區塊 ──
               StaggeredFadeIn(
-                index: 2,
-                totalItems: 3,
+                index: 4,
+                totalItems: 5,
                 animate: shouldAnimate,
                 child: ToolSectionCard(
                   label: l10n.settingsAbout,
@@ -110,6 +136,98 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  // ── Pro 升級卡片（Pro upgrade card in settings）──
+  Widget _buildProCard(BuildContext context, bool isPro) {
+    if (isPro) {
+      return Container(
+        padding: const EdgeInsets.all(DT.spaceLg),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [DT.brandPrimary, DT.brandPrimaryLight],
+          ),
+          borderRadius: BorderRadius.circular(DT.radiusLg),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.workspace_premium, color: Colors.white, size: 24),
+            SizedBox(width: DT.spaceMd),
+            Text(
+              '已是 Pro 用戶 ✓',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return GestureDetector(
+      onTap: () => _openPaywall(context),
+      child: Container(
+        padding: const EdgeInsets.all(DT.spaceLg),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [DT.brandPrimary, DT.brandPrimaryLight],
+          ),
+          borderRadius: BorderRadius.circular(DT.radiusLg),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.workspace_premium, color: Colors.white, size: 24),
+            const SizedBox(width: DT.spaceMd),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '升級至 Pro',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    '去廣告 · 自訂主題 · Widget',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: DT.spaceMd,
+                vertical: DT.spaceSm,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(DT.radiusSm),
+              ),
+              child: const Text(
+                'NT\$90',
+                style: TextStyle(
+                  color: DT.brandPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -179,11 +297,12 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  // ── 品牌色選擇 ──
+  // ── 品牌色選擇（Accent color selection — 軟鎖定）──
   Widget _buildAccentColorSelector() {
     final b = Theme.of(context).brightness;
     final l10n = AppLocalizations.of(context)!;
     final current = widget.settings.themeService.accentColor;
+    final isPro = context.watch<ProService>().isPro;
 
     String colorName(AccentColorOption opt) {
       switch (opt) {
@@ -205,41 +324,153 @@ class _SettingsPageState extends State<SettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.settingsAccentColor, style: DT.labelLarge(b)),
+        Row(
+          children: [
+            Text(l10n.settingsAccentColor, style: DT.labelLarge(b)),
+            if (!isPro) ...[
+              const SizedBox(width: DT.spaceSm),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: DT.spaceSm,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: DT.brandPrimaryBgLight,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const Text(
+                  'Pro',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: DT.brandPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
         const SizedBox(height: DT.spaceSm),
         Wrap(
           spacing: DT.spaceMd,
           runSpacing: DT.spaceSm,
           children: AccentColorOption.values.map((opt) {
             final isSelected = opt == current;
+            // 免費用戶：僅預設紫色可用，其餘加鎖
+            final isLocked = !isPro && opt != AccentColorOption.purple;
+
             return Tooltip(
-              message: colorName(opt),
+              message: isLocked ? '${ colorName(opt)} — Pro 專屬' : colorName(opt),
               child: GestureDetector(
-                onTap: () => widget.settings.themeService.setAccentColor(opt),
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: opt.color,
-                    shape: BoxShape.circle,
-                    border: isSelected
-                        ? Border.all(
-                            color: b == Brightness.dark
-                                ? Colors.white
-                                : Colors.black87,
-                            width: 2.5,
-                          )
-                        : null,
-                  ),
-                  child: isSelected
-                      ? const Icon(Icons.check, color: Colors.white, size: 18)
-                      : null,
+                onTap: isLocked
+                    ? () => _openPaywall(context)
+                    : () => widget.settings.themeService.setAccentColor(opt),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: opt.color.withValues(alpha: isLocked ? 0.4 : 1.0),
+                        shape: BoxShape.circle,
+                        border: isSelected
+                            ? Border.all(
+                                color: b == Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black87,
+                                width: 2.5,
+                              )
+                            : null,
+                      ),
+                      child: isSelected && !isLocked
+                          ? const Icon(Icons.check, color: Colors.white, size: 18)
+                          : null,
+                    ),
+                    if (isLocked)
+                      const Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Icon(Icons.lock, size: 14, color: Colors.white70),
+                      ),
+                  ],
                 ),
               ),
             );
           }).toList(),
         ),
       ],
+    );
+  }
+
+  // ── Widget 設定入口（Widget Pro gating in settings）──
+  Widget _buildWidgetSetupEntry(BuildContext context, bool isPro) {
+    final b = Theme.of(context).brightness;
+    return InkWell(
+      onTap: isPro ? null : () => _openPaywall(context),
+      borderRadius: BorderRadius.circular(DT.radiusSm),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: DT.spaceSm,
+          horizontal: DT.spaceXs,
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.widgets_outlined, size: 20, color: DT.subtitle(b)),
+            const SizedBox(width: DT.spaceMd),
+            Expanded(
+              child: Text('主螢幕 Widget', style: DT.bodyMedium(b)),
+            ),
+            if (!isPro)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: DT.spaceSm,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: DT.brandPrimaryBgLight,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const Text(
+                  'Pro',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: DT.brandPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            else
+              Icon(Icons.chevron_right, size: 20, color: DT.subtitle(b)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openPaywall(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ProService>.value(
+            value: context.read<ProService>(),
+          ),
+          Provider<InAppPurchaseService>.value(
+            value: context.read<InAppPurchaseService>(),
+          ),
+        ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(DT.radiusLg),
+            ),
+          ),
+          child: const PaywallScreen(),
+        ),
+      ),
     );
   }
 

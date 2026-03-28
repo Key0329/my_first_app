@@ -7,15 +7,25 @@ import 'package:my_first_app/l10n/l10n.dart';
 import 'package:my_first_app/pages/favorites_page.dart';
 import 'package:my_first_app/pages/home_page.dart';
 import 'package:my_first_app/pages/settings_page.dart';
+import 'package:my_first_app/services/in_app_purchase_service.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 import 'package:my_first_app/theme/app_theme.dart';
 import 'package:my_first_app/pages/onboarding_page.dart';
 import 'package:my_first_app/widgets/app_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class ToolboxApp extends StatefulWidget {
   final AppSettings settings;
+  final ProService proService;
+  final InAppPurchaseService iapService;
 
-  const ToolboxApp({super.key, required this.settings});
+  const ToolboxApp({
+    super.key,
+    required this.settings,
+    required this.proService,
+    required this.iapService,
+  });
 
   @override
   State<ToolboxApp> createState() => _ToolboxAppState();
@@ -32,6 +42,7 @@ class _ToolboxAppState extends State<ToolboxApp> {
 
   @override
   void dispose() {
+    widget.iapService.dispose();
     _router.dispose();
     super.dispose();
   }
@@ -95,25 +106,31 @@ class _ToolboxAppState extends State<ToolboxApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: widget.settings.themeService,
-      builder: (context, _) {
-        return MaterialApp.router(
-          title: '工具箱 Pro',
-          theme: AppTheme.light(
-            accentColor: widget.settings.themeService.accentColorValue,
-          ),
-          darkTheme: AppTheme.dark(
-            accentColor: widget.settings.themeService.accentColorValue,
-          ),
-          themeMode: widget.settings.themeMode,
-          locale: widget.settings.locale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: L10n.supportedLocales,
-          routerConfig: _router,
-          debugShowCheckedModeBanner: false,
-        );
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ProService>.value(value: widget.proService),
+        Provider<InAppPurchaseService>.value(value: widget.iapService),
+      ],
+      child: ListenableBuilder(
+        listenable: widget.settings.themeService,
+        builder: (context, _) {
+          return MaterialApp.router(
+            title: '工具箱 Pro',
+            theme: AppTheme.light(
+              accentColor: widget.settings.themeService.accentColorValue,
+            ),
+            darkTheme: AppTheme.dark(
+              accentColor: widget.settings.themeService.accentColorValue,
+            ),
+            themeMode: widget.settings.themeMode,
+            locale: widget.settings.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: L10n.supportedLocales,
+            routerConfig: _router,
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }

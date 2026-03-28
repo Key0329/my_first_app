@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/theme/design_tokens.dart';
+import 'package:my_first_app/widgets/banner_ad_widget.dart';
 
 import 'tool_recommendation_bar.dart';
 
@@ -160,6 +161,8 @@ class ImmersiveToolScaffold extends StatelessWidget {
     return Scaffold(
       // 透明 AppBar（主題已設定 backgroundColor: transparent）
       appBar: AppBar(title: Text(title), actions: actions),
+      // AdMob banner（免費用戶顯示，Pro 用戶零高度）
+      bottomNavigationBar: const BannerAdWidget(),
       // 使漸層背景延伸至 AppBar 後方
       extendBodyBehindAppBar: true,
       body: Column(

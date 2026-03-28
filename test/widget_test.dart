@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_first_app/app.dart';
+import 'package:my_first_app/services/in_app_purchase_service.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
 
 void main() {
@@ -8,8 +10,16 @@ void main() {
     // 設定 hasCompletedOnboarding = true 讓 App 直接進入工具首頁，略過 onboarding
     SharedPreferences.setMockInitialValues({'hasCompletedOnboarding': true});
     final settings = AppSettings();
-    await settings.init();
-    await tester.pumpWidget(ToolboxApp(settings: settings));
+    final proService = ProService();
+    await Future.wait([settings.init(), proService.init()]);
+    final iapService = InAppPurchaseService(proService: proService);
+    await tester.pumpWidget(
+      ToolboxApp(
+        settings: settings,
+        proService: proService,
+        iapService: iapService,
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('工具箱'), findsOneWidget);
