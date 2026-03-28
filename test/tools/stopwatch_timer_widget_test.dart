@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/tools/stopwatch_timer/stopwatch_timer_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget _buildApp() {
-  return MaterialApp(
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    locale: const Locale('zh'),
-    home: const StopwatchTimerPage(),
+  return ChangeNotifierProvider<ProService>.value(
+    value: ProService(),
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('zh'),
+      home: const StopwatchTimerPage(),
+    ),
   );
 }
 
@@ -17,6 +23,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() {
+    SharedPreferences.setMockInitialValues({});
     for (final channel in [
       'xyz.luan/audioplayers',
       'xyz.luan/audioplayers.global',

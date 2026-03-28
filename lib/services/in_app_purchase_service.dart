@@ -41,9 +41,8 @@ class _RealIap implements IapInterface {
       _iap.restorePurchases(applicationUserName: applicationUserName);
 
   @override
-  Future<ProductDetailsResponse> queryProductDetails(
-    Set<String> identifiers,
-  ) => _iap.queryProductDetails(identifiers);
+  Future<ProductDetailsResponse> queryProductDetails(Set<String> identifiers) =>
+      _iap.queryProductDetails(identifiers);
 }
 
 /// 管理應用內購買（StoreKit2 / Google Play Billing）。
@@ -67,11 +66,9 @@ class InAppPurchaseService {
   bool get isAvailable => _isAvailable;
   ProductDetails? get proProduct => _proProduct;
 
-  InAppPurchaseService({
-    IapInterface? iap,
-    required ProService proService,
-  }) : _iap = iap ?? _RealIap(InAppPurchase.instance),
-       _proService = proService;
+  InAppPurchaseService({IapInterface? iap, required ProService proService})
+    : _iap = iap ?? _RealIap(InAppPurchase.instance),
+      _proService = proService;
 
   /// 初始化 IAP：檢查可用性、載入商品資訊、監聽 purchaseStream。
   Future<void> init() async {

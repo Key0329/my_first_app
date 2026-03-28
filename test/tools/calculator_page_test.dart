@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/tools/calculator/calculator_page.dart';
 import 'package:my_first_app/widgets/animated_value_text.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget _buildApp() {
-  return MaterialApp(
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    locale: const Locale('zh'),
-    home: const CalculatorPage(),
+  return ChangeNotifierProvider<ProService>.value(
+    value: ProService(),
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('zh'),
+      home: const CalculatorPage(),
+    ),
   );
 }
 
@@ -18,6 +24,9 @@ const _testSurfaceSize = Size(414, 896);
 
 void main() {
   group('Calculator button single event firing', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
     testWidgets('tapping digit 5 appends exactly one "5" to expression', (
       tester,
     ) async {

@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/widgets/immersive_tool_scaffold.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 輔助函式：以指定 brightness 包裝待測 widget
-Widget _wrap(Widget child, {Brightness brightness = Brightness.light}) {
-  return MaterialApp(
-    theme: ThemeData(brightness: brightness),
-    home: child,
+Widget _wrap(
+  Widget child, {
+  Brightness brightness = Brightness.light,
+  ProService? proService,
+}) {
+  return ChangeNotifierProvider<ProService>.value(
+    value: proService ?? ProService(),
+    child: MaterialApp(
+      theme: ThemeData(brightness: brightness),
+      home: child,
+    ),
   );
 }
 
 void main() {
   group('ImmersiveToolScaffold', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
     const testColor = Color(0xFF4CAF50); // 綠色作為測試工具色
 
     // ─── 基本渲染 ───────────────────────────────────────────────

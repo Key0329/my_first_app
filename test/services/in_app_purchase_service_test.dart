@@ -57,10 +57,7 @@ class _FakeInAppPurchase implements IapInterface {
           ),
         )
         .toList();
-    return ProductDetailsResponse(
-      productDetails: products,
-      notFoundIDs: [],
-    );
+    return ProductDetailsResponse(productDetails: products, notFoundIDs: []);
   }
 
   void close() => _controller.close();
@@ -70,7 +67,11 @@ class _FakeInAppPurchase implements IapInterface {
 
 class _FakePurchaseDetails extends PurchaseDetails {
   _FakePurchaseDetails({required super.status, required super.productID})
-    : super(purchaseID: 'test_purchase', verificationData: _fakeVerification, transactionDate: null);
+    : super(
+        purchaseID: 'test_purchase',
+        verificationData: _fakeVerification,
+        transactionDate: null,
+      );
 
   static final PurchaseVerificationData _fakeVerification =
       PurchaseVerificationData(

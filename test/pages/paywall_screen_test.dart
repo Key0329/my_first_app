@@ -13,9 +13,7 @@ Widget _wrap({required ProService proService}) {
       ChangeNotifierProvider<ProService>.value(value: proService),
       Provider<InAppPurchaseService>.value(value: iapService),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: PaywallScreen()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: PaywallScreen())),
   );
 }
 
@@ -66,10 +64,7 @@ void main() {
       await tester.pumpWidget(_wrap(proService: proService));
       await tester.pump();
 
-      expect(
-        find.byKey(const Key('paywall_feature_list')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const Key('paywall_feature_list')), findsOneWidget);
     });
   });
 }

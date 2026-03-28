@@ -2,22 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/tools/word_counter/word_counter_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ImmersiveToolScaffold 需要足夠的畫面空間。
 const _testSurfaceSize = Size(414, 896);
 
 Widget _buildApp() {
-  return MaterialApp(
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    locale: const Locale('zh'),
-    home: const WordCounterPage(),
+  return ChangeNotifierProvider<ProService>.value(
+    value: ProService(),
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('zh'),
+      home: const WordCounterPage(),
+    ),
   );
 }
 
 void main() {
   group('WordCounterPage widget', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
     testWidgets('renders initial UI elements', (tester) async {
       await tester.binding.setSurfaceSize(_testSurfaceSize);
       addTearDown(() => tester.binding.setSurfaceSize(null));

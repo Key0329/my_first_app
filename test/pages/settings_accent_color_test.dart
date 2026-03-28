@@ -2,22 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
 import 'package:my_first_app/pages/settings_page.dart';
+import 'package:my_first_app/services/in_app_purchase_service.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/services/settings_service.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<AppSettings> _makeSettings() async {
+Future<({AppSettings settings, ProService proService})> _makeSettings() async {
   SharedPreferences.setMockInitialValues({});
   final settings = AppSettings();
   await settings.init();
-  return settings;
+  final proService = ProService();
+  return (settings: settings, proService: proService);
 }
 
-Widget _buildApp(AppSettings settings) {
-  return MaterialApp(
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    locale: const Locale('zh'),
-    home: Scaffold(body: SettingsPage(settings: settings)),
+Widget _buildApp(AppSettings settings, ProService proService) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ProService>.value(value: proService),
+      Provider<InAppPurchaseService>.value(
+        value: InAppPurchaseService(proService: proService),
+      ),
+    ],
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('zh'),
+      home: Scaffold(body: SettingsPage(settings: settings)),
+    ),
   );
 }
 
@@ -27,8 +39,8 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(414, 896));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      final settings = await _makeSettings();
-      await tester.pumpWidget(_buildApp(settings));
+      final (:settings, :proService) = await _makeSettings();
+      await tester.pumpWidget(_buildApp(settings, proService));
       // 等待 localizations 載入與初始 frame
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
@@ -40,8 +52,8 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(414, 896));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      final settings = await _makeSettings();
-      await tester.pumpWidget(_buildApp(settings));
+      final (:settings, :proService) = await _makeSettings();
+      await tester.pumpWidget(_buildApp(settings, proService));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
@@ -62,8 +74,8 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(414, 896));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      final settings = await _makeSettings();
-      await tester.pumpWidget(_buildApp(settings));
+      final (:settings, :proService) = await _makeSettings();
+      await tester.pumpWidget(_buildApp(settings, proService));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 

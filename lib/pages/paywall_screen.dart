@@ -58,14 +58,14 @@ class _PaywallScreenState extends State<PaywallScreen> {
         setState(() => _isLoading = false);
       case IapEvent.error:
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('購買失敗，請稍後再試')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('購買失敗，請稍後再試')));
       case IapEvent.restoreEmpty:
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('找不到先前的購買紀錄')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('找不到先前的購買紀錄')));
       case IapEvent.loading:
         setState(() => _isLoading = true);
     }
@@ -143,7 +143,11 @@ class _PaywallScreenState extends State<PaywallScreen> {
               color: Colors.white.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.workspace_premium, color: Colors.white, size: 36),
+            child: const Icon(
+              Icons.workspace_premium,
+              color: Colors.white,
+              size: 36,
+            ),
           ),
           const SizedBox(height: DT.spaceMd),
           const Text(
@@ -190,10 +194,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
           ),
         ),
         const SizedBox(width: DT.spaceXs),
-        Text(
-          '一次買斷',
-          style: TextStyle(fontSize: 14, color: DT.subtitle(b)),
-        ),
+        Text('一次買斷', style: TextStyle(fontSize: 14, color: DT.subtitle(b))),
       ],
     );
   }
@@ -232,10 +233,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     ),
                     Text(
                       desc,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: DT.subtitle(b),
-                      ),
+                      style: TextStyle(fontSize: 13, color: DT.subtitle(b)),
                     ),
                   ],
                 ),
@@ -272,10 +270,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
               )
             : const Text(
                 '立即升級 NT\$90',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
       ),
     );

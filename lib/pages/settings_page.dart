@@ -200,10 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Text(
                     '去廣告 · 自訂主題 · Widget',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
@@ -360,7 +357,7 @@ class _SettingsPageState extends State<SettingsPage> {
             final isLocked = !isPro && opt != AccentColorOption.purple;
 
             return Tooltip(
-              message: isLocked ? '${ colorName(opt)} — Pro 專屬' : colorName(opt),
+              message: isLocked ? '${colorName(opt)} — Pro 專屬' : colorName(opt),
               child: GestureDetector(
                 onTap: isLocked
                     ? () => _openPaywall(context)
@@ -371,7 +368,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: opt.color.withValues(alpha: isLocked ? 0.4 : 1.0),
+                        color: opt.color.withValues(
+                          alpha: isLocked ? 0.4 : 1.0,
+                        ),
                         shape: BoxShape.circle,
                         border: isSelected
                             ? Border.all(
@@ -383,14 +382,22 @@ class _SettingsPageState extends State<SettingsPage> {
                             : null,
                       ),
                       child: isSelected && !isLocked
-                          ? const Icon(Icons.check, color: Colors.white, size: 18)
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 18,
+                            )
                           : null,
                     ),
                     if (isLocked)
                       const Positioned(
                         right: 0,
                         bottom: 0,
-                        child: Icon(Icons.lock, size: 14, color: Colors.white70),
+                        child: Icon(
+                          Icons.lock,
+                          size: 14,
+                          color: Colors.white70,
+                        ),
                       ),
                   ],
                 ),
@@ -417,9 +424,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Icon(Icons.widgets_outlined, size: 20, color: DT.subtitle(b)),
             const SizedBox(width: DT.spaceMd),
-            Expanded(
-              child: Text('主螢幕 Widget', style: DT.bodyMedium(b)),
-            ),
+            Expanded(child: Text('主螢幕 Widget', style: DT.bodyMedium(b))),
             if (!isPro)
               Container(
                 padding: const EdgeInsets.symmetric(

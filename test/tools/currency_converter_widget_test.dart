@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:my_first_app/l10n/app_localizations.dart';
+import 'package:my_first_app/services/pro_service.dart';
 import 'package:my_first_app/tools/currency_converter/currency_api.dart';
 import 'package:my_first_app/tools/currency_converter/currency_converter_page.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ---------------------------------------------------------------------------
@@ -53,16 +55,19 @@ http.Client _failClient() {
 
 /// Build the widget under test with localizations.
 Widget _buildApp({CurrencyApi? api, CurrencyCache? cache}) {
-  return MaterialApp(
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: const [Locale('zh'), Locale('en')],
-    locale: const Locale('zh'),
-    home: CurrencyConverterPage(api: api, cache: cache),
+  return ChangeNotifierProvider<ProService>.value(
+    value: ProService(),
+    child: MaterialApp(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('zh'), Locale('en')],
+      locale: const Locale('zh'),
+      home: CurrencyConverterPage(api: api, cache: cache),
+    ),
   );
 }
 
