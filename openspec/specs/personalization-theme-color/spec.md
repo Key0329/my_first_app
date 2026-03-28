@@ -8,39 +8,59 @@ TBD - created by archiving change 'personalization'. Update Purpose after archiv
 
 ### Requirement: Accent color selection
 
-The system SHALL allow users to select an accent color from a set of predefined color options. The selected color SHALL be applied across the app's global UI elements.
+The system SHALL allow users to select an accent color from a set of predefined color options only if `ProService.isPro == true`. When `isPro == false`, the accent color section SHALL display each color swatch with a lock icon overlay and a Pro badge label. Tapping any locked swatch SHALL open `PaywallScreen`. The default purple accent (#6C5CE7) SHALL remain active for free users regardless of any prior selection.
 
-#### Scenario: Default accent color
+#### Scenario: Default accent color (free user)
 
-- **WHEN** user has not selected an accent color
+- **WHEN** user has not purchased Pro
+- **THEN** the app SHALL use the default purple accent (#6C5CE7) and color swatches SHALL show lock overlays
+
+#### Scenario: Default accent color (no prior selection, Pro user)
+
+- **WHEN** Pro user has not selected an accent color
 - **THEN** the app SHALL use the default purple accent (#6C5CE7)
 
-#### Scenario: Select accent color
+#### Scenario: Select accent color (Pro user)
 
-- **WHEN** user selects a new accent color in settings
+- **WHEN** Pro user selects a new accent color in settings
 - **THEN** the app's global UI elements (AppBar, tabs, buttons) SHALL update to reflect the selected color
+
+#### Scenario: Free user taps locked color swatch
+
+- **WHEN** free user taps any non-default color swatch
+- **THEN** `PaywallScreen` SHALL be presented as a modal
 
 
 <!-- @trace
-source: personalization
-updated: 2026-03-23
+source: freemium-paywall
+updated: 2026-03-28
 code:
-  - lib/services/user_preferences_service.dart
-  - lib/services/settings_service.dart
-  - lib/pages/home_page.dart
-  - lib/l10n/app_localizations_en.dart
-  - lib/theme/app_theme.dart
-  - lib/app.dart
-  - lib/l10n/app_en.arb
-  - lib/l10n/app_localizations.dart
-  - lib/l10n/app_zh.arb
-  - lib/services/theme_service.dart
+  - .agents/skills/spectra-ingest/SKILL.md
+  - lib/config/ad_config.dart
+  - pubspec.lock
+  - macos/Flutter/GeneratedPluginRegistrant.swift
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/main.dart
+  - lib/services/pro_service.dart
   - lib/pages/settings_page.dart
-  - lib/l10n/app_localizations_zh.dart
+  - .agents/skills/spectra-apply/SKILL.md
+  - lib/widgets/banner_ad_widget.dart
+  - lib/app.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - pubspec.yaml
+  - .agents/skills/spectra-discuss/SKILL.md
+  - .agents/skills/spectra-ask/SKILL.md
+  - android/app/src/main/AndroidManifest.xml
+  - .spectra.yaml
+  - ios/Runner/Info.plist
+  - lib/services/in_app_purchase_service.dart
+  - lib/pages/paywall_screen.dart
 tests:
-  - test/services/tool_order_test.dart
-  - test/services/accent_color_test.dart
-  - test/pages/settings_accent_color_test.dart
+  - test/pages/paywall_screen_test.dart
+  - test/services/pro_service_test.dart
+  - test/widgets/banner_ad_widget_test.dart
+  - test/services/in_app_purchase_service_test.dart
+  - test/widget_test.dart
 -->
 
 ---

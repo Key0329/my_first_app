@@ -376,3 +376,55 @@ code:
   - lib/services/settings_service.dart
   - lib/services/user_preferences_service.dart
 -->
+
+---
+### Requirement: Pro upgrade card in settings
+
+The settings page SHALL display a "Pro 升級" ToolSectionCard in a new "Pro" section positioned above the "Appearance" section. When `ProService.isPro == false`, the card SHALL show a gradient Pro badge, a headline "升級至 Pro", a subtitle listing three key benefits, and a primary button "NT$90 立即升級". When `ProService.isPro == true`, the card SHALL show a "已是 Pro 用戶 ✓" state with no upgrade button.
+
+#### Scenario: Free user views settings Pro card
+
+- **WHEN** `ProService.isPro` is `false` and user opens settings
+- **THEN** the Pro upgrade card SHALL display with upgrade CTA visible
+
+#### Scenario: Pro user views settings Pro card
+
+- **WHEN** `ProService.isPro` is `true` and user opens settings
+- **THEN** the Pro card SHALL display a "已是 Pro 用戶 ✓" badge and no upgrade button
+
+#### Scenario: User taps upgrade CTA
+
+- **WHEN** free user taps the "立即升級" button in the Pro card
+- **THEN** `PaywallScreen` SHALL be presented as a modal
+
+<!-- @trace
+source: freemium-paywall
+updated: 2026-03-28
+code:
+  - .agents/skills/spectra-ingest/SKILL.md
+  - lib/config/ad_config.dart
+  - pubspec.lock
+  - macos/Flutter/GeneratedPluginRegistrant.swift
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/main.dart
+  - lib/services/pro_service.dart
+  - lib/pages/settings_page.dart
+  - .agents/skills/spectra-apply/SKILL.md
+  - lib/widgets/banner_ad_widget.dart
+  - lib/app.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - pubspec.yaml
+  - .agents/skills/spectra-discuss/SKILL.md
+  - .agents/skills/spectra-ask/SKILL.md
+  - android/app/src/main/AndroidManifest.xml
+  - .spectra.yaml
+  - ios/Runner/Info.plist
+  - lib/services/in_app_purchase_service.dart
+  - lib/pages/paywall_screen.dart
+tests:
+  - test/pages/paywall_screen_test.dart
+  - test/services/pro_service_test.dart
+  - test/widgets/banner_ad_widget_test.dart
+  - test/services/in_app_purchase_service_test.dart
+  - test/widget_test.dart
+-->

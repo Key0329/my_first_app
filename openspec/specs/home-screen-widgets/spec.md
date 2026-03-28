@@ -148,3 +148,50 @@ code:
   - android/app/src/main/AndroidManifest.xml
   - android/app/src/main/res/layout/calculator_widget_layout.xml
 -->
+
+---
+### Requirement: Widget Pro gating in settings
+
+The settings page SHALL display the home screen widget setup entry point with a Pro badge when `ProService.isPro == false`. Tapping the locked widget entry SHALL open `PaywallScreen`. When `ProService.isPro == true`, the widget setup flow SHALL proceed normally without any paywall interception.
+
+#### Scenario: Free user taps widget setup
+
+- **WHEN** `ProService.isPro` is `false` and user taps the widget setup option
+- **THEN** `PaywallScreen` SHALL be presented as a modal
+
+#### Scenario: Pro user taps widget setup
+
+- **WHEN** `ProService.isPro` is `true` and user taps the widget setup option
+- **THEN** the widget setup instructions SHALL be shown with no paywall
+
+<!-- @trace
+source: freemium-paywall
+updated: 2026-03-28
+code:
+  - .agents/skills/spectra-ingest/SKILL.md
+  - lib/config/ad_config.dart
+  - pubspec.lock
+  - macos/Flutter/GeneratedPluginRegistrant.swift
+  - .agents/skills/spectra-propose/SKILL.md
+  - lib/main.dart
+  - lib/services/pro_service.dart
+  - lib/pages/settings_page.dart
+  - .agents/skills/spectra-apply/SKILL.md
+  - lib/widgets/banner_ad_widget.dart
+  - lib/app.dart
+  - lib/widgets/immersive_tool_scaffold.dart
+  - pubspec.yaml
+  - .agents/skills/spectra-discuss/SKILL.md
+  - .agents/skills/spectra-ask/SKILL.md
+  - android/app/src/main/AndroidManifest.xml
+  - .spectra.yaml
+  - ios/Runner/Info.plist
+  - lib/services/in_app_purchase_service.dart
+  - lib/pages/paywall_screen.dart
+tests:
+  - test/pages/paywall_screen_test.dart
+  - test/services/pro_service_test.dart
+  - test/widgets/banner_ad_widget_test.dart
+  - test/services/in_app_purchase_service_test.dart
+  - test/widget_test.dart
+-->
